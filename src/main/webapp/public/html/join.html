@@ -1,0 +1,190 @@
+<div id="titlebar_join" class="ui-draggable-handle title">
+    Join selected tables
+    <div style="float:right; text-align: left;" onclick="app.winMgr.closeWindow('join');">
+        <img class="icon24" src="./public/icons/close.png">
+    </div>
+    <div style="clear:both;">
+    </div>
+</div>
+
+<div class="window_content row">
+    <div class="left_col min50">
+        <div id="schema_list"></div>
+        <div>
+            <h4>Preview of join</h4>
+            <div id="join_preview">No rules defined.</div>
+        </div>
+    </div>
+    <div style="float: left">
+        <h4>Join rules</h4>
+        <input id="new_join_rule" type="button" value="Add rule" onclick="app.joinDlg.addRule();">
+        <!--<textarea id="join_rules"></textarea>-->
+        <div id="join_rules"></div>
+    </div>
+    <div class="right">
+        <h4>Multirelational k-Anonymity</h4>
+        <p>In real life situations data is kept in multiple relational tables instead of single table. In relational
+            tables, not all sensitive or identifying information is kept in each table separately. In this case
+            k-anonymity may not be the best option. It may fail to ensure anonymity or cause too much distortion making
+            data useless for data miners. Instead of running k-anonymity on each table separately, in Multirelational
+            k-Anonymity tables are first joined together using some identifier that is common for each table.</p>
+        <p>For example suppose we have person specific table called Person, table called Diasese that contains list of
+            diaseses and table called Job that lists jobs where people work. In these tables Id field is common for all
+            three tables.</p>
+        <center>
+            Person table<br>
+            <table class="preview_table">
+                <tr>
+                    <th>Id</th>
+                    <th>First name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Juhan</td>
+                    <td>Olev</td>
+                    <td>33</td>
+                    <td>Male</td>
+                    <td>Elva</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>John</td>
+                    <td>Smith</td>
+                    <td>36</td>
+                    <td>Male</td>
+                    <td>Elva</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Gebede</td>
+                    <td>Ahmed</td>
+                    <td>40</td>
+                    <td>Male</td>
+                    <td>Tartu</td>
+                </tr>
+            </table>
+            <br>Diasese table<br>
+            <table class="preview_table">
+                <tr>
+                    <th>Id</th>
+                    <th>Diasese</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Flu</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Hiv</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Aids</td>
+                </tr>
+            </table>
+            <br>Job table<br>
+            <table class="preview_table">
+                <tr>
+                    <th>Id</th>
+                    <th>Job</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Programmer</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Analyst</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Developer</td>
+                </tr>
+            </table>
+        </center>
+        <p>In this example we can join tables using two rules: <code>Person.Id = Diasese.id</code> and <code> Person.Id
+            = Job.Id</code>. These rule
+            would give us the following table:</p>
+        <center>
+            <table class="preview_table">
+                <tr>
+                    <th>Id</th>
+                    <th>First name</th>
+                    <th>Last Name</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Diasese</th>
+                    <th>Job</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>Juhan</td>
+                    <td>Olev</td>
+                    <td>33</td>
+                    <td>Male</td>
+                    <td>Elva</td>
+                    <td>Flu</td>
+                    <td>Programmer</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>John</td>
+                    <td>Smith</td>
+                    <td>36</td>
+                    <td>Male</td>
+                    <td>Elva</td>
+                    <td>Hiv</td>
+                    <td>Analyst</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>Gebede</td>
+                    <td>Ahmed</td>
+                    <td>40</td>
+                    <td>Male</td>
+                    <td>Tartu</td>
+                    <td>Aids</td>
+                    <td>Developer</td>
+                </tr>
+            </table>
+        </center>
+        <h4>Getting started</h4>
+        <p>At left you have tables that you selected in previous step. Your task is to specify rules for joining these
+            tables. To do this these steps:
+        <ol>
+            <li>Click on button <code>Add rule</code>. Now you should see that table headers have turned from gray to
+                black an you can click on them.
+            </li>
+            <li>Click on colum header in first table. The bacground color of selected header will become green. If you
+                wish to change your selection, simply click on other header.
+            </li>
+            <li>Click on matching colum header in second table. For example, if you clicked on <code>Id</code> column on
+                <code>Person</code> table in previous step you might now want to click on <code>Id</code> column on
+                <code>Diasese</code> table.
+            </li>
+            <li>Click on button <code>Ok</code> to finish defining of rule after which you can see rule in purple box,
+            </li>
+            <li>Repeat previous steps until you have specified rules for all the tables that you have listed on the
+                left hand side.
+            </li>
+        </ol>
+        </p>
+        <p>Below the tables there is section called <code>Preview of join</code> which you can use to check if you have
+            deined rules correctly. This table will be updated as you add or remove rules.</p>
+        <p>If you wish to remove the rule simply click on red <code>X</code> in rule box.</p>
+        <p>Once you have defined all the necessary rules, click on <code>next</code> button.</p>
+    </div>
+    <div style="clear:both"></div>
+</div>
+<script>
+    console.log("Join loaded.");
+</script>
+<hr class="bottom">
+<div class="status_bar">Step 2
+    <input type="button" id="joinNext" onclick="app.joinDlg.nextClicked();" value="Next">
+</div>

@@ -1,0 +1,52 @@
+<div id="titlebar_types" class="ui-draggable-handle title">
+    Choose attribute types
+    <div style="float:right; text-align: left;" onclick="app.winMgr.closeWindow('types');">
+        <img class="icon24" src="./public/icons/close.png">
+    </div>
+    <div style="clear:both;">
+    </div>
+</div>
+
+<div class="window_content row">
+    <div class="left_col">
+        <div id="type_list"></div>
+    </div>
+    <div class="right_column">
+        <h4>Introduction</h4>
+        <p>Generally in PPDP (Privacy Preserving Data Publishing), the table that is to
+            be published is in the following form:
+        </p>
+        <center><code>T (Explicit_identifier, Quasi_identifier,
+            Sensitive_attributes, Non-sensitive_attributes)
+        </code></center>
+        <p>Where Explicit_identifier is a list of attributes that directly identify person such
+            as name, person code, address, social security number and so on. <code>Quasi_identifier</code>
+            (QID) is a list of attributes whose combination could possibly identify person
+            such as <code>sex, age, job, zip-code</code> and so on. Combination of quasi identifiers can
+            either specify the unique record from second table or small set of records.
+            <code>Sensitive_attributes</code> are
+            sensitive attributes that are specific to person such as diseases
+            or salary. <code>Non-sensitive_attributes</code> are all other attributes that do not fit into previous
+            categories.</p>
+        <p>Having too many attributes in QID will cause too much distortion in the data while choosing to few attributes
+            in QID will offer insufficient protection for privacy.</p>
+        <h4>Getting started</h4>
+        In this view you need to specify column types for each column. You can get hints from Introduction above on what
+        these should be. To complete this step, follow these steps:
+        <ol>
+            <li>For each attribute choose it's type from combobox. Type should be one of the following: <code>Explicit_identifier
+                (ID), Quasi_identifier (QID),
+                Sensitive_attributes (Sensitive) or Non-sensitive_attributes (Nonsensitive)</code>.
+            </li>
+            <li>When you are done, click <code>next</code> to proceed.</li>
+        </ol>
+    </div>
+</div>
+<script>
+
+    console.log("Types loaded.");
+
+</script>
+
+<div class="status_bar"> Step 3 <input type="button" value="Next" id="typesNext" onclick="app.typeDlg.nextClicked();">
+</div>

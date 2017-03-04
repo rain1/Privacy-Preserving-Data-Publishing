@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<div th:fragment="header">
+    <h1>About Privacy Preserving Data Publishing</h1>
+    <p> Our data gets collected everyday by governments and different organizations for datamining.
+        Since it is often not known who the receiving part of data is and whether data receiver
+        can be trusted and therefore it is necessary to anonymize data in a way what it would be not possible to
+        identify persons from released data sets. The purpose of Privacy Preserving Data Publishing is to anonymize data
+        while preserving it's usefulness for dataminers.</p>
+    <h1>Getting started</h1>
+    <p>The purpose of this software is to offer students opportunity to practise data anonymization methods. This
+        program will guide you step by step trough data anonymization process. The data anonymization process consists
+        of following steps:
+    </p>
+    <ol>
+        <li>Selection of table and anonymization method,</li>
+        <li>In case of of Multirelational k-Anonymity joining the tables together (this step will be skipped in other
+            cases),
+        </li>
+        <li>Specification of column types (Identifier (ID), Quasi-Identifier (QID), Sensitive Information, Non-sensitive
+            Information),
+        </li>
+        <li>Specification of anonymization operations for each column</li>
+        <li>Displaying the results.</li>
+    </ol>
+
+    <p>In each step you will be given instructions on how to complete this step. After successfully finishing all the
+        steps you will be able to see anonymized version of your data table.</p>
+
+    <ul>
+        <li>To get started with Privacy Preserving Data Publishing practical simply click on <code>Open</code> button
+            left. Further
+            instructions will be shown to you when you have clicked on button <code>Open</code>.
+        </li>
+        <li>If you wish to use your own data table in addition to built-in data tables click on <code>Import</code> button left.</li>
+        <li>To save anonymized table, click on <code>Export</code> button left.</li>
+    </ul>
+</div>
+</body>
+</html>

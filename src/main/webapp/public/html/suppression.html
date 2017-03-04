@@ -1,0 +1,55 @@
+<div id="titlebar_suppression" class="ui-draggable-handle title">
+    Specify suppression rules for column Work
+    <div style="float:right; text-align: left;" onclick="closeWindow('suppression');">
+        <img class="icon24" src="./public/icons/close.png">
+    </div>
+    <div style="clear:both;">
+    </div>
+</div>
+
+<script>
+    var currentColumn = "";
+
+    function setupSuppression(columnName){
+        currentColumn = columnName;
+        var columns = app.getUniqueValueByColumn(columnName.split(".")[1]);
+        elements = "";
+        for(var i in columns) {
+            elements += '<span class="word" onclick="addWordSuppression(this);">' + columns[i] + '</span>';
+            if(!$.isNumeric(columns[i])){
+                isNum = false;
+            }
+        }
+        $("#suppression_value_pool").html(elements);
+    }
+
+    function addWordSuppression(element){
+        $(element).hide();
+        $("#suppression_rules").val($("#suppression_rules").val() + $(element).text() + " ");
+    }
+
+    function addSuppression(){
+        var general = prompt("Please specify suppression value for these values", "");
+        $("#suppression_rules").val($("#suppression_rules").val() + "-> " + general);
+    }
+
+    function newSuppression(){
+        $("#suppression_rules").val($("#suppression_rules").val() + "\n");
+    }
+
+    function okSuppressionClicked(){
+        app.attributeActions[currentColumn].operation = $("#suppression_rules").val();
+        closeWindow("suppression");
+        specificationEnded = true;
+    }
+
+
+</script>
+
+<div>
+    <textarea id="suppression_rules" rows="4" cols="50"></textarea> <br>
+    <input id="set_rule" type="button" value="Set suppression for this rule" onclick="addSuppression();">
+    <input id="new_rule" type="button" value="New suppression rule" onclick="newSuppression();">
+    <div id="suppression_value_pool"></div>
+    <button onclick="okSuppressionClicked();" >Ok</button>
+</div>

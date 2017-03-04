@@ -1,0 +1,197 @@
+<div id="titlebar_open" class="ui-draggable-handle title">
+    Open table
+    <div style="float:right; text-align: left;" onclick="app.winMgr.closeWindow('open');">
+        <img class="icon24" src="./public/icons/close.png">
+    </div>
+    <div style="clear:both;">
+    </div>
+</div>
+
+<div class="window_content row">
+    <div class="left_col min50">
+        <table>
+            <tr>
+                <td>
+                    <h3>Available tables</h3>
+                    <div id="table_list"></div>
+                </td>
+                <td>
+                    Anonymization method:
+                    <select id="anonymization_method" onchange="app.openDlg.methodChanged();">
+                        <option value="none">Select one</option>
+                        <option value="kanonymity">k-Anonymity</option>
+                        <option value="xy">(X, Y)-Anonymity</option>
+                        <option value="multir">MultiRelational k-anonymity</option>
+                        <option value="ldiv">l-Diversity</option>
+                        <option value="tc">t-Closeness</option>
+                        <option value="edif">e-Differential privacy</option>
+                        <option value="dist">Distributional Privacy</option>
+                    </select>
+
+                </td>
+            </tr>
+        </table>
+        <h3>Preview of selected tables</h3>
+        <div id="open_table_preview">
+            None selected.
+        </div>
+    </div>
+    <div id="help_container">
+        <h3>Getting started</h3>
+        <p>This view allows you to choose one or more data tables to work with and anonymyztion method. To complete this
+            step, do the following:</p>
+        <ol>
+            <li>Choose the table(s) which you would like to anonymize. You can select table by checking the checkbox in
+                front of table name.
+                <ul>
+                    <li>Once you select the table you will immediately see the preview of this table under <code>Preview
+                        of selected tables</code>. This will give you an idea of how table looks like.
+                    </li>
+                </ul>
+            </li>
+            <li>Choose the anonymization method.
+                <ul>
+                    <li>Please note that when you select more than one table, only <code>MultiRelational
+                        k-anonymity</code> is available. This limitation is due to fact that other other anonymization
+                        methods would either offer insufficient protection to privacy or they would over generalize the
+                        data,
+                        making it useless for data miners.
+                    </li>
+                </ul>
+            </li>
+            <li>Click on <code>Next</code> button.</li>
+        </ol>
+        <h3>About different anonymization methods.</h3>
+        <p>In this dialog you will be asked to choose anonymization method. Each method work a little bit differently
+            and has a different purpose. This paragraph will give you brief overview of these methods.</p>
+        <h4>k-Anonymity</h4>
+        <p>The purpose of k-Anonymity is to protect individuals against record linkage attacks by anonymizing attribues
+            in QID. The point of k-Anonymity is generalize data in QID columns to that for each row with some QID values
+            there would be at least k-1 other rows with that same QID. k-Anonymity works in situations where each person
+            is present only in one row. For example if <code>QID = {Age, Gender, City}</code> then the table below is
+            2-Anonymous because the smallest QID group has size of 2.</p>
+        <center>
+            <table class="preview_table">
+                <tr>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Disability</th>
+                </tr>
+                <tr>
+                    <td>[35-40)</td>
+                    <td>Male</td>
+                    <td>Elva</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>[35-40)</td>
+                    <td>Male</td>
+                    <td>Elva</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>[35-40)</td>
+                    <td>Male</td>
+                    <td>Tartu</td>
+                    <td>No</td>
+                </tr>
+                <tr>
+                    <td>[40-45)</td>
+                    <td>Female</td>
+                    <td>Tartu</td>
+                    <td>Yes</td>
+                </tr>
+                <tr>
+                    <td>[40-45)</td>
+                    <td>Female</td>
+                    <td>Tartu</td>
+                    <td>No</td>
+                </tr>
+            </table>
+        </center>
+        <h4>(X, Y)-Anonymity (Currently unsupported)</h4>
+        <p>The purpose of (X, Y)-Anonymity is to protect individuals against record linkage attacks. In cases where one
+            individual appears in multiple rows k-Anonymity would not offer sufficient protection. For example if
+            hospital releases data about diaseses, person who has multiple diaseses would be present in pultiple rows
+            (one row per diasese). For example, if each person has 3 different diaseses it means that there are 3 rows
+            for each person and therefore QID group of size k would only offer anonymity of k/3 instead of k. The
+            following table is illustration of this.</p>
+        <center>
+            <table class="preview_table">
+                <tbody>
+                <tr>
+                    <th>Id</th>
+                    <th>Age</th>
+                    <th>Gender</th>
+                    <th>City</th>
+                    <th>Diasese</th>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>33</td>
+                    <td>Male</td>
+                    <td>Tartu</td>
+                    <td>Hiv</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>33</td>
+                    <td>Male</td>
+                    <td>Tartu</td>
+                    <td>Flu</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>33</td>
+                    <td>Male</td>
+                    <td>Tartu</td>
+                    <td>Aids</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>35</td>
+                    <td>Female</td>
+                    <td>Elva</td>
+                    <td>Hiv</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>35</td>
+                    <td>Female</td>
+                    <td>Elva</td>
+                    <td>Aids</td>
+                </tr>
+                </tbody>
+            </table>
+        </center>
+        <p>This table above would be 2-Anonymous on <code>QID = {Age, Gender, Elva}</code> but in reality in first QID
+            group all 3 rows represent the same person who has 3 diaseses and in second group both 2 rows represent the
+            same person who has two diaseses. (X, Y)-Anonymity overcomes this problem by making requirement that each
+            element from group X has at least k elements from group Y. For example: require that each QID group
+            represents at least k different persons.</p>
+        <h4>MultiRelational k-anonymity</h4>
+        <p>MultiRelational k-anonymity is also for protecting against record linkage. In more realistic situations, data is stored in relational database rather than one single table that contains all the data. Usually, it would be a person specific table (PT) and one table T for each sensitive
+            attribute. In such situations other anonymization methods would either not provide sufficient protection for privacy or they could make data useless for dataminers by over generalizing it. Such tables have common identifier which can be used to link persons with their attributes. For
+            example <code>PT = {Id, Name, Age, Gender, City}</code> and <code>T1= {PersonId, Job}</code>. In tabe T1 <code>PersonId</code> matches <code>Id</code> in PT so these table can be joined on <code>PT.Id = T1.PersonId</code> which would result in <code>T = {Id, Name, Age, Gender, City, Job}</code>. After joining those tables together into table T, k-Anonymity is applied to T.</p>
+        <h4>l-Diversity (Currently unsupported)</h4>
+        <h4>t-Closeness (Currently unsupported)</h4>
+        <h4>e-Differential privacy (Currently unsupported)</h4>
+        <h4>Distributional Privacy (Currently unsupported)</h4>
+    </div>
+
+    <div style="clear:both"></div>
+</div>
+
+
+<div class="status_bar">
+    Step 1 <input class="next" id="open_next" value="Next" onclick="app.openDlg.nextClicked();" type="button">
+</div>
+
+<script>
+    console.log("Open loaded.");
+    $("#anonymization_method").val("none");
+    app.openDlg.methodChanged();
+
+
+</script>

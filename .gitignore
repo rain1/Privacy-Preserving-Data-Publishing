@@ -1,0 +1,4 @@
+*.class
+.idea
+target
+src/main/webapp/public/js/node_modules

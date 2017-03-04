@@ -1,0 +1,96 @@
+<div id="titlebar_generalization" class="ui-draggable-handle title">
+    Specify generalization rules for column <span id="column_name">Work</span>
+    <div style="float:right; text-align: left;" onclick="app.winMgr.closeWindow('generalization');">
+        <img class="icon24" src="./public/icons/close.png">
+    </div>
+    <div style="clear:both;">
+    </div>
+</div>
+
+<div class="window_content row">
+    <div class="left_col">
+        <div>
+            <input id="intervals_radio" type="radio" name="gentype" value="intervals"
+                   onclick="app.generalizationDlg.selectIntervals();"> Generalize numeric value to intervals <br>
+            <span id="interval_desc">Select interval size: </span><input type="number" id="interval_size" onkeypress="app.generalizationDlg.intervalSizeChanged()"><br>
+            <span id="min_max"></span>
+            <br>
+            <input id="values_radio" type="radio" name="gentype" value="values"
+                   onclick="app.generalizationDlg.selectValues();"> Generalize values <br>
+            <textarea id="rules" rows="4" cols="50"></textarea> <br>
+            <input id="set_rule" type="button" value="Set generalization for this rule"
+                   onclick="app.generalizationDlg.addGeneralization();">
+            <div id="value_pool"></div>
+            <h4>Working table</h4>
+            <p>The purpose of table below is to keep the table you are currently anonymizing visible. You do not have to click anything. The column for which you are currently defining rules is highlighted with yellow.</p>
+            <div id="generalization_preview"></div>
+        </div>
+    </div>
+    <div>
+        <h4>Introduction</h4>
+        <p>In Privacy Preserving Data Publishing the protection of privacy depends on generalization. The more general
+            value is used the the better protection for privacy. However generalizing data too much will cause too high
+            distortion and therefore render it useless for dataminers. For example generalizing person's age to interval
+            with step of 5 would be normally offer sufficient protection while generalizing age to interval with size of
+            20 can cause too much distortion. In addition to numerical values categorical values are also
+            generalized.</p>
+        <p>For example: if in some case Job is part of QID we can generalize tester, programmer and developer to
+            information technology and surgeon, family doctor and nurese to medicine. If for some reason this
+            generalization does not offer sufficient protection to privacy it can be further generalized to 'any
+            job'.</p>
+        <h4>Getting started</h4>
+        <p>
+            Your task is to decide how much generalization is needed. Depending on whether you have numerical values or
+            categorical values you need to either specify interval size or add generalization rules.
+        </p>
+        <ul>
+            <li>If you have numeric values follow these steps:</li>
+            <ol>
+                <li>Write the size of interval under <code>Select interval size</code>.</li>
+                <ul>
+                    <li>To help you to decide which interval is best there are 2 labels given to you: <code>min</code>
+                        which tells you the smallest value for this column and <code>max</code> which tells you the
+                        largest value in this column. For example if you are generalzing column age and min is 18 and
+                        max is 65 it means that the youngest person in this table is 18 years old and the oldestst is 65
+                        years old.
+                    </li>
+                </ul>
+                <li>Click <code>next</code> button.</li>
+            </ol>
+            <li>If you have categorical values follow these steps:</li>
+            <ol>
+                <li>define general value for each value.
+                    <ol>
+                        <li>Below the text box you see different values from that column (in purple boxes). Start
+                            clicking on
+                            similar values to group them into one rule.
+                        </li>
+                        <li>Once you have grouped together all the similar values, click on <code>Set generalization for
+                            this
+                            rule</code>.
+                        </li>
+                        <li>Under <code>Please specify general value for these values</code> enter the more general
+                            value. For
+                            example, if you have previously clicked on programmer, tester and developer you might want
+                            to enter
+                            information technology there.
+                        </li>
+                        <li>Click <code>ok</code> to close input box.</li>
+                        <li>If you have any unused values (purple boxes) left, repeat steps 1.1 - 1.4. For example if
+                            you are
+                            generalizing job and you previously generalized programmer, tester and developer to
+                            information
+                            technology, you might now want to generalize surgeon, family doctor and nurese to medicine
+                        </li>
+                    </ol>
+                </li>
+                <li>Click <code>next</code> button.</li>
+            </ol>
+        </ul>
+
+    </div>
+</div>
+
+<div class="status_bar">
+    <input id="generalization_next" type="button" value="Next" onclick="app.generalizationDlg.nextClicked();">
+</div>

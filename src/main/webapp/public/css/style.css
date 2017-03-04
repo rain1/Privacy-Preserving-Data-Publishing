@@ -1,0 +1,121 @@
+h1 {
+    color: orange;
+}
+
+.window {
+    background: #ccc;
+    width: 90%;
+    height: 90%;
+    position: fixed;
+    left: 5%;
+    top: 5%;
+    display: none;
+    overflow: hidden;
+    border: 1px solid #555;
+    right: auto;
+    bottom: auto;
+}
+
+.window_content {
+    overflow: scroll;
+    height: calc(100% - 4em);
+}
+
+.title {
+    background: darkblue;
+    color: white;
+    margin: 0px;
+    font-size: 20px;
+}
+
+.preview_table {
+    border: 1px solid black;
+}
+
+.preview_table th {
+    font-weight: bold;
+}
+
+.preview_table td, .preview_table th{
+    border-left: 1px solid black;
+    border-top: 1px solid black;
+}
+
+
+th.on {
+    background: greenyellow;
+}
+
+
+.word {
+    background: purple;
+    margin-left: 5px;
+}
+
+.status_bar {
+    bottom: 0px;
+    position: absolute;
+    width: 100%;
+    border-top: dashed 1px #888;
+}
+
+.close_button {
+    border: solid black 1px;
+    position: fixed;
+    right: 0px;
+}
+
+.window_container {
+    background: blueviolet;
+    overflow: hidden;
+    display: inline-block;
+}
+
+.window_container_remove {
+    background: #ae7ade;
+    color: #c00;
+    font-weight: bold;
+}
+
+img.icon24 {
+    width: 24px;
+    height: 24px;
+}
+
+
+.left_col {
+    float: left;
+}
+
+.min50 {
+    min-width: 50%;
+}
+
+.row {
+    display: flex; /* equal height of the children */
+}
+
+input[type="button"] {
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    color: black;
+}
+
+input[type="button"]:disabled {
+    color: gray;
+}
+
+
+.next {
+
+}
+
+.highlight {
+    background-color: lightyellow;
+}
+
+.right_column {
+    margin-left: 10px;
+}
