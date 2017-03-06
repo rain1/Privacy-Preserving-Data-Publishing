@@ -1,5 +1,5 @@
-import WindowManager = require("./WindowManager");
-import Application = require("./Application");
+import WindowManager = require("./../WindowManager");
+import Application = require("./../Application");
 
 class GeneralizationDialog {
     isNum = true;

@@ -3,12 +3,12 @@
  */
 
 import WindowManager = require("./WindowManager");
-import GeneralizationDialog = require("./GeneralizationDialog");
+import GeneralizationDialog = require("./dialogs/GeneralizationDialog");
 import Application = require("./Application");
-import OpenDialog = require("./OpenDialog");
-import JoinDialog = require("./JoinDialog");
-import TypeDialog = require("./TypeDialog");
-import ActionDialog = require("./ActionDialog");
+import OpenDialog = require("./dialogs/OpenDialog");
+import JoinDialog = require("./dialogs/JoinDialog");
+import TypeDialog = require("./dialogs/TypeDialog");
+import ActionDialog = require("./dialogs/ActionDialog");
 import Anonymization = require("./Anonymization");
 
 

@@ -1,5 +1,5 @@
-import Application = require("./Application");
-import WindowManager = require("./WindowManager");
+import Application = require("./../Application");
+import WindowManager = require("./../WindowManager");
 class TypeDialog {
     app:Application;
     winMgr:WindowManager;

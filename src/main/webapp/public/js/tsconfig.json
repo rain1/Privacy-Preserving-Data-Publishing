@@ -3,7 +3,6 @@
     "module": "commonjs"
   },
   "files": [
-    "test.ts",
-    "WindowManager.ts"
+    "ts/Main.ts"
   ]
 }

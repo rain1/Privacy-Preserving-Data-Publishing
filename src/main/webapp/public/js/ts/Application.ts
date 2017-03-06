@@ -1,8 +1,8 @@
-import OpenDialog = require("./OpenDialog");
-import GeneralizationDialog = require("./GeneralizationDialog");
-import JoinDialog = require("./JoinDialog");
-import TypeDialog = require("./TypeDialog");
-import ActionDialog = require("./ActionDialog");
+import OpenDialog = require("./dialogs/OpenDialog");
+import GeneralizationDialog = require("./dialogs/GeneralizationDialog");
+import JoinDialog = require("./dialogs/JoinDialog");
+import TypeDialog = require("./dialogs/TypeDialog");
+import ActionDialog = require("./dialogs/ActionDialog");
 import Anonymization = require("./Anonymization");
 
 class Application {
@@ -46,6 +46,19 @@ class Application {
         return response;
     };
 
+    //http://stackoverflow.com/questions/11688692/most-elegant-way-to-create-a-list-of-unique-items-in-javascript
+    unique(arr) {
+        var u = {}, a = [];
+        var l = 0;
+        for (var i = 0, l = arr.length; i < l; ++i) {
+            if (!u.hasOwnProperty(arr[i])) {
+                a.push(arr[i]);
+                u[arr[i]] = 1;
+            }
+        }
+        return a;
+    }
+
     getValuesByColumn(columnName:string, schema = {}):string[] {
         var values = [];
         if(this.equals(schema, {})) {
@@ -58,7 +71,7 @@ class Application {
     };
 
     getUniqueValueByColumn(columnName:string, schema = {}):string[] {
-        return unique(this.getValuesByColumn(columnName, schema));
+        return this.unique(this.getValuesByColumn(columnName, schema));
     };
 
     getColumnNamesByType(search:string) {

@@ -52,7 +52,6 @@ class Anonymization {
             resultTable.push(row);
         }
 
-        //TODO see tuleb 6igesti teha.
         console.log(JSON.stringify(resultTable));
         var qid_cols = this.app.getColumnNamesByType("qid");
         var tableKeys = Object.keys(resultTable[0]);

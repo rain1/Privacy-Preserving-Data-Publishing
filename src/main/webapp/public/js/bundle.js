@@ -61,11 +61,231 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var Anonymization = (function () {
+    function Anonymization(app) {
+        this.app = app;
+    }
+    Anonymization.prototype.anonymizeCell = function (cell, rule) {
+        switch (rule.action) {
+            case "keep":
+                return cell;
+            case "remove":
+                //specificationEnded = true;
+                break;
+            case "generalize":
+                if (rule.mode == "interval") {
+                    var result = cell / rule.operation;
+                    return "[" + Math.floor(result) * rule.operation + ", " + (Math.floor(result) + 1) * rule.operation + ")";
+                }
+                else {
+                    return rule.operation[cell];
+                }
+                break;
+            case "suppress":
+                //setupSuppression(columName);
+                $("#suppression").show();
+                break;
+            default:
+                //specificationEnded = true;
+                break;
+        }
+    };
+    Anonymization.prototype.anonymizeData = function () {
+        this.app.workingSchema = jQuery.extend(true, {}, this.app.schema);
+        var resultTable = [];
+        for (var i = 0; i < this.app.schema.length; i++) {
+            var obj = this.app.schema[i];
+            var row = {};
+            for (var key in obj) {
+                var actionData = this.app.attributeActions[key];
+                if (actionData.action != "remove") {
+                    row[key] = this.anonymizeCell(obj[key], actionData);
+                    console.log(key, obj[key], actionData);
+                }
+            }
+            resultTable.push(row);
+        }
+        console.log(JSON.stringify(resultTable));
+        var qid_cols = this.app.getColumnNamesByType("qid");
+        var tableKeys = Object.keys(resultTable[0]);
+        var qid_ids = [];
+        for (i in tableKeys) {
+            if (qid_cols.indexOf(tableKeys[i]) > -1) {
+                qid_ids.push({
+                    "name": tableKeys[i],
+                    "values": this.app.getUniqueValueByColumn(tableKeys[i], resultTable).length,
+                    'id': i
+                });
+            }
+        }
+        qid_ids.sort(function (a, b) {
+            return parseFloat(a.values) - parseFloat(b.values);
+        });
+        var final_sort = [];
+        for (var _i = 0, qid_ids_1 = qid_ids; _i < qid_ids_1.length; _i++) {
+            var sortToken = qid_ids_1[_i];
+            final_sort.push([sortToken.id, 0]);
+        }
+        $("#finished_table").html(app.jsonToTable(resultTable, -1, [], "myTable"));
+        $("#myTable").tablesorter({ sortList: final_sort }); //TODO sorteerida muutuste j2gi, et saada max QID.
+    };
+    return Anonymization;
+}());
+module.exports = Anonymization;
+
+
+/***/ },
+/* 1 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var Application = (function () {
+    function Application() {
+        this.schemaName = "";
+        this.attributeTypes = [];
+        this.attributeActions = [];
+        this.schema = {};
+        this.workingSchema = {};
+        this.method = "";
+    }
+    Application.prototype.getSchemas = function () {
+        var response = "";
+        $.ajax({
+            url: './rest/schemas/',
+            success: function (result) {
+                response = result;
+                console.log(result);
+            },
+            async: false
+        });
+        return response;
+    };
+    ;
+    Application.prototype.getSchema = function (schema) {
+        var response = "";
+        $.ajax({
+            url: './rest/schema/' + schema,
+            success: function (result) {
+                response = result;
+                console.log(result);
+            },
+            async: false
+        });
+        return response;
+    };
+    ;
+    //http://stackoverflow.com/questions/11688692/most-elegant-way-to-create-a-list-of-unique-items-in-javascript
+    Application.prototype.unique = function (arr) {
+        var u = {}, a = [];
+        var l = 0;
+        for (var i = 0, l = arr.length; i < l; ++i) {
+            if (!u.hasOwnProperty(arr[i])) {
+                a.push(arr[i]);
+                u[arr[i]] = 1;
+            }
+        }
+        return a;
+    };
+    Application.prototype.getValuesByColumn = function (columnName, schema) {
+        if (schema === void 0) { schema = {}; }
+        var values = [];
+        if (this.equals(schema, {})) {
+            schema = this.schema;
+        }
+        for (var i in schema) {
+            values.push(schema[i][columnName]);
+        }
+        return values;
+    };
+    ;
+    Application.prototype.getUniqueValueByColumn = function (columnName, schema) {
+        if (schema === void 0) { schema = {}; }
+        return this.unique(this.getValuesByColumn(columnName, schema));
+    };
+    ;
+    Application.prototype.getColumnNamesByType = function (search) {
+        var columns = [];
+        for (var c in this.attributeTypes) {
+            if (this.attributeTypes[c].type == search) {
+                columns.push(c);
+            }
+        }
+        return columns;
+    };
+    ;
+    Application.prototype.equals = function (a, b) {
+        return JSON.stringify(a) == JSON.stringify(b);
+    };
+    ;
+    Application.prototype.hasDuplicateKeys = function () {
+        var columns = this.getColumnNamesByType("id");
+        if (columns.length == 0) {
+            console.log("non");
+            return false;
+        }
+        var currentKey = {};
+        var foundItems = [];
+        for (var i = 0; i < Object.keys(this.schema).length; i++) {
+            currentKey = {};
+            for (var column = 0; column < columns.length; column++) {
+                var columnName = columns[column];
+                currentKey[columnName] = this.schema[i][columnName];
+            }
+            console.log("debug: ", JSON.stringify(currentKey));
+            for (var j = 0; j < Object.keys(foundItems).length; j++) {
+                if (this.equals(currentKey, foundItems[j])) {
+                    console.log("found");
+                    return true;
+                }
+            }
+            foundItems.push(currentKey);
+        }
+        return false;
+    };
+    ;
+    return Application;
+}());
+module.exports = Application;
+
+
+/***/ },
+/* 2 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var WindowManager = (function () {
+    function WindowManager() {
+    }
+    WindowManager.prototype.closeWindow = function (window) {
+        console.log("closing: " + window);
+        $("#" + window).hide();
+    };
+    WindowManager.prototype.loadWindow = function (window) {
+        $("#" + window).load("public/html/" + window + ".html");
+        $("#" + window).draggable({
+            containment: 'window',
+            scroll: false,
+            handle: '#titlebar_' + window
+        });
+    };
+    return WindowManager;
+}());
+module.exports = WindowManager;
+
+
+/***/ },
+/* 3 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -205,110 +425,7 @@ module.exports = ActionDialog;
 
 
 /***/ },
-/* 1 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-var Application = (function () {
-    function Application() {
-        this.schemaName = "";
-        this.attributeTypes = [];
-        this.attributeActions = [];
-        this.schema = {};
-        this.workingSchema = {};
-        this.method = "";
-    }
-    Application.prototype.getSchemas = function () {
-        var response = "";
-        $.ajax({
-            url: './rest/schemas/',
-            success: function (result) {
-                response = result;
-                console.log(result);
-            },
-            async: false
-        });
-        return response;
-    };
-    ;
-    Application.prototype.getSchema = function (schema) {
-        var response = "";
-        $.ajax({
-            url: './rest/schema/' + schema,
-            success: function (result) {
-                response = result;
-                console.log(result);
-            },
-            async: false
-        });
-        return response;
-    };
-    ;
-    Application.prototype.getValuesByColumn = function (columnName, schema) {
-        if (schema === void 0) { schema = {}; }
-        var values = [];
-        if (this.equals(schema, {})) {
-            schema = this.schema;
-        }
-        for (var i in schema) {
-            values.push(schema[i][columnName]);
-        }
-        return values;
-    };
-    ;
-    Application.prototype.getUniqueValueByColumn = function (columnName, schema) {
-        if (schema === void 0) { schema = {}; }
-        return unique(this.getValuesByColumn(columnName, schema));
-    };
-    ;
-    Application.prototype.getColumnNamesByType = function (search) {
-        var columns = [];
-        for (var c in this.attributeTypes) {
-            if (this.attributeTypes[c].type == search) {
-                columns.push(c);
-            }
-        }
-        return columns;
-    };
-    ;
-    Application.prototype.equals = function (a, b) {
-        return JSON.stringify(a) == JSON.stringify(b);
-    };
-    ;
-    Application.prototype.hasDuplicateKeys = function () {
-        var columns = this.getColumnNamesByType("id");
-        if (columns.length == 0) {
-            console.log("non");
-            return false;
-        }
-        var currentKey = {};
-        var foundItems = [];
-        for (var i = 0; i < Object.keys(this.schema).length; i++) {
-            currentKey = {};
-            for (var column = 0; column < columns.length; column++) {
-                var columnName = columns[column];
-                currentKey[columnName] = this.schema[i][columnName];
-            }
-            console.log("debug: ", JSON.stringify(currentKey));
-            for (var j = 0; j < Object.keys(foundItems).length; j++) {
-                if (this.equals(currentKey, foundItems[j])) {
-                    console.log("found");
-                    return true;
-                }
-            }
-            foundItems.push(currentKey);
-        }
-        return false;
-    };
-    ;
-    return Application;
-}());
-module.exports = Application;
-
-
-/***/ },
-/* 2 */
+/* 4 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -419,7 +536,7 @@ module.exports = GeneralizationDialog;
 
 
 /***/ },
-/* 3 */
+/* 5 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -695,7 +812,7 @@ module.exports = JoinDialog;
 
 
 /***/ },
-/* 4 */
+/* 6 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -805,7 +922,7 @@ module.exports = OpenDialog;
 
 
 /***/ },
-/* 5 */
+/* 7 */
 /***/ function(module, exports) {
 
 "use strict";
@@ -887,33 +1004,7 @@ module.exports = TypeDialog;
 
 
 /***/ },
-/* 6 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-var WindowManager = (function () {
-    function WindowManager() {
-    }
-    WindowManager.prototype.closeWindow = function (window) {
-        console.log("closing: " + window);
-        $("#" + window).hide();
-    };
-    WindowManager.prototype.loadWindow = function (window) {
-        $("#" + window).load("public/html/" + window + ".html");
-        $("#" + window).draggable({
-            containment: 'window',
-            scroll: false,
-            handle: '#titlebar_' + window
-        });
-    };
-    return WindowManager;
-}());
-module.exports = WindowManager;
-
-
-/***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -921,14 +1012,14 @@ module.exports = WindowManager;
  * Created by rain on 11.02.17.
  */
 "use strict";
-var WindowManager = __webpack_require__(6);
-var GeneralizationDialog = __webpack_require__(2);
+var WindowManager = __webpack_require__(2);
+var GeneralizationDialog = __webpack_require__(4);
 var Application = __webpack_require__(1);
-var OpenDialog = __webpack_require__(4);
-var JoinDialog = __webpack_require__(3);
-var TypeDialog = __webpack_require__(5);
-var ActionDialog = __webpack_require__(0);
-var Anonymization = __webpack_require__(8);
+var OpenDialog = __webpack_require__(6);
+var JoinDialog = __webpack_require__(5);
+var TypeDialog = __webpack_require__(7);
+var ActionDialog = __webpack_require__(3);
+var Anonymization = __webpack_require__(0);
 var Main = (function () {
     function Main() {
         this.winMgr = new WindowManager();
@@ -1002,87 +1093,6 @@ var Main = (function () {
 }());
 window.app = new Main();
 console.log("I am alive");
-
-
-/***/ },
-/* 8 */
-/***/ function(module, exports) {
-
-"use strict";
-"use strict";
-var Anonymization = (function () {
-    function Anonymization(app) {
-        this.app = app;
-    }
-    Anonymization.prototype.anonymizeCell = function (cell, rule) {
-        switch (rule.action) {
-            case "keep":
-                return cell;
-            case "remove":
-                //specificationEnded = true;
-                break;
-            case "generalize":
-                if (rule.mode == "interval") {
-                    var result = cell / rule.operation;
-                    return "[" + Math.floor(result) * rule.operation + ", " + (Math.floor(result) + 1) * rule.operation + ")";
-                }
-                else {
-                    return rule.operation[cell];
-                }
-                break;
-            case "suppress":
-                //setupSuppression(columName);
-                $("#suppression").show();
-                break;
-            default:
-                //specificationEnded = true;
-                break;
-        }
-    };
-    Anonymization.prototype.anonymizeData = function () {
-        this.app.workingSchema = jQuery.extend(true, {}, this.app.schema);
-        var resultTable = [];
-        for (var i = 0; i < this.app.schema.length; i++) {
-            var obj = this.app.schema[i];
-            var row = {};
-            for (var key in obj) {
-                var actionData = this.app.attributeActions[key];
-                if (actionData.action != "remove") {
-                    row[key] = this.anonymizeCell(obj[key], actionData);
-                    console.log(key, obj[key], actionData);
-                }
-            }
-            resultTable.push(row);
-        }
-        //TODO see tuleb 6igesti teha.
-        console.log(JSON.stringify(resultTable));
-        var qid_cols = this.app.getColumnNamesByType("qid");
-        var tableKeys = Object.keys(resultTable[0]);
-        var qid_ids = [];
-        for (i in tableKeys) {
-            if (qid_cols.indexOf(tableKeys[i]) > -1) {
-                qid_ids.push({
-                    "name": tableKeys[i],
-                    "values": this.app.getUniqueValueByColumn(tableKeys[i], resultTable).length,
-                    'id': i
-                });
-            }
-        }
-        qid_ids.sort(function (a, b) {
-            return parseFloat(a.values) - parseFloat(b.values);
-        });
-        var final_sort = [];
-        for (var _i = 0, qid_ids_1 = qid_ids; _i < qid_ids_1.length; _i++) {
-            var sortToken = qid_ids_1[_i];
-            final_sort.push([sortToken.id, 0]);
-        }
-        debugger;
-        $("#finished_table").html(app.jsonToTable(resultTable, -1, [], "myTable"));
-        $("#myTable").tablesorter({ sortList: final_sort }); //TODO sorteerida muutuste j2gi, et saada max QID.
-    };
-    return Anonymization;
-}());
-module.exports = Anonymization;
 
 
 /***/ }
