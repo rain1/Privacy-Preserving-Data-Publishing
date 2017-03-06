@@ -31,7 +31,7 @@
         <H1>Main View</H1>
         <input type="button" onclick="app.importSchema();" value="Import"></input>
         <input type="button" class="btn btn-default" onclick="app.openDlg.init();" value="Open"></input>
-        <input type="button" class="btn btn-default" onclick="" value="Export" disabled="true"></input>
+        <input id="export_schema" type="button" class="btn btn-default" onclick="app.app.getResult();" value="Export" disabled="true"></input>
 
         <div id="finished_table"></div>
 
@@ -44,6 +44,7 @@
     <div style="clear:both"></div>
 </div>
 
+<a id="result_download" download="result.csv"></a>
 
 </BODY>
 </HTML>

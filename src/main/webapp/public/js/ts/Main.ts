@@ -82,6 +82,26 @@ class Main {
         return table;
     }
 
+    jsonToCSV(jsonData) {
+        var table = '';
+
+        for (let key of Object.keys(jsonData[0])) {
+            table += key + ",";
+        }
+        table = table.slice(0,-1);
+        table += "\n";
+
+        for (let row of jsonData) {
+            for (let cell in row) {
+                    table += row[cell] + ",";
+            }
+            table = table.slice(0,-1);
+            table += "\n";
+        }
+
+        return table;
+    }
+
 }
 
 window.app = new Main();

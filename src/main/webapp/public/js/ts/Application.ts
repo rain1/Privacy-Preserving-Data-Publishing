@@ -12,6 +12,7 @@ class Application {
     schema = {};
     workingSchema = {};
     method = "";
+    anonymizedSchema = {};
 
     openDialog:OpenDialog;
     joinDialog:JoinDialog;
@@ -19,6 +20,13 @@ class Application {
     actionDialog:ActionDialog;
     generalizationDialog:GeneralizationDialog;
     anonymizer:Anonymization;
+
+    getResult() {
+        var csv = app.jsonToCSV(this.anonymizedSchema);
+        var downloadLink = $("#result_download");
+        downloadLink.attr("href", "data:text/plain,"+encodeURIComponent(csv));
+        downloadLink[0].click();
+    }
 
     getSchemas() {
         var response = "";

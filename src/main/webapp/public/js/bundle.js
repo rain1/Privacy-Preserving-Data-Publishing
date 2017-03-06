@@ -136,7 +136,9 @@ var Anonymization = (function () {
             final_sort.push([sortToken.id, 0]);
         }
         $("#finished_table").html(app.jsonToTable(resultTable, -1, [], "myTable"));
-        $("#myTable").tablesorter({ sortList: final_sort }); //TODO sorteerida muutuste j2gi, et saada max QID.
+        this.app.anonymizedSchema = resultTable;
+        $("#export_schema").prop("disabled", false);
+        $("#myTable").tablesorter({ sortList: final_sort });
     };
     return Anonymization;
 }());
@@ -157,7 +159,14 @@ var Application = (function () {
         this.schema = {};
         this.workingSchema = {};
         this.method = "";
+        this.anonymizedSchema = {};
     }
+    Application.prototype.getResult = function () {
+        var csv = app.jsonToCSV(this.anonymizedSchema);
+        var downloadLink = $("#result_download");
+        downloadLink.attr("href", "data:text/plain," + encodeURIComponent(csv));
+        downloadLink[0].click();
+    };
     Application.prototype.getSchemas = function () {
         var response = "";
         $.ajax({
@@ -1087,6 +1096,24 @@ var Main = (function () {
             }
         }
         table += "</tbody></table>";
+        return table;
+    };
+    Main.prototype.jsonToCSV = function (jsonData) {
+        var table = '';
+        for (var _i = 0, _a = Object.keys(jsonData[0]); _i < _a.length; _i++) {
+            var key = _a[_i];
+            table += key + ",";
+        }
+        table = table.slice(0, -1);
+        table += "\n";
+        for (var _b = 0, jsonData_2 = jsonData; _b < jsonData_2.length; _b++) {
+            var row = jsonData_2[_b];
+            for (var cell in row) {
+                table += row[cell] + ",";
+            }
+            table = table.slice(0, -1);
+            table += "\n";
+        }
         return table;
     };
     return Main;

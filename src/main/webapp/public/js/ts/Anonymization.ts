@@ -77,7 +77,9 @@ class Anonymization {
 
 
         $("#finished_table").html(app.jsonToTable(resultTable, -1, [], "myTable"));
-        $("#myTable").tablesorter({sortList: final_sort}); //TODO sorteerida muutuste j2gi, et saada max QID.
+        this.app.anonymizedSchema = resultTable;
+        $("#export_schema").prop("disabled", false);
+        $("#myTable").tablesorter({sortList: final_sort});
     }
 
 }
