@@ -10,12 +10,14 @@ import JoinDialog = require("./dialogs/JoinDialog");
 import TypeDialog = require("./dialogs/TypeDialog");
 import ActionDialog = require("./dialogs/ActionDialog");
 import Anonymization = require("./Anonymization");
+import UploadDialog = require("./dialogs/UploadDialog");
 
 
 class Main {
     winMgr = new WindowManager();
     app = new Application();
     openDlg = new OpenDialog(this.app, this.winMgr);
+    uploadDlg = new UploadDialog(this.app, this.winMgr);
     joinDlg = new JoinDialog(this.app, this.winMgr);
     typeDlg = new TypeDialog(this.app, this.winMgr);
     actionDlg = new ActionDialog(this.app, this.winMgr);
@@ -29,7 +31,9 @@ class Main {
         this.winMgr.loadWindow("actions");
         this.winMgr.loadWindow("generalization");
         this.winMgr.loadWindow("suppression");
+        this.winMgr.loadWindow("upload");
 
+        this.app.uploadDialog = this.uploadDlg;
         this.app.openDialog = this.openDlg;
         this.app.joinDialog = this.joinDlg;
         this.app.typeDialog = this.typeDlg;

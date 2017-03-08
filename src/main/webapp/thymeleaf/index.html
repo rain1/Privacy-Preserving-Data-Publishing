@@ -7,6 +7,7 @@
     <script src="public/js/jquery.js"></script>
     <script src="public/js/jquery.tablesorter.js"></script>
     <script src="public/js/jquery-ui.js"></script>
+    <script src="public/js/dmuploader.min.js"></script>
     <script src="public/js/main.js"></script>
     <script src="public/js/bundle.js"></script>
     <!---<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/5.0.0/normalize.css"></link>-->
@@ -21,6 +22,7 @@
 <div id="actions" class="window ui-draggable"></div>
 <div id="generalization" class="window ui-draggable"></div>
 <div id="suppression" class="window ui-draggable"></div>
+<div id="upload" class="window ui-draggable"></div>
 <script>
     app.init();
 </script>
@@ -29,7 +31,7 @@
 
     <div class="left_col min50">
         <H1>Main View</H1>
-        <input type="button" onclick="app.importSchema();" value="Import"></input>
+        <input type="button" onclick="app.uploadDlg.init();" value="Import"></input>
         <input type="button" class="btn btn-default" onclick="app.openDlg.init();" value="Open"></input>
         <input id="export_schema" type="button" class="btn btn-default" onclick="app.app.getResult();" value="Export" disabled="true"></input>
 

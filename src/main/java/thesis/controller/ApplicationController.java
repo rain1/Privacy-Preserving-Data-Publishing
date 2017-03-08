@@ -1,12 +1,15 @@
 package thesis.controller;
 
+import lombok.SneakyThrows;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import thesis.ppdp.PPDPController;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -17,11 +20,11 @@ public class ApplicationController {
 
     public PPDPController app;
 
-    ApplicationController(){
+    ApplicationController() {
         app = new PPDPController();
     }
 
-    @RequestMapping("/rest/schema/{schema}")
+    @RequestMapping("/rest/schema/{schema:.+}")
     public List<Map<String, String>> getStats(@PathVariable("schema") String schema) {
         LOG.info("Requested schema for {}", schema);
 
@@ -31,5 +34,51 @@ public class ApplicationController {
     @RequestMapping("/rest/schemas")
     public String[] getSchemas() {
         return app.getSchemas();
+    }
+
+    //http://stackoverflow.com/questions/24339990/how-to-convert-a-multipart-file-to-file
+    @SneakyThrows
+    public File convert(MultipartFile file)
+    {
+        File convFile = new File(file.getOriginalFilename());
+        convFile.createNewFile();
+        FileOutputStream fos = new FileOutputStream(convFile);
+        fos.write(file.getBytes());
+        fos.close();
+        return convFile;
+    }
+
+    @SneakyThrows
+    public List<Map<String, String>> handleUploadedFile(@RequestParam("file") MultipartFile multipartFile) {
+        String name = multipartFile.getOriginalFilename();
+        if(!FilenameUtils.getExtension(name).toLowerCase().equals("csv")){
+            LOG.warn("Non-CSV file was uploaded");
+            return null;
+        }
+        List<Map<String, String>> addedSchema = null;
+        File file = convert(multipartFile);
+        try {
+            addedSchema = app.addSchema(name, file);
+        } catch (Exception e) {
+            LOG.error("Upload failed", e);
+        }
+        return addedSchema;
+    }
+
+
+    @PostMapping("/rest/schema/add")
+    @SneakyThrows
+    public List<Map<String, String>> addFile(@RequestParam("file") MultipartFile multipartFile) {
+        return handleUploadedFile(multipartFile);
+    }
+
+    @PostMapping("/rest/schema/addfallback")
+    @SneakyThrows
+    public String addFileFallback(@RequestParam("file") MultipartFile multipartFile) {
+        if(handleUploadedFile(multipartFile) == null) {
+            return "Upload failed.";
+        }else{
+            return "Upload succeeded.<br>Click <a href='/'>here</a> to go back";
+        }
     }
 }

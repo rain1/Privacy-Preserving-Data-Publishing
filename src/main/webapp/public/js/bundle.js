@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -1014,6 +1014,28 @@ module.exports = TypeDialog;
 
 /***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var UploadDialog = (function () {
+    function UploadDialog(app, winMgr) {
+        this.app = app;
+        this.winMgr = winMgr;
+    }
+    UploadDialog.prototype.init = function () {
+        $("#upload").show();
+    };
+    UploadDialog.prototype.nextClicked = function () {
+        this.winMgr.closeWindow('upload');
+    };
+    return UploadDialog;
+}());
+module.exports = UploadDialog;
+
+
+/***/ },
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1029,11 +1051,13 @@ var JoinDialog = __webpack_require__(5);
 var TypeDialog = __webpack_require__(7);
 var ActionDialog = __webpack_require__(3);
 var Anonymization = __webpack_require__(0);
+var UploadDialog = __webpack_require__(8);
 var Main = (function () {
     function Main() {
         this.winMgr = new WindowManager();
         this.app = new Application();
         this.openDlg = new OpenDialog(this.app, this.winMgr);
+        this.uploadDlg = new UploadDialog(this.app, this.winMgr);
         this.joinDlg = new JoinDialog(this.app, this.winMgr);
         this.typeDlg = new TypeDialog(this.app, this.winMgr);
         this.actionDlg = new ActionDialog(this.app, this.winMgr);
@@ -1047,6 +1071,8 @@ var Main = (function () {
         this.winMgr.loadWindow("actions");
         this.winMgr.loadWindow("generalization");
         this.winMgr.loadWindow("suppression");
+        this.winMgr.loadWindow("upload");
+        this.app.uploadDialog = this.uploadDlg;
         this.app.openDialog = this.openDlg;
         this.app.joinDialog = this.joinDlg;
         this.app.typeDialog = this.typeDlg;

@@ -95,7 +95,7 @@ img.icon24 {
     display: flex; /* equal height of the children */
 }
 
-input[type="button"] {
+input[type="button"], input[type="file"] {
     padding-left: 10px;
     padding-right: 10px;
     padding-top: 4px;
@@ -118,4 +118,14 @@ input[type="button"]:disabled {
 
 .right_column {
     margin-left: 10px;
+}
+
+#drag-and-drop-zone{
+    background-color: #cfcfcf;
+    border: 1px dashed #bbb;
+}
+
+#drag-and-drop-zone .or {
+    line-height: 200%;
+    color: #333;
 }

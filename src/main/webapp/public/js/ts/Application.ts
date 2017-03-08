@@ -4,6 +4,7 @@ import JoinDialog = require("./dialogs/JoinDialog");
 import TypeDialog = require("./dialogs/TypeDialog");
 import ActionDialog = require("./dialogs/ActionDialog");
 import Anonymization = require("./Anonymization");
+import UploadDialog = require("./dialogs/UploadDialog");
 
 class Application {
     schemaName = "";
@@ -14,6 +15,7 @@ class Application {
     method = "";
     anonymizedSchema = {};
 
+    uploadDialog:UploadDialog;
     openDialog:OpenDialog;
     joinDialog:JoinDialog;
     typeDialog:TypeDialog;
