@@ -17,7 +17,7 @@ h1 {
 }
 
 .window_content {
-    overflow: scroll;
+    overflow: hidden;
     height: calc(100% - 4em);
 }
 
@@ -85,6 +85,7 @@ img.icon24 {
 
 .left_col {
     float: left;
+    overflow: scroll;
 }
 
 .min50 {
@@ -118,6 +119,7 @@ input[type="button"]:disabled {
 
 .right_column {
     margin-left: 10px;
+    overflow: scroll;
 }
 
 #drag-and-drop-zone{
@@ -128,4 +130,18 @@ input[type="button"]:disabled {
 #drag-and-drop-zone .or {
     line-height: 200%;
     color: #333;
+}
+
+canvas{
+    width: 300px;
+    height: 200px;
+}
+
+.canvas_container{
+    max-width:300px;
+    max-height:200px
+}
+
+#statistics {
+    margin-left: 10px;
 }

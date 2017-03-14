@@ -14,6 +14,7 @@ class Application {
     workingSchema = {};
     method = "";
     anonymizedSchema = {};
+    anonymizedSchemaFull = {};
 
     uploadDialog:UploadDialog;
     openDialog:OpenDialog;
@@ -23,7 +24,7 @@ class Application {
     generalizationDialog:GeneralizationDialog;
     anonymizer:Anonymization;
 
-    getResult() {
+    downloadResult() {
         var csv = app.jsonToCSV(this.anonymizedSchema);
         var downloadLink = $("#result_download");
         downloadLink.attr("href", "data:text/plain,"+encodeURIComponent(csv));

@@ -61,15 +61,16 @@
 /******/ 	__webpack_require__.p = "";
 
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 10);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
 "use strict";
 "use strict";
+var Statistics = __webpack_require__(9);
 var Anonymization = (function () {
     function Anonymization(app) {
         this.app = app;
@@ -80,6 +81,7 @@ var Anonymization = (function () {
                 return cell;
             case "remove":
                 //specificationEnded = true;
+                return cell;
                 break;
             case "generalize":
                 if (rule.mode == "interval") {
@@ -99,30 +101,42 @@ var Anonymization = (function () {
                 break;
         }
     };
+    Anonymization.prototype.getPreservedColumns = function () {
+        var columns = [];
+        debugger;
+        for (var column in this.app.attributeActions) {
+            if (this.app.attributeActions[column]["action"] != "remove") {
+                columns.push(column);
+            }
+        }
+        return columns;
+    };
     Anonymization.prototype.anonymizeData = function () {
         this.app.workingSchema = jQuery.extend(true, {}, this.app.schema);
         var resultTable = [];
+        var statistics = new Statistics(this.app);
         for (var i = 0; i < this.app.schema.length; i++) {
             var obj = this.app.schema[i];
             var row = {};
             for (var key in obj) {
                 var actionData = this.app.attributeActions[key];
-                if (actionData.action != "remove") {
-                    row[key] = this.anonymizeCell(obj[key], actionData);
-                    console.log(key, obj[key], actionData);
-                }
+                //if (actionData.action != "remove") {
+                row[key] = this.anonymizeCell(obj[key], actionData);
             }
             resultTable.push(row);
         }
-        console.log(JSON.stringify(resultTable));
+        var preservedColumns = this.getPreservedColumns();
+        var subSet = statistics.selectColumns(resultTable, preservedColumns);
+        this.app.anonymizedSchema = subSet;
+        this.app.anonymizedSchemaFull = resultTable;
         var qid_cols = this.app.getColumnNamesByType("qid");
-        var tableKeys = Object.keys(resultTable[0]);
+        var tableKeys = Object.keys(this.app.anonymizedSchema[0]);
         var qid_ids = [];
         for (i in tableKeys) {
             if (qid_cols.indexOf(tableKeys[i]) > -1) {
                 qid_ids.push({
                     "name": tableKeys[i],
-                    "values": this.app.getUniqueValueByColumn(tableKeys[i], resultTable).length,
+                    "values": this.app.getUniqueValueByColumn(tableKeys[i], this.app.anonymizedSchema).length,
                     'id': i
                 });
             }
@@ -135,10 +149,15 @@ var Anonymization = (function () {
             var sortToken = qid_ids_1[_i];
             final_sort.push([sortToken.id, 0]);
         }
-        $("#finished_table").html(app.jsonToTable(resultTable, -1, [], "myTable"));
-        this.app.anonymizedSchema = resultTable;
+        $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable"));
         $("#export_schema").prop("disabled", false);
         $("#myTable").tablesorter({ sortList: final_sort });
+        var statistics = new Statistics(this.app);
+        $("#statistics").html(statistics.build());
+        for (var _a = 0, _b = statistics.charts; _a < _b.length; _a++) {
+            var chart = _b[_a];
+            statistics.drawChart(chart);
+        }
     };
     return Anonymization;
 }());
@@ -160,8 +179,9 @@ var Application = (function () {
         this.workingSchema = {};
         this.method = "";
         this.anonymizedSchema = {};
+        this.anonymizedSchemaFull = {};
     }
-    Application.prototype.getResult = function () {
+    Application.prototype.downloadResult = function () {
         var csv = app.jsonToCSV(this.anonymizedSchema);
         var downloadLink = $("#result_download");
         downloadLink.attr("href", "data:text/plain," + encodeURIComponent(csv));
@@ -350,14 +370,14 @@ var ActionDialog = (function () {
             element.prop("disabled", true);
             element.prop("title", "Identificators will always be removed");
         }
-        if (this.app.method == "kanonymity") {
+        if (["kanonymity", "xy", "multir"].indexOf(this.app.method) > -1) {
             var identifiers = this.app.getColumnNamesByType("sensitive");
             for (var i in identifiers) {
                 console.log(identifiers[i]);
                 var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
                 element.val("keep");
                 element.prop("disabled", true);
-                element.prop("title", "In k-Anonymity sensitive attributes are not generalized");
+                element.prop("title", "In k-Anonymity, (X, Y)-Anonymity and MultiRelational k-Anonymity sensitive attributes are not generalized");
             }
         }
     };
@@ -1036,6 +1056,236 @@ module.exports = UploadDialog;
 
 /***/ },
 /* 9 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+var Statistics = (function () {
+    function Statistics(app) {
+        this.charts = [];
+        Chart.defaults.global.legend.display = false;
+        this.app = app;
+    }
+    Statistics.prototype.pushId = function (qidMap, qid, id) {
+        if (qidMap[qid] == undefined) {
+            qidMap[qid] = new Set([id]);
+        }
+        else {
+            qidMap[qid].add(id);
+        }
+    };
+    Statistics.prototype.incrementMapCounter = function (qidMap, key) {
+        if (qidMap[key] == undefined) {
+            qidMap[key] = 1;
+        }
+        else {
+            qidMap[key] += 1;
+        }
+    };
+    Statistics.prototype.getRowColumns = function (row, columns) {
+        var selected = {};
+        for (var _i = 0, columns_1 = columns; _i < columns_1.length; _i++) {
+            var column = columns_1[_i];
+            selected[column] = row[column];
+        }
+        return selected;
+    };
+    Statistics.prototype.selectColumns = function (table, columns) {
+        var resultTable = [];
+        for (var _i = 0, table_1 = table; _i < table_1.length; _i++) {
+            var row = table_1[_i];
+            resultTable.push(this.getRowColumns(row, columns));
+        }
+        return resultTable;
+    };
+    Statistics.prototype.getQIDSizeMap = function (qidColumns) {
+        var qidMap = {};
+        for (var _i = 0, _a = this.app.anonymizedSchema; _i < _a.length; _i++) {
+            var row = _a[_i];
+            var qid = this.getRowColumns(row, qidColumns);
+            this.incrementMapCounter(qidMap, JSON.stringify(qid));
+        }
+        return qidMap;
+    };
+    Statistics.prototype.getQIDIDMap = function (qidColumns, idColumns) {
+        var qidIdMap = {};
+        for (var _i = 0, _a = this.app.anonymizedSchemaFull; _i < _a.length; _i++) {
+            var row = _a[_i];
+            var qid = this.getRowColumns(row, qidColumns);
+            var id = this.getRowColumns(row, idColumns);
+            this.pushId(qidIdMap, JSON.stringify(qid), JSON.stringify(id));
+        }
+        return qidIdMap;
+    };
+    Statistics.prototype.max = function (list) {
+        var maximum = -Infinity;
+        for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+            var element = list_1[_i];
+            if (element > maximum) {
+                maximum = element;
+            }
+        }
+        return maximum;
+    };
+    Statistics.prototype.min = function (list) {
+        var minimum = +Infinity;
+        for (var _i = 0, list_2 = list; _i < list_2.length; _i++) {
+            var element = list_2[_i];
+            if (element < minimum) {
+                minimum = element;
+            }
+        }
+        return minimum;
+    };
+    Statistics.prototype.findLargestMapValue = function (qidMap) {
+        var valueList = Object.values(qidMap);
+        return this.max(valueList);
+    };
+    Statistics.prototype.findSmallestMapValue = function (qidMap) {
+        var valueList = Object.values(qidMap);
+        return this.min(valueList);
+    };
+    Statistics.prototype.findLargestMapKey = function (qidMap) {
+        var keyList = Object.keys(qidMap).map(function (x) { return parseInt(x); });
+        return this.max(keyList);
+    };
+    Statistics.prototype.findSmallestMapKey = function (qidMap) {
+        var keyList = Object.keys(qidMap).map(function (x) { return parseInt(x); });
+        return this.min(keyList);
+    };
+    Statistics.prototype.buildCanvas = function (id) {
+        return '<div class="canvas_container"><canvas id="' + id + '"></canvas></div>';
+    };
+    Statistics.prototype.build = function () {
+        var statistics = "<b>Statistics:</b><br>";
+        var qidColumns = this.app.getColumnNamesByType("qid");
+        var idColumns = this.app.getColumnNamesByType("id");
+        var qidMap = this.getQIDSizeMap(qidColumns);
+        var frequencyMap = this.qidMapToFrequencyMap(qidMap);
+        var smallestQID = this.findSmallestMapValue(qidMap);
+        var largestQID = this.findLargestMapValue(qidMap);
+        var qidIdSet = this.getQIDIDMap(qidColumns, idColumns);
+        var qidIdSetSizeMap = this.qidIdSetToSizeMap(qidIdSet);
+        var smallestQIDXY = this.findSmallestMapKey(qidIdSetSizeMap);
+        var largestQIDXY = this.findLargestMapKey(qidIdSetSizeMap);
+        debugger;
+        if (qidColumns.length == 0) {
+            statistics += "Warning: QID not defined<br>";
+        }
+        else {
+            statistics += "Unique QIDs: " + Object.keys(qidMap).length + "<br>";
+            switch (this.app.method) {
+                case "kanonymity":
+                case "multir":
+                    statistics += "Smallest QID group: " + smallestQID + "<br>";
+                    statistics += "Largest QID group: " + largestQID + "<br>";
+                    statistics += this.buildCanvas("qidsize");
+                    statistics += "Table is: " + smallestQID + "-anonymous<br>";
+                    this.charts.push({
+                        elementId: "qidsize",
+                        dataMap: frequencyMap,
+                        xLabel: 'QID group size',
+                        yLabel: 'Occurrences',
+                        title: 'Distribution of QID groups'
+                    });
+                    for (var value in frequencyMap) {
+                        statistics += "There are " + frequencyMap[value] + " QID groups that represent " + value + " different persons<br>";
+                    }
+                    break;
+                case "xy":
+                    statistics += "Smallest QID group: " + smallestQIDXY + "<br>";
+                    statistics += "Largest QID group: " + largestQIDXY + "<br>";
+                    statistics += this.buildCanvas("qidid");
+                    this.charts.push({
+                        elementId: "qidid",
+                        dataMap: qidIdSetSizeMap,
+                        xLabel: 'Unique persons in QID group',
+                        yLabel: 'Num groups',
+                        title: 'Number of unique persons represented by QID group'
+                    });
+                    for (var value in qidIdSetSizeMap) {
+                        statistics += "There are " + qidIdSetSizeMap[value] + " QID groups that represent " + value + " different persons<br>";
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+        return statistics;
+    };
+    Statistics.prototype.qidMapToFrequencyMap = function (qidMap) {
+        var frequencyMap = {};
+        for (var key in qidMap) {
+            this.incrementMapCounter(frequencyMap, qidMap[key]);
+        }
+        return frequencyMap;
+    };
+    Statistics.prototype.qidIdSetToSizeMap = function (qidIdSet) {
+        var sizeMap = {};
+        for (var key in qidIdSet) {
+            this.incrementMapCounter(sizeMap, qidIdSet[key].size);
+        }
+        return sizeMap;
+    };
+    Statistics.prototype.drawChart = function (drawInfo) {
+        var barLabels = [];
+        var barValues = [];
+        for (var value in drawInfo.dataMap) {
+            barLabels.push(value);
+            barValues.push(drawInfo.dataMap[value]);
+        }
+        var barChartData = {
+            labels: barLabels,
+            datasets: [{
+                    fillColor: "rgba(0,60,100,1)",
+                    strokeColor: "black",
+                    data: barValues
+                }]
+        };
+        var ctx = document.getElementById(drawInfo.elementId).getContext("2d");
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: barLabels,
+                datasets: [{
+                        data: barValues,
+                        backgroundColor: "#0095FF"
+                    }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: drawInfo.yLabel
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }],
+                    xAxes: [{
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: drawInfo.xLabel
+                            }
+                        }]
+                },
+                title: {
+                    display: true,
+                    text: drawInfo.title
+                }
+            }
+        });
+    };
+    return Statistics;
+}());
+module.exports = Statistics;
+
+
+/***/ },
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1052,6 +1302,7 @@ var TypeDialog = __webpack_require__(7);
 var ActionDialog = __webpack_require__(3);
 var Anonymization = __webpack_require__(0);
 var UploadDialog = __webpack_require__(8);
+var Statistics = __webpack_require__(9);
 var Main = (function () {
     function Main() {
         this.winMgr = new WindowManager();
@@ -1145,6 +1396,7 @@ var Main = (function () {
     return Main;
 }());
 window.app = new Main();
+window.statistics = new Statistics();
 console.log("I am alive");
 
 

@@ -11,6 +11,7 @@ import TypeDialog = require("./dialogs/TypeDialog");
 import ActionDialog = require("./dialogs/ActionDialog");
 import Anonymization = require("./Anonymization");
 import UploadDialog = require("./dialogs/UploadDialog");
+import Statistics = require("./Statistics");
 
 
 class Main {
@@ -109,4 +110,5 @@ class Main {
 }
 
 window.app = new Main();
+window.statistics = new Statistics();
 console.log("I am alive");

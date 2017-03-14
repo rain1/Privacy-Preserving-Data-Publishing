@@ -62,14 +62,14 @@ class ActionDialog {
             element.prop("disabled", true);
             element.prop("title", "Identificators will always be removed");
         }
-        if (this.app.method == "kanonymity") {
+        if (["kanonymity", "xy", "multir"].indexOf(this.app.method) > -1) {
             var identifiers = this.app.getColumnNamesByType("sensitive");
             for (var i in identifiers) {
                 console.log(identifiers[i]);
                 var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
                 element.val("keep");
                 element.prop("disabled", true);
-                element.prop("title", "In k-Anonymity sensitive attributes are not generalized");
+                element.prop("title", "In k-Anonymity, (X, Y)-Anonymity and MultiRelational k-Anonymity sensitive attributes are not generalized");
             }
         }
     }

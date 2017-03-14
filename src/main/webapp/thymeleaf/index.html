@@ -2,16 +2,17 @@
 <HTML xmlns:th="http://www.w3.org/1999/xhtml">
 <HEAD>
     <TITLE>
-        A Small Hello
+        Privacy Preserving Data Publishing Study Assistant
     </TITLE>
     <script src="public/js/jquery.js"></script>
     <script src="public/js/jquery.tablesorter.js"></script>
     <script src="public/js/jquery-ui.js"></script>
+    <script src="public/js/Chart.bundle.min.js"></script>
     <script src="public/js/dmuploader.min.js"></script>
     <script src="public/js/main.js"></script>
     <script src="public/js/bundle.js"></script>
     <!---<link rel="stylesheet" type="text/css" href="https://necolas.github.io/normalize.css/5.0.0/normalize.css"></link>-->
-    <link rel="stylesheet" type="text/css" href="public/css/style.css"></link>
+    <link rel="stylesheet" type="text/css" href="public/css/style.css">
 </HEAD>
 <BODY>
 
@@ -29,13 +30,22 @@
 
 <div class="row">
 
-    <div class="left_col min50">
+    <div class="left_col min50" style="overflow: inherit;">
         <H1>Main View</H1>
-        <input type="button" onclick="app.uploadDlg.init();" value="Import"></input>
-        <input type="button" class="btn btn-default" onclick="app.openDlg.init();" value="Open"></input>
-        <input id="export_schema" type="button" class="btn btn-default" onclick="app.app.getResult();" value="Export" disabled="true"></input>
+        <input type="button" onclick="app.uploadDlg.init();" value="Import">
+        <input type="button" class="btn btn-default" onclick="app.openDlg.init();" value="Open">
+        <input id="export_schema" type="button" class="btn btn-default" onclick="app.app.downloadResult();"
+               value="Export" disabled="true">
 
-        <div id="finished_table"></div>
+        <div class="row">
+            <div class="left_col" style="overflow: inherit;">
+                <div id="finished_table"></div>
+            </div>
+            <div>
+                <div id="statistics"></div>
+            </div>
+            <div style="clear:both"></div>
+        </div>
 
         <!--<p><a href="#" onclick="console.log('ss');app.exit();">Exit the Application</a></p>-->
     </div>

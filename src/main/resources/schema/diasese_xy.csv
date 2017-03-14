@@ -1,194 +1,205 @@
 name,last name,age,gender,job,disease
-Olivia,Jones,48,Female,Designer,Dandruff
-Olivia,Jones,48,Female,Designer,Asthma
-Noah,Johnson,36,Male,IT manager,Epilepsy
-Noah,Johnson,36,Male,IT manager,Asthma
-Emma,Johnson,31,Female,Designer,Dandruff
-Emma,Davis,32,Female,Systems analyst,Epilepsy
-Emma,Davis,32,Female,Systems analyst,Cancer
-Emma,Davis,32,Female,Systems analyst,Epilepsy
-Laim,Brown,27,Male,IT manager,Asthma
-Laim,Brown,27,Male,IT manager,Dandruff
-Mason,Moore,29,Male,IT manager,Epilepsy
-Jacob,Miller,39,Male,Systems analyst,Asthma
-Jacob,Miller,39,Male,Systems analyst,Hair Loss
-Jacob,Miller,39,Male,Systems analyst,Cancer
-Jacob,Davis,43,Male,Programmer,Acne
-Jacob,Davis,43,Male,Programmer,Asthma
-Jacob,Davis,43,Male,Programmer,Hair Loss
-Sophia,Brown,43,Female,IT manager,Hair Loss
-Sophia,Brown,43,Female,IT manager,Cancer
-Sophia,Brown,43,Female,IT manager,Epilepsy
-Daniel,Moore,29,Male,Systems analyst,Cancer
-Daniel,Moore,29,Male,Systems analyst,Cancer
-Daniel,Jones,35,Male,Printmaker,Cancer
-Daniel,Jones,35,Male,Printmaker,Dandruff
-Mason,Johnson,21,Male,IT manager,Hair Loss
-Willia,Jones,37,Male,IT manager,Hair Loss
-Willia,Jones,37,Male,IT manager,Hair Loss
-Daniel,Williams,25,Male,IT manager,Acne
-Daniel,Williams,25,Male,IT manager,Acne
-Abigal,Williams,32,Female,Designer,Acne
-Isabella,Miller,39,Female,IT manager,Cancer
-Isabella,Miller,39,Female,IT manager,Cancer
-Noah,Jones,24,Male,System admin,Hair Loss
-Noah,Jones,24,Male,System admin,Cancer
-Laim,Moore,42,Male,Systems analyst,Acne
-Laim,Moore,42,Male,Systems analyst,Dandruff
-Abigal,Brown,29,Female,Printmaker,Acne
-Abigal,Brown,29,Female,Printmaker,Cancer
-Abigal,Brown,29,Female,Printmaker,Epilepsy
-Isabella,Jones,49,Female,Programmer,Dandruff
-Isabella,Jones,49,Female,Programmer,Hair Loss
-Isabella,Jones,49,Female,Programmer,Asthma
-Laim,Johnson,36,Male,Systems analyst,Dandruff
-Laim,Johnson,36,Male,Systems analyst,Asthma
-Daniel,Davis,37,Male,Programmer,Asthma
-Daniel,Davis,37,Male,Programmer,Cancer
-Daniel,Davis,37,Male,Programmer,Asthma
-Laim,Jones,26,Male,Printmaker,Asthma
-Laim,Jones,26,Male,Printmaker,Hair Loss
-Laim,Jones,26,Male,Printmaker,Cancer
-Daniel,Moore,45,Male,Programmer,Hair Loss
-Sophia,Smith,36,Female,Designer,Asthma
-Sophia,Smith,36,Female,Designer,Cancer
-Sophia,Smith,36,Female,Designer,Cancer
-Isabella,Jones,43,Female,Systems analyst,Hair Loss
-Olivia,Wilson,48,Female,Programmer,Dandruff
-Daniel,Johnson,38,Male,IT manager,Epilepsy
-Laim,Smith,33,Male,Printmaker,Cancer
-Mason,Johnson,24,Male,Printmaker,Epilepsy
-Willia,Davis,49,Male,Printmaker,Cancer
-Willia,Davis,49,Male,Printmaker,Acne
-Olivia,Williams,35,Female,Printmaker,Epilepsy
-Olivia,Wilson,30,Female,IT manager,Cancer
-Olivia,Wilson,30,Female,IT manager,Hair Loss
-Daniel,Taylor,49,Male,System admin,Dandruff
-Daniel,Taylor,49,Male,System admin,Cancer
-Abigal,Miller,23,Female,Programmer,Dandruff
-Ava,Wilson,32,Female,System admin,Acne
-Ava,Wilson,32,Female,System admin,Asthma
-Ava,Wilson,32,Female,System admin,Hair Loss
-Laim,Brown,20,Male,System admin,Asthma
-Laim,Brown,20,Male,System admin,Acne
-Laim,Brown,20,Male,System admin,Epilepsy
-Isabella,Taylor,41,Female,Designer,Epilepsy
-Isabella,Johnson,25,Female,System admin,Dandruff
-Isabella,Johnson,25,Female,System admin,Dandruff
-Ava,Johnson,20,Female,Designer,Epilepsy
-Ava,Johnson,20,Female,Designer,Asthma
-Ava,Johnson,20,Female,Designer,Acne
-Ava,Miller,34,Female,Designer,Cancer
-Olivia,Smith,21,Female,Printmaker,Acne
-Olivia,Smith,21,Female,Printmaker,Cancer
-Mason,Jones,22,Male,Printmaker,Cancer
-Mason,Jones,22,Male,Printmaker,Hair Loss
-Mason,Jones,22,Male,Printmaker,Asthma
-Ava,Johnson,29,Female,Programmer,Asthma
-Ava,Johnson,29,Female,Programmer,Acne
-Jacob,Jones,41,Male,System admin,Hair Loss
-Abigal,Williams,30,Female,Programmer,Asthma
-Abigal,Williams,30,Female,Programmer,Dandruff
-Olivia,Wilson,36,Female,Printmaker,Hair Loss
-Abigal,Miller,42,Female,Designer,Asthma
-Sophia,Smith,22,Female,Programmer,Dandruff
-Sophia,Smith,22,Female,Programmer,Asthma
-Sophia,Smith,22,Female,Programmer,Acne
-Ethan,Miller,32,Male,Designer,Dandruff
-Ethan,Miller,32,Male,Designer,Hair Loss
-Ethan,Miller,32,Male,Designer,Acne
-Mason,Williams,44,Male,Systems analyst,Hair Loss
-Mason,Williams,44,Male,Systems analyst,Hair Loss
-Mason,Williams,44,Male,Systems analyst,Dandruff
-Sophia,Davis,25,Female,Programmer,Asthma
-Sophia,Davis,25,Female,Programmer,Dandruff
-Sophia,Davis,25,Female,Programmer,Cancer
-Emma,Williams,39,Female,Printmaker,Acne
-Emma,Williams,39,Female,Printmaker,Hair Loss
-Willia,Smith,34,Male,Designer,Cancer
-Isabella,Davis,48,Female,Printmaker,Asthma
-Isabella,Davis,48,Female,Printmaker,Hair Loss
-Willia,Moore,45,Male,Systems analyst,Epilepsy
-Noah,Smith,32,Male,Designer,Asthma
-Noah,Smith,32,Male,Designer,Hair Loss
-Noah,Smith,32,Male,Designer,Cancer
-Ava,Taylor,26,Female,Systems analyst,Epilepsy
-Ava,Taylor,26,Female,Systems analyst,Dandruff
-Emma,Wilson,47,Female,Designer,Dandruff
-Emma,Wilson,47,Female,Designer,Epilepsy
-Abigal,Brown,32,Female,Systems analyst,Hair Loss
-Abigal,Brown,32,Female,Systems analyst,Asthma
-Sophia,Davis,47,Female,Programmer,Cancer
-Sophia,Davis,47,Female,Programmer,Acne
-Emma,Moore,46,Female,Systems analyst,Acne
-Emma,Johnson,47,Female,Printmaker,Acne
-Emma,Johnson,47,Female,Printmaker,Cancer
-Emma,Johnson,47,Female,Printmaker,Cancer
-Willia,Johnson,36,Male,Designer,Dandruff
-Laim,Taylor,27,Male,IT manager,Asthma
-Laim,Taylor,27,Male,IT manager,Asthma
-Sophia,Johnson,28,Female,IT manager,Asthma
-Sophia,Johnson,28,Female,IT manager,Hair Loss
-Olivia,Johnson,37,Female,Systems analyst,Dandruff
-Abigal,Davis,40,Female,Systems analyst,Hair Loss
-Abigal,Davis,40,Female,Systems analyst,Epilepsy
-Abigal,Davis,40,Female,Systems analyst,Epilepsy
-Mason,Williams,37,Male,Printmaker,Cancer
-Abigal,Johnson,32,Female,Designer,Cancer
-Jacob,Wilson,49,Male,Printmaker,Acne
-Jacob,Wilson,49,Male,Printmaker,Hair Loss
-Isabella,Williams,22,Female,Designer,Epilepsy
-Sophia,Smith,37,Female,Systems analyst,Cancer
-Sophia,Moore,29,Female,IT manager,Dandruff
-Sophia,Moore,29,Female,IT manager,Acne
-Sophia,Moore,29,Female,IT manager,Dandruff
-Noah,Moore,42,Male,IT manager,Hair Loss
-Noah,Moore,42,Male,IT manager,Epilepsy
-Sophia,Miller,31,Female,Systems analyst,Hair Loss
-Sophia,Miller,31,Female,Systems analyst,Dandruff
-Noah,Johnson,47,Male,Printmaker,Acne
-Noah,Johnson,47,Male,Printmaker,Hair Loss
-Noah,Johnson,47,Male,Printmaker,Hair Loss
-Abigal,Williams,27,Female,Printmaker,Cancer
-Abigal,Williams,27,Female,Printmaker,Cancer
-Noah,Moore,46,Male,Systems analyst,Acne
-Jacob,Williams,22,Male,Programmer,Epilepsy
-Jacob,Williams,22,Male,Programmer,Asthma
-Jacob,Williams,22,Male,Programmer,Cancer
-Ethan,Miller,37,Male,IT manager,Dandruff
-Daniel,Davis,49,Male,Programmer,Cancer
-Daniel,Davis,49,Male,Programmer,Epilepsy
-Olivia,Moore,32,Female,System admin,Hair Loss
-Ethan,Miller,24,Male,IT manager,Hair Loss
-Jacob,Miller,26,Male,Printmaker,Cancer
-Isabella,Brown,28,Female,Programmer,Epilepsy
-Ava,Williams,21,Female,System admin,Cancer
-Noah,Taylor,47,Male,Systems analyst,Asthma
-Noah,Taylor,47,Male,Systems analyst,Acne
-Noah,Taylor,47,Male,Systems analyst,Epilepsy
-Isabella,Smith,22,Female,System admin,Epilepsy
-Isabella,Smith,22,Female,System admin,Dandruff
-Isabella,Smith,22,Female,System admin,Cancer
-Abigal,Taylor,37,Female,IT manager,Acne
-Ava,Moore,20,Female,Printmaker,Asthma
-Isabella,Wilson,23,Female,Printmaker,Hair Loss
-Isabella,Wilson,23,Female,Printmaker,Cancer
-Willia,Smith,26,Male,Designer,Cancer
-Willia,Smith,26,Male,Designer,Cancer
-Isabella,Smith,47,Female,System admin,Hair Loss
-Isabella,Smith,47,Female,System admin,Epilepsy
-Isabella,Smith,47,Female,System admin,Acne
-Ava,Moore,20,Female,Programmer,Dandruff
-Ava,Moore,20,Female,Programmer,Acne
-Daniel,Johnson,20,Male,Programmer,Cancer
-Ethan,Johnson,33,Male,Systems analyst,Hair Loss
-Ethan,Johnson,33,Male,Systems analyst,Hair Loss
-Abigal,Miller,21,Female,System admin,Cancer
-Abigal,Miller,21,Female,System admin,Dandruff
-Abigal,Miller,21,Female,System admin,Epilepsy
-Jacob,Williams,23,Male,IT manager,Epilepsy
-Jacob,Williams,23,Male,IT manager,Asthma
-Jacob,Williams,23,Male,IT manager,Epilepsy
-Ethan,Miller,22,Male,System admin,Cancer
-Ethan,Miller,22,Male,System admin,Asthma
-Ethan,Miller,22,Male,System admin,Asthma
+Jacob,Taylor,25,Male,Viljandi,Cancer
+Jacob,Taylor,25,Male,Viljandi,Dandruff
+Ethan,Jones,23,Male,Elva,Asthma
+Ethan,Miller,22,Male,Vändra,Acne
+Ethan,Miller,22,Male,Vändra,Hair Loss
+Ethan,Miller,22,Male,Vändra,Dandruff
+Isabella,Johnson,25,Female,Viljandi,Epilepsy
+Isabella,Johnson,25,Female,Viljandi,Hair Loss
+Laim,Davis,27,Male,Vändra,Dandruff
+Sophia,Brown,35,Female,Põltsamaa,Hair Loss
+Sophia,Brown,35,Female,Põltsamaa,Acne
+Ethan,Brown,28,Male,Rapla,Hair Loss
+Jacob,Taylor,41,Male,Viljandi,Epilepsy
+Jacob,Taylor,41,Male,Viljandi,Asthma
+Jacob,Taylor,41,Male,Viljandi,Acne
+Mason,Wilson,44,Male,Jõgeva,Acne
+Willia,Williams,28,Male,Jõgeva,Cancer
+Abigal,Johnson,29,Female,Põltsamaa,Acne
+Abigal,Johnson,29,Female,Põltsamaa,Epilepsy
+Mason,Smith,24,Male,Paide,Acne
+Mason,Smith,24,Male,Paide,Acne
+Mason,Smith,24,Male,Paide,Dandruff
+Ethan,Taylor,38,Male,Türi,Cancer
+Ethan,Taylor,38,Male,Türi,Acne
+Mason,Jones,34,Male,Paide,Cancer
+Mason,Jones,34,Male,Paide,Acne
+Mason,Jones,34,Male,Paide,Hair Loss
+Laim,Brown,36,Male,Rapla,Dandruff
+Noah,Johnson,49,Male,Paide,Hair Loss
+Noah,Johnson,49,Male,Paide,Epilepsy
+Daniel,Williams,27,Male,Tartu,Dandruff
+Daniel,Williams,27,Male,Tartu,Dandruff
+Noah,Williams,37,Male,Tallinn,Dandruff
+Noah,Williams,37,Male,Tallinn,Epilepsy
+Isabella,Smith,41,Female,Viljandi,Asthma
+Isabella,Smith,41,Female,Viljandi,Acne
+Isabella,Smith,41,Female,Viljandi,Hair Loss
+Isabella,Jones,35,Female,Põltsamaa,Cancer
+Isabella,Jones,35,Female,Põltsamaa,Asthma
+Isabella,Jones,35,Female,Põltsamaa,Cancer
+Ethan,Smith,41,Male,Paide,Acne
+Ethan,Smith,41,Male,Paide,Asthma
+Ethan,Smith,41,Male,Paide,Acne
+Jacob,Taylor,28,Male,Põltsamaa,Asthma
+Ethan,Johnson,46,Male,Tallinn,Dandruff
+Ethan,Johnson,46,Male,Tallinn,Dandruff
+Ethan,Johnson,46,Male,Tallinn,Epilepsy
+Noah,Wilson,35,Male,Paide,Epilepsy
+Olivia,Smith,26,Female,Jõgeva,Hair Loss
+Olivia,Smith,26,Female,Jõgeva,Epilepsy
+Olivia,Smith,26,Female,Jõgeva,Acne
+Noah,Wilson,36,Male,Tallinn,Asthma
+Mason,Williams,45,Male,Tallinn,Hair Loss
+Mason,Williams,45,Male,Tallinn,Cancer
+Mason,Williams,45,Male,Tallinn,Dandruff
+Olivia,Moore,37,Female,Rapla,Epilepsy
+Olivia,Moore,37,Female,Rapla,Cancer
+Olivia,Moore,37,Female,Rapla,Hair Loss
+Daniel,Wilson,22,Male,Tallinn,Acne
+Daniel,Wilson,22,Male,Tallinn,Epilepsy
+Isabella,Miller,32,Female,Viljandi,Cancer
+Isabella,Miller,32,Female,Viljandi,Hair Loss
+Isabella,Miller,32,Female,Viljandi,Dandruff
+Sophia,Williams,32,Female,Viljandi,Dandruff
+Sophia,Williams,32,Female,Viljandi,Acne
+Sophia,Williams,32,Female,Viljandi,Acne
+Isabella,Johnson,27,Female,Vändra,Dandruff
+Laim,Johnson,25,Male,Rapla,Dandruff
+Sophia,Williams,21,Female,Jõgeva,Acne
+Sophia,Williams,21,Female,Jõgeva,Hair Loss
+Sophia,Williams,21,Female,Jõgeva,Dandruff
+Mason,Brown,32,Male,Jõgeva,Acne
+Mason,Brown,32,Male,Jõgeva,Asthma
+Noah,Johnson,42,Male,Elva,Epilepsy
+Noah,Johnson,42,Male,Elva,Cancer
+Noah,Johnson,42,Male,Elva,Dandruff
+Noah,Smith,39,Male,Tallinn,Epilepsy
+Noah,Williams,40,Male,Tartu,Acne
+Noah,Williams,40,Male,Tartu,Hair Loss
+Isabella,Johnson,35,Female,Türi,Asthma
+Isabella,Johnson,35,Female,Türi,Cancer
+Isabella,Johnson,35,Female,Türi,Cancer
+Sophia,Brown,33,Female,Viljandi,Hair Loss
+Sophia,Brown,33,Female,Viljandi,Asthma
+Sophia,Brown,33,Female,Viljandi,Acne
+Mason,Taylor,27,Male,Viljandi,Dandruff
+Laim,Williams,34,Male,Jõgeva,Hair Loss
+Laim,Williams,34,Male,Jõgeva,Hair Loss
+Emma,Jones,34,Female,Elva,Dandruff
+Willia,Moore,28,Male,Rapla,Cancer
+Willia,Moore,28,Male,Rapla,Hair Loss
+Daniel,Wilson,31,Male,Jõgeva,Dandruff
+Laim,Smith,28,Male,Põltsamaa,Hair Loss
+Laim,Smith,28,Male,Põltsamaa,Acne
+Laim,Smith,28,Male,Põltsamaa,Dandruff
+Ethan,Taylor,49,Male,Türi,Cancer
+Ethan,Taylor,49,Male,Türi,Asthma
+Laim,Davis,47,Male,Tartu,Cancer
+Olivia,Miller,21,Female,Paide,Cancer
+Abigal,Williams,42,Female,Tartu,Epilepsy
+Abigal,Williams,42,Female,Tartu,Hair Loss
+Abigal,Brown,36,Female,Elva,Dandruff
+Abigal,Brown,36,Female,Elva,Acne
+Abigal,Taylor,26,Female,Viljandi,Epilepsy
+Abigal,Taylor,26,Female,Viljandi,Asthma
+Abigal,Taylor,26,Female,Viljandi,Dandruff
+Abigal,Williams,34,Female,Türi,Epilepsy
+Abigal,Williams,34,Female,Türi,Hair Loss
+Ethan,Taylor,48,Male,Rapla,Asthma
+Ethan,Taylor,48,Male,Rapla,Asthma
+Ethan,Taylor,48,Male,Rapla,Dandruff
+Willia,Taylor,36,Male,Türi,Epilepsy
+Willia,Taylor,36,Male,Türi,Acne
+Willia,Taylor,36,Male,Türi,Asthma
+Ethan,Wilson,24,Male,Jõgeva,Asthma
+Ethan,Wilson,24,Male,Jõgeva,Acne
+Ethan,Wilson,24,Male,Jõgeva,Acne
+Ethan,Taylor,32,Male,Rapla,Epilepsy
+Ethan,Taylor,32,Male,Rapla,Hair Loss
+Abigal,Williams,34,Female,Viljandi,Asthma
+Abigal,Williams,34,Female,Viljandi,Asthma
+Willia,Williams,20,Male,Tallinn,Dandruff
+Ethan,Moore,25,Male,Viljandi,Hair Loss
+Mason,Brown,28,Male,Elva,Dandruff
+Laim,Jones,47,Male,Tallinn,Cancer
+Abigal,Smith,44,Female,Viljandi,Asthma
+Jacob,Jones,29,Male,Viljandi,Dandruff
+Noah,Smith,25,Male,Paide,Dandruff
+Noah,Smith,25,Male,Paide,Dandruff
+Emma,Williams,47,Female,Türi,Cancer
+Emma,Williams,47,Female,Türi,Cancer
+Emma,Williams,47,Female,Türi,Acne
+Mason,Davis,37,Male,Viljandi,Cancer
+Mason,Davis,37,Male,Viljandi,Asthma
+Noah,Miller,29,Male,Rapla,Cancer
+Noah,Miller,29,Male,Rapla,Cancer
+Noah,Miller,29,Male,Rapla,Asthma
+Olivia,Taylor,35,Female,Tallinn,Acne
+Olivia,Taylor,35,Female,Tallinn,Hair Loss
+Jacob,Jones,28,Male,Tallinn,Asthma
+Jacob,Jones,28,Male,Tallinn,Dandruff
+Isabella,Jones,46,Female,Elva,Cancer
+Isabella,Jones,46,Female,Elva,Hair Loss
+Isabella,Jones,46,Female,Elva,Acne
+Mason,Wilson,24,Male,Jõgeva,Acne
+Noah,Johnson,37,Male,Türi,Dandruff
+Daniel,Jones,32,Male,Jõgeva,Epilepsy
+Sophia,Miller,34,Female,Elva,Cancer
+Sophia,Miller,34,Female,Elva,Cancer
+Sophia,Miller,34,Female,Elva,Epilepsy
+Olivia,Jones,30,Female,Türi,Dandruff
+Olivia,Jones,30,Female,Türi,Epilepsy
+Olivia,Jones,30,Female,Türi,Dandruff
+Olivia,Smith,49,Female,Põltsamaa,Dandruff
+Ethan,Jones,28,Male,Jõgeva,Hair Loss
+Ethan,Jones,28,Male,Jõgeva,Acne
+Ethan,Jones,28,Male,Jõgeva,Epilepsy
+Laim,Williams,47,Male,Türi,Hair Loss
+Laim,Williams,47,Male,Türi,Dandruff
+Laim,Williams,47,Male,Türi,Asthma
+Daniel,Taylor,27,Male,Elva,Dandruff
+Daniel,Taylor,27,Male,Elva,Asthma
+Daniel,Taylor,27,Male,Elva,Cancer
+Daniel,Johnson,22,Male,Viljandi,Acne
+Noah,Smith,35,Male,Põltsamaa,Epilepsy
+Noah,Smith,35,Male,Põltsamaa,Acne
+Noah,Smith,35,Male,Põltsamaa,Dandruff
+Noah,Davis,20,Male,Põltsamaa,Hair Loss
+Sophia,Miller,43,Female,Põltsamaa,Epilepsy
+Sophia,Miller,43,Female,Põltsamaa,Acne
+Sophia,Wilson,23,Female,Elva,Asthma
+Sophia,Wilson,23,Female,Elva,Epilepsy
+Willia,Smith,35,Male,Põltsamaa,Acne
+Willia,Smith,35,Male,Põltsamaa,Hair Loss
+Willia,Smith,35,Male,Põltsamaa,Dandruff
+Laim,Davis,42,Male,Viljandi,Hair Loss
+Laim,Davis,42,Male,Viljandi,Dandruff
+Laim,Davis,42,Male,Viljandi,Asthma
+Isabella,Smith,32,Female,Tallinn,Cancer
+Emma,Smith,29,Female,Viljandi,Hair Loss
+Emma,Smith,29,Female,Viljandi,Acne
+Emma,Smith,29,Female,Viljandi,Cancer
+Noah,Johnson,20,Male,Põltsamaa,Hair Loss
+Willia,Jones,25,Male,Põltsamaa,Acne
+Willia,Jones,25,Male,Põltsamaa,Asthma
+Willia,Jones,25,Male,Põltsamaa,Asthma
+Olivia,Johnson,31,Female,Jõgeva,Asthma
+Olivia,Johnson,31,Female,Jõgeva,Cancer
+Ethan,Brown,28,Male,Tartu,Epilepsy
+Ethan,Brown,28,Male,Tartu,Asthma
+Ethan,Brown,28,Male,Tartu,Acne
+Emma,Brown,45,Female,Tallinn,Cancer
+Abigal,Smith,24,Female,Rapla,Acne
+Emma,Taylor,37,Female,Rapla,Epilepsy
+Emma,Taylor,37,Female,Rapla,Acne
+Emma,Taylor,37,Female,Rapla,Cancer
+Jacob,Brown,22,Male,Paide,Epilepsy
+Jacob,Brown,22,Male,Paide,Cancer
+Jacob,Brown,22,Male,Paide,Cancer
+Ethan,Jones,31,Male,Tartu,Asthma
+Ethan,Brown,30,Male,Põltsamaa,Acne
+Ethan,Brown,30,Male,Põltsamaa,Cancer
+Noah,Brown,40,Male,Jõgeva,Epilepsy
+Noah,Brown,40,Male,Jõgeva,Acne

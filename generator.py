@@ -4,7 +4,7 @@
 import random
 from random import randrange
 
-table_xy = "name,last name,age,gender,job,disease\n"
+table_xy = "name,last name,age,gender,city,disease\n"
 table_diasese = "name,last name,age,gender,city,diasese\n"
 table_job = "name,last name,age,gender,city,job\n"
 
@@ -40,7 +40,7 @@ for i in range(0,100):
     num_diaseses = randrange(1,4)
     city = random.choice(cities)
     for j in range(0,num_diaseses):
-        table_xy += str(name)  + "," + str(last_name) + "," + str(age) + "," + gender + "," + job + "," + random.choice(diaseses) + "\n"
+        table_xy += str(name)  + "," + str(last_name) + "," + str(age) + "," + gender + "," + city + "," + random.choice(diaseses) + "\n"
 
     if i < 20:
         table_diasese +=  str(name) + "," + str(last_name) + "," + str(age) + "," + gender + "," + city + "," + diasese + "\n"
@@ -58,13 +58,15 @@ with open("src/main/resources/schema/diasese.csv","w") as f:
 
 with open("src/main/resources/schema/job.csv","w") as f:
     f.write(table_job)
-"""
 
 with open("src/main/resources/schema/job_rel.csv","w") as f:
     f.write(table_job_rel)
 
 with open("src/main/resources/schema/person_rel.csv","w") as f:
     f.write(table_person)
+"""
 
+with open("src/main/resources/schema/diasese_xy.csv","w") as f:
+    f.write(table_xy)
 
 #print(table_xy)
