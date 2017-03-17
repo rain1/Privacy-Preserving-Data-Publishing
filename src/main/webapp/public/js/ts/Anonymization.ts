@@ -46,8 +46,27 @@ class Anonymization {
         return columns;
     }
 
+    generateIdentificators(table, idColumns: string[]){
+        var remember = {};
+        var counter = 0;
+        var statistics = new Statistics();
+        for(let row in table){
+            var currentIdColumns = statistics.getRowColumns(table[row], idColumns);
+            var currentIdColumnsStr = JSON.stringify(currentIdColumns);
+            if(remember[currentIdColumnsStr] == undefined){
+                remember[currentIdColumnsStr] = ++counter;
+            }
+            //jQuery.extend(true, {"id": remember[currentIdColumnsStr]}, statistics.getRowColumnsNot(row, idColumns));
+            table[row] = jQuery.extend(true, {"_generated_id": remember[currentIdColumnsStr]}, table[row]);
+        }
+
+
+    }
+
     anonymizeData() {
         this.app.workingSchema = jQuery.extend(true, {}, this.app.schema);
+        var id_cols = this.app.getColumnNamesByType("id");
+        var qid_cols = this.app.getColumnNamesByType("qid");
 
         var resultTable = [];
         var statistics = new Statistics(this.app);
@@ -65,12 +84,17 @@ class Anonymization {
             resultTable.push(row);
         }
 
+        debugger;
+        this.generateIdentificators(resultTable, id_cols);
+
         var preservedColumns =  this.getPreservedColumns();
+        if(id_cols.length > 0){
+            preservedColumns.unshift("_generated_id");
+        }
         var subSet = statistics.selectColumns(resultTable,preservedColumns);
         this.app.anonymizedSchema = subSet;
         this.app.anonymizedSchemaFull = resultTable;
 
-        var qid_cols = this.app.getColumnNamesByType("qid");
         var tableKeys = Object.keys(this.app.anonymizedSchema[0]);
         var qid_ids = [];
         for (i in tableKeys) {

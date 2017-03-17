@@ -32,6 +32,16 @@ class Statistics {
         return selected;
     }
 
+    getRowColumnsNot(row, columns:string[]) {
+        var selected = {};
+        for(let key in Object.keys(row)) {
+            if(columns.indexOf(row[key]) == -1){
+                selected[key] = row[key];
+            }
+        }
+        return selected;
+    }
+
     selectColumns(table, columns:string[]) {
         var resultTable = [];
         for (let row of table) {
