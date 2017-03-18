@@ -57,14 +57,13 @@ class Application {
         return response;
     };
 
-    //http://stackoverflow.com/questions/11688692/most-elegant-way-to-create-a-list-of-unique-items-in-javascript
     unique(arr) {
-        var u = {}, a = [];
-        var l = 0;
-        for (var i = 0, l = arr.length; i < l; ++i) {
-            if (!u.hasOwnProperty(arr[i])) {
-                a.push(arr[i]);
-                u[arr[i]] = 1;
+        var u = {};
+        var a = [];
+        for (let element of arr) {
+            if (!u.hasOwnProperty(element)) {
+                a.push(element);
+                u[element] = 1;
             }
         }
         return a;

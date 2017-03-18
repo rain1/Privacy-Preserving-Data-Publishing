@@ -48,6 +48,7 @@ class OpenDialog {
         });
 
         this.app.method = $("#anonymization_method").val();
+        $(".method").html(this.app.methodName );
 
         this.winMgr.closeWindow('open');
         this.app.joinDialog.init(selected);

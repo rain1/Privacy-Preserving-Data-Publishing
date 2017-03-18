@@ -496,14 +496,14 @@ var Application = (function () {
         return response;
     };
     ;
-    //http://stackoverflow.com/questions/11688692/most-elegant-way-to-create-a-list-of-unique-items-in-javascript
     Application.prototype.unique = function (arr) {
-        var u = {}, a = [];
-        var l = 0;
-        for (var i = 0, l = arr.length; i < l; ++i) {
-            if (!u.hasOwnProperty(arr[i])) {
-                a.push(arr[i]);
-                u[arr[i]] = 1;
+        var u = {};
+        var a = [];
+        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
+            var element = arr_1[_i];
+            if (!u.hasOwnProperty(element)) {
+                a.push(element);
+                u[element] = 1;
             }
         }
         return a;
@@ -590,6 +590,8 @@ var WindowManager = (function () {
             scroll: false,
             handle: '#titlebar_' + window
         });
+    };
+    WindowManager.prototype.setWindowTitle = function () {
     };
     return WindowManager;
 }());
@@ -1179,6 +1181,7 @@ var OpenDialog = (function () {
             selected.push($(this).attr('name'));
         });
         this.app.method = $("#anonymization_method").val();
+        $(".method").html(this.app.methodName);
         this.winMgr.closeWindow('open');
         this.app.joinDialog.init(selected);
     };

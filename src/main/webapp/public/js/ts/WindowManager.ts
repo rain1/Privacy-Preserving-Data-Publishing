@@ -12,6 +12,10 @@ class WindowManager {
             handle: '#titlebar_' + window
         });
     }
+
+    setWindowTitle() {
+
+    }
 }
 
 export = WindowManager;
