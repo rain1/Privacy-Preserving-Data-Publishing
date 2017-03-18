@@ -53,6 +53,7 @@ class GeneralizationDialog {
         $("#set_rule").prop("disabled", true);
         $("#new_rule").prop("disabled", true);
         $("#value_pool").prop("disabled", true);
+        this.intervalSizeChanged();
     }
 
     selectValues() {
@@ -82,13 +83,25 @@ class GeneralizationDialog {
     }
 
 
+    isValidInterval(str) {
+        var integerValue = Math.floor(Number(str));
+        if(String(integerValue) == str){
+            if(integerValue == 0){
+                alert("Error: Interval with size of 0 is not usable for generalization.");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
     intervalSizeChanged() {
         if (this.app.attributeActions[this.currentColumn].mode == "interval") {
             var inputValue = $("#interval_size").val();
-            if (inputValue == "") {
-                $("#generalization_next").prop("disabled", true);
-            } else {
+            if (this.isValidInterval(inputValue)) {
                 $("#generalization_next").prop("disabled", false);
+            } else {
+                $("#generalization_next").prop("disabled", true);
             }
         }
     }

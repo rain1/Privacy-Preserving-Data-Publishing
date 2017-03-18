@@ -12,7 +12,7 @@
         <div>
             <input id="intervals_radio" type="radio" name="gentype" value="intervals"
                    onclick="app.generalizationDlg.selectIntervals();"> Generalize numeric value to intervals <br>
-            <span id="interval_desc">Select interval size: </span><input type="number" id="interval_size" onkeypress="app.generalizationDlg.intervalSizeChanged()"><br>
+            <span id="interval_desc">Select interval size: </span><input type="number" id="interval_size" oninput="app.generalizationDlg.intervalSizeChanged()"><br>
             <span id="min_max"></span>
             <br>
             <input id="values_radio" type="radio" name="gentype" value="values"

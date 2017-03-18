@@ -126,7 +126,7 @@ var Statistics = (function () {
         }
         return qidMap;
     };
-    Statistics.prototype.getQIDIDMap = function (qidColumns, idColumns) {
+    Statistics.prototype.xyMap = function (qidColumns, idColumns) {
         var qidIdMap = {};
         for (var _i = 0, _a = this.app.anonymizedSchemaFull; _i < _a.length; _i++) {
             var row = _a[_i];
@@ -175,18 +175,26 @@ var Statistics = (function () {
     Statistics.prototype.buildCanvas = function (id) {
         return '<div class="canvas_container"><canvas id="' + id + '"></canvas></div>';
     };
+    Statistics.prototype.getXYStatistics = function (qidColumns, correspondingColumns) {
+        var qidIdSet = this.xyMap(qidColumns, correspondingColumns);
+        var qidIdSetSizeMap = this.qidIdSetToSizeMap(qidIdSet);
+        var smallestQIDXY = this.findSmallestMapKey(qidIdSetSizeMap);
+        var largestQIDXY = this.findLargestMapKey(qidIdSetSizeMap);
+        return {
+            map: qidIdSetSizeMap,
+            smallest: smallestQIDXY,
+            largest: largestQIDXY
+        };
+    };
     Statistics.prototype.build = function () {
         var statistics = "<b>Statistics:</b><br>";
         var qidColumns = this.app.getColumnNamesByType("qid");
         var idColumns = this.app.getColumnNamesByType("id");
+        var sensitiveColumns = this.app.getColumnNamesByType("sensitive");
         var qidMap = this.getQIDSizeMap(qidColumns);
         var frequencyMap = this.qidMapToFrequencyMap(qidMap);
         var smallestQID = this.findSmallestMapValue(qidMap);
         var largestQID = this.findLargestMapValue(qidMap);
-        var qidIdSet = this.getQIDIDMap(qidColumns, idColumns);
-        var qidIdSetSizeMap = this.qidIdSetToSizeMap(qidIdSet);
-        var smallestQIDXY = this.findSmallestMapKey(qidIdSetSizeMap);
-        var largestQIDXY = this.findLargestMapKey(qidIdSetSizeMap);
         debugger;
         if (qidColumns.length == 0) {
             statistics += "Warning: QID not defined<br>";
@@ -208,22 +216,39 @@ var Statistics = (function () {
                         title: 'Distribution of QID groups'
                     });
                     for (var value in frequencyMap) {
-                        statistics += "There are " + frequencyMap[value] + " QID groups that represent " + value + " different persons<br>";
+                        statistics += "There are " + frequencyMap[value] + " QID groups that represent " + value + " different persons.<br>";
                     }
                     break;
                 case "xy":
-                    statistics += "Smallest QID group: " + smallestQIDXY + "<br>";
-                    statistics += "Largest QID group: " + largestQIDXY + "<br>";
+                    var xy = this.getXYStatistics(qidColumns, idColumns);
+                    statistics += "Smallest QID group: " + xy.smallest + "<br>";
+                    statistics += "Largest QID group: " + xy.largest + "<br>";
                     statistics += this.buildCanvas("qidid");
                     this.charts.push({
                         elementId: "qidid",
-                        dataMap: qidIdSetSizeMap,
+                        dataMap: xy.map,
                         xLabel: 'Unique persons in QID group',
                         yLabel: 'Num groups',
                         title: 'Number of unique persons represented by QID group'
                     });
-                    for (var value in qidIdSetSizeMap) {
-                        statistics += "There are " + qidIdSetSizeMap[value] + " QID groups that represent " + value + " different persons<br>";
+                    for (var value in xy.map) {
+                        statistics += "There are " + xy.map[value] + " QID groups that represent " + value + " different persons.<br>";
+                    }
+                    break;
+                case "ldiv":
+                    var ldiv = this.getXYStatistics(qidColumns, sensitiveColumns);
+                    statistics += "Smallest QID group: " + ldiv.smallest + "<br>";
+                    statistics += "Largest QID group: " + ldiv.largest + "<br>";
+                    statistics += this.buildCanvas("qidsens");
+                    this.charts.push({
+                        elementId: "qidsens",
+                        dataMap: ldiv.map,
+                        xLabel: 'Unique sensitive attributes in QID group',
+                        yLabel: 'Num groups',
+                        title: 'Number of unique persons represented by QID group'
+                    });
+                    for (var value in ldiv.map) {
+                        statistics += "There are " + ldiv.map[value] + " QID groups that represent " + value + " different values.<br>";
                     }
                     break;
                 default:
@@ -361,7 +386,7 @@ var Anonymization = (function () {
                 remember[currentIdColumnsStr] = ++counter;
             }
             //jQuery.extend(true, {"id": remember[currentIdColumnsStr]}, statistics.getRowColumnsNot(row, idColumns));
-            table[row] = jQuery.extend(true, { "_generated_id": remember[currentIdColumnsStr] }, table[row]);
+            table[row] = jQuery.extend(true, { "_id": remember[currentIdColumnsStr] }, table[row]);
         }
     };
     Anonymization.prototype.anonymizeData = function () {
@@ -380,11 +405,10 @@ var Anonymization = (function () {
             }
             resultTable.push(row);
         }
-        debugger;
         this.generateIdentificators(resultTable, id_cols);
         var preservedColumns = this.getPreservedColumns();
         if (id_cols.length > 0) {
-            preservedColumns.unshift("_generated_id");
+            preservedColumns.unshift("_id");
         }
         var subSet = statistics.selectColumns(resultTable, preservedColumns);
         this.app.anonymizedSchema = subSet;
@@ -629,15 +653,13 @@ var ActionDialog = (function () {
             element.prop("disabled", true);
             element.prop("title", "Identificators will always be removed");
         }
-        if (["kanonymity", "xy", "multir"].indexOf(this.app.method) > -1) {
-            var identifiers = this.app.getColumnNamesByType("sensitive");
-            for (var i in identifiers) {
-                console.log(identifiers[i]);
-                var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
-                element.val("keep");
-                element.prop("disabled", true);
-                element.prop("title", "In k-Anonymity, (X, Y)-Anonymity and MultiRelational k-Anonymity sensitive attributes are not generalized");
-            }
+        var identifiers = this.app.getColumnNamesByType("sensitive");
+        for (var i in identifiers) {
+            console.log(identifiers[i]);
+            var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
+            element.val("keep");
+            element.prop("disabled", true);
+            element.prop("title", "Sensitive attributes are not generalized");
         }
     };
     ActionDialog.prototype.init = function () {
@@ -762,6 +784,7 @@ var GeneralizationDialog = (function () {
         $("#set_rule").prop("disabled", true);
         $("#new_rule").prop("disabled", true);
         $("#value_pool").prop("disabled", true);
+        this.intervalSizeChanged();
     };
     GeneralizationDialog.prototype.selectValues = function () {
         this.app.attributeActions[this.currentColumn].mode = "values";
@@ -785,14 +808,25 @@ var GeneralizationDialog = (function () {
         $("#rules").val(currentRules + "->" + general);
         $("#rules").val($("#rules").val() + "\n");
     };
+    GeneralizationDialog.prototype.isValidInterval = function (str) {
+        var integerValue = Math.floor(Number(str));
+        if (String(integerValue) == str) {
+            if (integerValue == 0) {
+                alert("Error: Interval with size of 0 is not usable for generalization.");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    };
     GeneralizationDialog.prototype.intervalSizeChanged = function () {
         if (this.app.attributeActions[this.currentColumn].mode == "interval") {
             var inputValue = $("#interval_size").val();
-            if (inputValue == "") {
-                $("#generalization_next").prop("disabled", true);
+            if (this.isValidInterval(inputValue)) {
+                $("#generalization_next").prop("disabled", false);
             }
             else {
-                $("#generalization_next").prop("disabled", false);
+                $("#generalization_next").prop("disabled", true);
             }
         }
     };

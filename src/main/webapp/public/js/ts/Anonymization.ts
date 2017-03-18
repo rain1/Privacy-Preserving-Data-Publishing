@@ -57,7 +57,7 @@ class Anonymization {
                 remember[currentIdColumnsStr] = ++counter;
             }
             //jQuery.extend(true, {"id": remember[currentIdColumnsStr]}, statistics.getRowColumnsNot(row, idColumns));
-            table[row] = jQuery.extend(true, {"_generated_id": remember[currentIdColumnsStr]}, table[row]);
+            table[row] = jQuery.extend(true, {"_id": remember[currentIdColumnsStr]}, table[row]);
         }
 
 
@@ -84,12 +84,11 @@ class Anonymization {
             resultTable.push(row);
         }
 
-        debugger;
         this.generateIdentificators(resultTable, id_cols);
 
         var preservedColumns =  this.getPreservedColumns();
         if(id_cols.length > 0){
-            preservedColumns.unshift("_generated_id");
+            preservedColumns.unshift("_id");
         }
         var subSet = statistics.selectColumns(resultTable,preservedColumns);
         this.app.anonymizedSchema = subSet;

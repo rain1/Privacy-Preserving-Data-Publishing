@@ -59,7 +59,7 @@ class Statistics {
         return qidMap;
     }
 
-    getQIDIDMap(qidColumns:string[], idColumns:string[]) {
+    xyMap(qidColumns:string[], idColumns:string[]) {
         var qidIdMap = {};
         for (let row of this.app.anonymizedSchemaFull) {
             var qid = this.getRowColumns(row, qidColumns);
@@ -113,18 +113,28 @@ class Statistics {
         return '<div class="canvas_container"><canvas id="' + id + '"></canvas></div>';
     }
 
+    getXYStatistics(qidColumns:string[], correspondingColumns:string[]){
+        var qidIdSet = this.xyMap(qidColumns, correspondingColumns);
+        var qidIdSetSizeMap = this.qidIdSetToSizeMap(qidIdSet);
+        var smallestQIDXY = this.findSmallestMapKey(qidIdSetSizeMap);
+        var largestQIDXY = this.findLargestMapKey(qidIdSetSizeMap);
+        return {
+            map:qidIdSetSizeMap,
+            smallest: smallestQIDXY,
+            largest: largestQIDXY
+        };
+    }
+
     build() {
         var statistics = "<b>Statistics:</b><br>";
         var qidColumns = this.app.getColumnNamesByType("qid");
         var idColumns = this.app.getColumnNamesByType("id");
+        var sensitiveColumns = this.app.getColumnNamesByType("sensitive");
         var qidMap = this.getQIDSizeMap(qidColumns);
         var frequencyMap = this.qidMapToFrequencyMap(qidMap);
         var smallestQID = this.findSmallestMapValue(qidMap);
         var largestQID = this.findLargestMapValue(qidMap);
-        var qidIdSet = this.getQIDIDMap(qidColumns, idColumns);
-        var qidIdSetSizeMap = this.qidIdSetToSizeMap(qidIdSet);
-        var smallestQIDXY = this.findSmallestMapKey(qidIdSetSizeMap);
-        var largestQIDXY = this.findLargestMapKey(qidIdSetSizeMap);
+
         debugger;
         if (qidColumns.length == 0) {
             statistics += "Warning: QID not defined<br>";
@@ -145,23 +155,41 @@ class Statistics {
                         title: 'Distribution of QID groups'
                     });
                     for (let value in frequencyMap) {
-                        statistics += "There are " + frequencyMap[value] + " QID groups that represent " + value + " different persons<br>";
+                        statistics += "There are " + frequencyMap[value] + " QID groups that represent " + value + " different persons.<br>";
                     }
                     break;
                 case "xy":
-                    statistics += "Smallest QID group: " + smallestQIDXY + "<br>";
-                    statistics += "Largest QID group: " + largestQIDXY + "<br>";
+                    var xy = this.getXYStatistics(qidColumns, idColumns);
+                    statistics += "Smallest QID group: " + xy.smallest + "<br>";
+                    statistics += "Largest QID group: " + xy.largest + "<br>";
                     statistics += this.buildCanvas("qidid");
                     this.charts.push({
                         elementId: "qidid",
-                        dataMap: qidIdSetSizeMap,
+                        dataMap: xy.map,
                         xLabel: 'Unique persons in QID group',
                         yLabel: 'Num groups',
                         title: 'Number of unique persons represented by QID group'
 
                     });
-                    for (let value in qidIdSetSizeMap) {
-                        statistics += "There are " + qidIdSetSizeMap[value] + " QID groups that represent " + value + " different persons<br>";
+                    for (let value in xy.map) {
+                        statistics += "There are " + xy.map[value] + " QID groups that represent " + value + " different persons.<br>";
+                    }
+                    break;
+                case "ldiv":
+                    var ldiv = this.getXYStatistics(qidColumns, sensitiveColumns);
+                    statistics += "Smallest QID group: " + ldiv.smallest + "<br>";
+                    statistics += "Largest QID group: " + ldiv.largest + "<br>";
+                    statistics += this.buildCanvas("qidsens");
+                    this.charts.push({
+                        elementId: "qidsens",
+                        dataMap: ldiv.map,
+                        xLabel: 'Unique sensitive attributes in QID group',
+                        yLabel: 'Num groups',
+                        title: 'Number of unique persons represented by QID group'
+
+                    });
+                    for (let value in ldiv.map) {
+                        statistics += "There are " + ldiv.map[value] + " QID groups that represent " + value + " different values.<br>";
                     }
                     break;
                 default:
