@@ -8,18 +8,20 @@
 </div>
 
 <div class="window_content row">
-    <div class="left_col min50">
-        <div id="schema_list"></div>
-        <div>
-            <h4>Preview of join</h4>
-            <div id="join_preview">No rules defined.</div>
+    <div class="row min50">
+        <div class="left_col" style="width: 100%;">
+            <div id="schema_list"></div>
+            <div>
+                <h4>Preview of join</h4>
+                <div id="join_preview">No rules defined.</div>
+            </div>
         </div>
-    </div>
-    <div style="float: left">
-        <h4>Join rules</h4>
-        <input id="new_join_rule" type="button" value="Add rule" onclick="app.joinDlg.addRule();">
-        <!--<textarea id="join_rules"></textarea>-->
-        <div id="join_rules"></div>
+        <div style="margin-left: 10px;">
+            <h4>Join rules</h4>
+            <input id="new_join_rule" type="button" value="Add rule" onclick="app.joinDlg.addRule();">
+            <!--<textarea id="join_rules"></textarea>-->
+            <div id="join_rules"></div>
+        </div>
     </div>
     <div class="right_column">
         <h4>Multirelational k-Anonymity</h4>
