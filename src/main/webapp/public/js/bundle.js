@@ -1019,6 +1019,11 @@ var JoinDialog = (function () {
     JoinDialog.prototype.init = function (selectedTables) {
         var htmlContent = '';
         this.schemasJSON = {};
+        this.defineRules = false;
+        this.joinRules = {};
+        this.joinRulesList = [];
+        this.tableNames = [];
+        this.lastJoinResult = [];
         this.tableNames = selectedTables;
         console.log("init join");
         if (selectedTables.length == 0) {
@@ -1044,6 +1049,8 @@ var JoinDialog = (function () {
         $("#schema_list").html(htmlContent);
         $('#schema_list .preview_table th').css("color", "#555");
         $("#joinNext").prop("disabled", true);
+        $("#join_rules").html("");
+        this.showResult();
     };
     JoinDialog.prototype.compareRow = function (rows) {
         var generatedRow = {};

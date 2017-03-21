@@ -182,6 +182,11 @@ class JoinDialog {
     init(selectedTables:string[]) {
         var htmlContent = '';
         this.schemasJSON = {};
+        this.defineRules = false;
+        this.joinRules = {};
+        this.joinRulesList = [];
+        this.tableNames = [];
+        this.lastJoinResult = [];
         this.tableNames = selectedTables;
         console.log("init join");
 
@@ -206,6 +211,8 @@ class JoinDialog {
         $("#schema_list").html(htmlContent);
         $('#schema_list .preview_table th').css("color", "#555");
         $("#joinNext").prop("disabled", true);
+        $("#join_rules").html("");
+        this.showResult();
     }
 
     compareRow(rows) {
