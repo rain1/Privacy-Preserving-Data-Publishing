@@ -535,6 +535,14 @@ var Application = (function () {
         return columns;
     };
     ;
+    Application.prototype.getColumnNames = function () {
+        var columns = [];
+        for (var c in this.attributeTypes) {
+            columns.push(c);
+        }
+        return columns;
+    };
+    ;
     Application.prototype.equals = function (a, b) {
         return JSON.stringify(a) == JSON.stringify(b);
     };
@@ -607,6 +615,7 @@ module.exports = WindowManager;
 var ActionDialog = (function () {
     function ActionDialog(app, winMgr) {
         this.specificationEnded = false;
+        this.startOver = true;
         this.app = app;
         this.winMgr = winMgr;
     }
@@ -664,19 +673,22 @@ var ActionDialog = (function () {
             element.prop("title", "Sensitive attributes are not generalized");
         }
     };
-    ActionDialog.prototype.init = function () {
-        this.app.attributeActions = {};
-        var htmlContent = '';
-        htmlContent += this.buildActionsTable(this.app.schema);
+    ActionDialog.prototype.init = function (startOver) {
+        this.app.typeDialog.startOver = false;
+        if (startOver) {
+            this.app.attributeActions = {};
+            var htmlContent = '';
+            htmlContent += this.buildActionsTable(this.app.schema);
+            if (this.app.method == "kanonymity") {
+                $("#special_actions").hide();
+            }
+            else {
+            }
+            $("#action_list").html(htmlContent);
+        }
         $("#actions").show();
-        if (this.app.method == "kanonymity") {
-            $("#special_actions").hide();
-        }
-        else {
-            $("#special_actions").show();
-        }
-        $("#action_list").html(htmlContent);
         this.preselectActions();
+        this.startOver = false;
     };
     ActionDialog.prototype.defineRules = function (action, columnName) {
         var columName = columnName;
@@ -690,7 +702,6 @@ var ActionDialog = (function () {
                 break;
             case "generalize":
                 this.app.generalizationDialog.init(columName);
-                $("#generalization").show();
                 break;
             case "suppress":
                 setupSuppression(columName);
@@ -716,20 +727,52 @@ var ActionDialog = (function () {
         }
         this.app.anonymizer.anonymizeData();
     };
+    ActionDialog.prototype.backClicked = function () {
+        this.winMgr.closeWindow("actions");
+        this.app.typeDialog.startOver = false;
+        $("#types").show();
+    };
     ActionDialog.prototype.nextClicked = function () {
         console.log("sadfsd");
         for (var _i = 0, _a = $('select[class="action_select"]'); _i < _a.length; _i++) {
             var element = _a[_i];
             var colName = $(element).attr('name');
             var jsonVariable = {};
-            jsonVariable["action"] = $(element).val();
-            jsonVariable["defined"] = false;
-            this.app.attributeActions[colName] = jsonVariable;
+            if (this.app.attributeActions[colName] == undefined
+                || (this.app.attributeActions[colName] != undefined && this.app.attributeActions[colName].action != $(element).val())) {
+                jsonVariable["action"] = $(element).val();
+                jsonVariable["defined"] = false;
+                this.app.attributeActions[colName] = jsonVariable;
+            }
         }
-        this.defineNextRule();
+        //if(this.app.generalizationDialog.definingInProgress && !this.startOver){
+        if (this.app.generalizationDialog.definingInProgress) {
+            var firstColumn = this.getFirstGeneralizeColumn();
+            if (firstColumn == "") {
+                this.app.anonymizer.anonymizeData();
+            }
+            else {
+                this.app.generalizationDialog.init(firstColumn);
+            }
+        }
+        else {
+            this.defineNextRule();
+        }
         this.winMgr.closeWindow('actions');
         console.log(this.app.attributeActions);
         console.log("defining done");
+    };
+    ActionDialog.prototype.getFirstGeneralizeColumn = function () {
+        var columns = this.app.getColumnNames();
+        var next = 0;
+        while (next < columns.length - 1) {
+            var nextValue = columns[next];
+            if (this.app.attributeActions[nextValue].action == "generalize") {
+                return nextValue;
+            }
+            next++;
+        }
+        return "";
     };
     return ActionDialog;
 }());
@@ -746,14 +789,54 @@ var GeneralizationDialog = (function () {
     function GeneralizationDialog(app, winMgr) {
         this.isNum = true;
         this.currentColumn = "";
+        this.currentColumnId = -1;
+        this.lastDefinedColumn = "";
+        this.lastDefinedColumnId = -1;
+        this.definingInProgress = false;
         this.app = app;
         this.winMgr = winMgr;
     }
+    GeneralizationDialog.prototype.updateLastDefinedColumn = function (column) {
+        var columns = this.app.getColumnNames();
+        if (columns.indexOf(column) > columns.indexOf(this.lastDefinedColumn)) {
+            this.lastDefinedColumn = column;
+            this.lastDefinedColumnId = columns.indexOf(column);
+        }
+        this.currentColumnId = columns.indexOf(column);
+    };
+    GeneralizationDialog.prototype.renderView = function (columnName) {
+        debugger;
+        if (this.app.attributeActions[columnName].defined) {
+            if (this.app.attributeActions[columnName].mode == "interval") {
+                $("#interval_size").val(this.app.attributeActions[columnName]["operation"]);
+                this.intervalSizeChanged();
+            }
+            else {
+                var actionDict = {};
+                var ruleData = "";
+                for (var k in this.app.attributeActions[columnName]["operation"]) {
+                    if (actionDict[this.app.attributeActions[columnName]["operation"][k]] == undefined) {
+                        actionDict[this.app.attributeActions[columnName]["operation"][k]] = [k];
+                    }
+                    else {
+                        actionDict[this.app.attributeActions[columnName]["operation"][k]].push(k);
+                    }
+                }
+                for (var k in actionDict) {
+                    ruleData += actionDict[k].join();
+                    ruleData += "->" + k + "\n";
+                }
+                $("#rules").val(ruleData);
+            }
+        }
+    };
     GeneralizationDialog.prototype.init = function (columnName) {
         this.isNum = true;
+        this.definingInProgress = true;
         this.currentColumn = columnName;
         var cells = this.app.getUniqueValueByColumn(columnName);
         var elements = "";
+        $("#value_pool").html("");
         for (var i in cells) {
             elements += '<span class="word" onclick="app.generalizationDlg.addWord(this);">' + cells[i] + '</span>';
             if (!$.isNumeric(cells[i])) {
@@ -776,6 +859,9 @@ var GeneralizationDialog = (function () {
         $("#rules").val("");
         $("#generalization_preview").html(app.jsonToTable(this.app.schema, -1, [this.currentColumn]));
         //$("#generalization_next").prop("disabled", true);
+        this.renderView(columnName);
+        this.updateLastDefinedColumn(columnName);
+        $("#generalization").show();
     };
     GeneralizationDialog.prototype.selectIntervals = function () {
         this.app.attributeActions[this.currentColumn].mode = "interval";
@@ -832,7 +918,7 @@ var GeneralizationDialog = (function () {
             }
         }
     };
-    GeneralizationDialog.prototype.nextClicked = function () {
+    GeneralizationDialog.prototype.saveFormData = function () {
         if (this.app.attributeActions[this.currentColumn].mode == "interval") {
             this.app.attributeActions[this.currentColumn].operation = $("#interval_size").val();
         }
@@ -851,8 +937,55 @@ var GeneralizationDialog = (function () {
                 }
             }
         }
+    };
+    GeneralizationDialog.prototype.getPreviousColumn = function () {
+        var columns = this.app.getColumnNames();
+        var previous = columns.indexOf(this.currentColumn) - 1;
+        while (previous > -1) {
+            var previousValue = columns[previous];
+            if (this.app.attributeActions[previousValue].action == "generalize") {
+                return previousValue;
+            }
+            previous--;
+        }
+        return "";
+    };
+    GeneralizationDialog.prototype.getNextColumn = function () {
+        var columns = this.app.getColumnNames();
+        var next = columns.indexOf(this.currentColumn) + 1;
+        while (next < columns.length - 1) {
+            var nextValue = columns[next];
+            if (this.app.attributeActions[nextValue].action == "generalize") {
+                return nextValue;
+            }
+            next++;
+        }
+        return "";
+    };
+    GeneralizationDialog.prototype.backClicked = function () {
+        this.app.attributeActions[this.currentColumn].defined = true;
+        this.saveFormData();
+        var previousColumn = this.getPreviousColumn();
+        if (previousColumn == "") {
+            this.winMgr.closeWindow("generalization");
+            $("#actions").show();
+        }
+        else {
+            this.init(previousColumn);
+        }
+    };
+    GeneralizationDialog.prototype.nextClicked = function () {
+        debugger;
+        this.saveFormData();
         this.winMgr.closeWindow("generalization");
-        this.app.actionDialog.defineNextRule();
+        this.app.attributeActions[this.currentColumn].defined = true;
+        if (this.currentColumnId >= this.lastDefinedColumnId) {
+            this.definingInProgress = false;
+            this.app.actionDialog.defineNextRule();
+        }
+        else {
+            this.init(this.getNextColumn());
+        }
     };
     return GeneralizationDialog;
 }());
@@ -902,6 +1035,7 @@ var JoinDialog = (function () {
         this.joinRules = {};
         this.joinRulesList = [];
         this.lastJoinResult = [];
+        this.startOver = true;
         this.app = app;
         this.winMgr = winMgr;
     }
@@ -922,14 +1056,9 @@ var JoinDialog = (function () {
         joinButton.attr("onclick", "app.joinDlg.finishRule();");
         $('#schema_list .preview_table th').css("color", "#000");
     };
-    JoinDialog.prototype.finishRule = function () {
-        this.defineRules = false;
+    JoinDialog.prototype.finishRuleVisuals = function () {
         var joinButton = $("#new_join_rule");
         var ruleKeys = Object.keys(this.joinRules);
-        var joinRule = new JoinRule(this.joinRules[ruleKeys[0]], "=", this.joinRules[ruleKeys[1]]);
-        this.joinRulesList.push(joinRule);
-        var htmlContent = '<code class="window_container"><span class="rule">' + joinRule.toString() + '</span><img class="icon24 window_container_remove" src="./public/icons/delete.png" title="Remove rule" onclick="app.joinDlg.removeRule(this)"></code>';
-        $("#join_rules").append(htmlContent);
         joinButton.val("Add rule");
         joinButton.attr("onclick", "app.joinDlg.addRule();");
         for (var _i = 0, _a = this.tableNames; _i < _a.length; _i++) {
@@ -940,6 +1069,15 @@ var JoinDialog = (function () {
             }
         }
         $('#schema_list .preview_table th').css("color", "#555");
+    };
+    JoinDialog.prototype.finishRule = function () {
+        this.finishRuleVisuals();
+        this.defineRules = false;
+        var ruleKeys = Object.keys(this.joinRules);
+        var joinRule = new JoinRule(this.joinRules[ruleKeys[0]], "=", this.joinRules[ruleKeys[1]]);
+        this.joinRulesList.push(joinRule);
+        var htmlContent = '<code class="window_container"><span class="rule">' + joinRule.toString() + '</span><img class="icon24 window_container_remove" src="./public/icons/delete.png" title="Remove rule" onclick="app.joinDlg.removeRule(this)"></code>';
+        $("#join_rules").append(htmlContent);
         this.joinRules = {};
         this.showResult();
     };
@@ -1014,43 +1152,59 @@ var JoinDialog = (function () {
     JoinDialog.prototype.nextClicked = function () {
         this.winMgr.closeWindow("join");
         this.app.schema = this.lastJoinResult;
-        this.app.typeDialog.init("merged");
+        this.app.typeDialog.init("merged", this.startOver);
     };
-    JoinDialog.prototype.init = function (selectedTables) {
-        var htmlContent = '';
-        this.schemasJSON = {};
-        this.defineRules = false;
-        this.joinRules = {};
-        this.joinRulesList = [];
-        this.tableNames = [];
-        this.lastJoinResult = [];
-        this.tableNames = selectedTables;
-        console.log("init join");
-        if (selectedTables.length == 0) {
-            console.log("none");
-            return;
-        }
-        else if (selectedTables.length == 1) {
+    JoinDialog.prototype.backClicked = function () {
+        this.winMgr.closeWindow("join");
+        this.app.openDialog.startOver = false;
+        $("#open").show();
+    };
+    JoinDialog.prototype.init = function (selectedTables, startOver) {
+        if (selectedTables.length == 1) {
             console.log("skip to column types");
             this.app.schema = this.app.getSchema(selectedTables[0]);
-            this.app.typeDialog.init(selectedTables[0]);
+            this.app.typeDialog.init(selectedTables[0], startOver);
             return;
         }
-        else {
-            console.log("merge" + selectedTables.length.toString());
-            for (var _i = 0, selectedTables_1 = selectedTables; _i < selectedTables_1.length; _i++) {
-                var schemaName = selectedTables_1[_i];
-                console.log(schemaName);
-                this.schemasJSON[schemaName] = this.app.getSchema(schemaName);
-                htmlContent += this.buildTable(schemaName, this.schemasJSON[schemaName]);
+        if (startOver) {
+            var htmlContent = '';
+            this.schemasJSON = {};
+            this.defineRules = false;
+            this.joinRules = {};
+            this.joinRulesList = [];
+            this.tableNames = [];
+            this.lastJoinResult = [];
+            this.tableNames = selectedTables;
+            console.log("init join");
+            if (selectedTables.length == 0) {
+                console.error("none");
+                return;
             }
+            else if (selectedTables.length == 1) {
+                console.log("skip to column types");
+                this.app.schema = this.app.getSchema(selectedTables[0]);
+                this.app.typeDialog.init(selectedTables[0], startOver);
+                return;
+            }
+            else {
+                console.log("merge" + selectedTables.length.toString());
+                for (var _i = 0, selectedTables_1 = selectedTables; _i < selectedTables_1.length; _i++) {
+                    var schemaName = selectedTables_1[_i];
+                    console.log(schemaName);
+                    this.schemasJSON[schemaName] = this.app.getSchema(schemaName);
+                    htmlContent += this.buildTable(schemaName, this.schemasJSON[schemaName]);
+                }
+            }
+            $("#new_join_rule").prop("disabled", false);
+            $("#schema_list").html(htmlContent);
+            $('#schema_list .preview_table th').css("color", "#555");
+            $("#joinNext").prop("disabled", true);
+            $("#join_rules").html("");
+            this.showResult();
+            this.finishRuleVisuals();
         }
         $("#join").show();
-        $("#schema_list").html(htmlContent);
-        $('#schema_list .preview_table th').css("color", "#555");
-        $("#joinNext").prop("disabled", true);
-        $("#join_rules").html("");
-        this.showResult();
+        this.startOver = false;
     };
     JoinDialog.prototype.compareRow = function (rows) {
         var generatedRow = {};
@@ -1122,6 +1276,7 @@ var JoinDialog = (function () {
         return resultTable;
     };
     JoinDialog.prototype.showResult = function () {
+        this.startOver = true;
         var result = this.joinTables(jQuery.extend(true, {}, this.schemasJSON), {}, []);
         if (result.length == 0 && this.joinRulesList.length == 0) {
             $("#join_preview").html("No rules defined.");
@@ -1150,10 +1305,12 @@ module.exports = JoinDialog;
 "use strict";
 var OpenDialog = (function () {
     function OpenDialog(app, winMgr) {
+        this.startOver = true;
         this.app = app;
         this.winMgr = winMgr;
     }
     OpenDialog.prototype.init = function () {
+        this.startOver = true;
         var schemasJSON = this.app.getSchemas();
         $("#anonymization_method").val("none");
         $("#open_table_preview").html("None selected.");
@@ -1190,7 +1347,7 @@ var OpenDialog = (function () {
         this.app.method = $("#anonymization_method").val();
         $(".method").html(this.app.methodName);
         this.winMgr.closeWindow('open');
-        this.app.joinDialog.init(selected);
+        this.app.joinDialog.init(selected, this.startOver);
     };
     OpenDialog.prototype.methodChanged = function () {
         if ($("#anonymization_method").val() == "none") {
@@ -1201,6 +1358,7 @@ var OpenDialog = (function () {
         }
     };
     OpenDialog.prototype.checkboxesChanged = function () {
+        this.startOver = true;
         console.log("changed");
         var selectedCheckboxes = $("input:checked[type=checkbox]");
         var checkedInputs = selectedCheckboxes.length;
@@ -1261,6 +1419,7 @@ module.exports = OpenDialog;
 "use strict";
 var TypeDialog = (function () {
     function TypeDialog(app, winMgr) {
+        this.startOver = true;
         this.app = app;
         this.winMgr = winMgr;
     }
@@ -1302,13 +1461,27 @@ var TypeDialog = (function () {
         content += "</table>";
         return content;
     };
-    TypeDialog.prototype.init = function (selectedTable) {
-        this.app.schemaName = selectedTable;
-        var schemasJSON = "";
-        var htmlContent = '';
-        htmlContent += this.buildTableTypes(this.app.schema);
+    TypeDialog.prototype.init = function (selectedTable, startOver) {
+        this.startOver = startOver;
+        if (startOver) {
+            this.app.schemaName = selectedTable;
+            var schemasJSON = "";
+            var htmlContent = '';
+            htmlContent += this.buildTableTypes(this.app.schema);
+            $("#type_list").html(htmlContent);
+        }
         $("#types").show();
-        $("#type_list").html(htmlContent);
+    };
+    TypeDialog.prototype.backClicked = function () {
+        this.winMgr.closeWindow("types");
+        if (this.app.method == "multir") {
+            this.app.joinDialog.startOver = false;
+            $("#join").show();
+        }
+        else {
+            this.app.openDialog.startOver = false;
+            $("#open").show();
+        }
     };
     TypeDialog.prototype.nextClicked = function () {
         this.app.attributeTypes = {};
@@ -1328,7 +1501,7 @@ var TypeDialog = (function () {
             }
         }
         this.winMgr.closeWindow('types');
-        app.actionDlg.init();
+        app.actionDlg.init(this.startOver);
     };
     return TypeDialog;
 }());

@@ -3,6 +3,7 @@ import WindowManager = require("./../WindowManager");
 class OpenDialog {
     app:Application;
     winMgr:WindowManager;
+    startOver = true;
 
     constructor(app:Application, winMgr:WindowManager) {
         this.app = app;
@@ -10,6 +11,7 @@ class OpenDialog {
     }
 
     init() {
+        this.startOver = true;
         var schemasJSON = this.app.getSchemas();
         $("#anonymization_method").val("none");
         $("#open_table_preview").html("None selected.");
@@ -51,7 +53,7 @@ class OpenDialog {
         $(".method").html(this.app.methodName );
 
         this.winMgr.closeWindow('open');
-        this.app.joinDialog.init(selected);
+        this.app.joinDialog.init(selected, this.startOver);
     }
 
     methodChanged() {
@@ -63,6 +65,7 @@ class OpenDialog {
     }
 
     checkboxesChanged() {
+        this.startOver = true;
         console.log("changed");
         var selectedCheckboxes = $("input:checked[type=checkbox]");
         var checkedInputs = selectedCheckboxes.length;

@@ -1,5 +1,5 @@
 class WindowManager {
-    closeWindow(window) {
+    closeWindow(window: string) {
         console.log("closing: " + window);
         $("#" + window).hide();
     }

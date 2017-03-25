@@ -4,6 +4,10 @@ import Application = require("./../Application");
 class GeneralizationDialog {
     isNum = true;
     currentColumn = "";
+    currentColumnId = -1;
+    lastDefinedColumn = "";
+    lastDefinedColumnId = -1;
+    definingInProgress = false;
 
     app:Application;
     winMgr:WindowManager;
@@ -13,11 +17,47 @@ class GeneralizationDialog {
         this.winMgr = winMgr;
     }
 
+    updateLastDefinedColumn(column:string){
+        var columns = this.app.getColumnNames();
+        if(columns.indexOf(column) >  columns.indexOf(this.lastDefinedColumn)){
+            this.lastDefinedColumn = column;
+            this.lastDefinedColumnId = columns.indexOf(column);
+        }
+        this.currentColumnId = columns.indexOf(column);
+    }
+
+    renderView(columnName:string){
+        debugger;
+        if (this.app.attributeActions[columnName].defined) {
+            if (this.app.attributeActions[columnName].mode == "interval") {
+                $("#interval_size").val(this.app.attributeActions[columnName]["operation"]);
+                this.intervalSizeChanged();
+            } else {
+                var actionDict = {};
+                var ruleData = "";
+                for (var k in this.app.attributeActions[columnName]["operation"]) {
+                    if (actionDict[this.app.attributeActions[columnName]["operation"][k]] == undefined) {
+                        actionDict[this.app.attributeActions[columnName]["operation"][k]] = [k];
+                    } else {
+                        actionDict[this.app.attributeActions[columnName]["operation"][k]].push(k);
+                    }
+                }
+                for (var k in actionDict) {
+                    ruleData += actionDict[k].join();
+                    ruleData += "->" + k + "\n";
+                }
+                $("#rules").val(ruleData);
+            }
+        }
+    }
+
     init(columnName:string) {
         this.isNum = true;
+        this.definingInProgress = true;
         this.currentColumn = columnName;
         var cells = this.app.getUniqueValueByColumn(columnName);
         var elements = "";
+        $("#value_pool").html("");
         for (var i in cells) {
             elements += '<span class="word" onclick="app.generalizationDlg.addWord(this);">' + cells[i] + '</span>';
             if (!$.isNumeric(cells[i])) {
@@ -41,7 +81,9 @@ class GeneralizationDialog {
         $("#rules").val("");
         $("#generalization_preview").html(app.jsonToTable(this.app.schema, -1, [this.currentColumn]));
         //$("#generalization_next").prop("disabled", true);
-
+        this.renderView(columnName);
+        this.updateLastDefinedColumn(columnName);
+        $("#generalization").show();
     }
 
     selectIntervals() {
@@ -85,8 +127,8 @@ class GeneralizationDialog {
 
     isValidInterval(str) {
         var integerValue = Math.floor(Number(str));
-        if(String(integerValue) == str){
-            if(integerValue == 0){
+        if (String(integerValue) == str) {
+            if (integerValue == 0) {
                 alert("Error: Interval with size of 0 is not usable for generalization.");
                 return false;
             }
@@ -106,14 +148,14 @@ class GeneralizationDialog {
         }
     }
 
-    nextClicked() {
+    saveFormData(){
         if (this.app.attributeActions[this.currentColumn].mode == "interval") {
             this.app.attributeActions[this.currentColumn].operation = $("#interval_size").val();
         } else {
             this.app.attributeActions[this.currentColumn].operation = {};
             var inputValue = $("#rules").val();
-            if(inputValue.substring(inputValue.length -1) == "\n"){ //TODO TEST
-                inputValue = inputValue.substring(0, inputValue.length -1);
+            if (inputValue.substring(inputValue.length - 1) == "\n") {
+                inputValue = inputValue.substring(0, inputValue.length - 1);
             }
             var lines = inputValue.split("\n");
             for (var i = 0; i < lines.length; i++) {
@@ -124,8 +166,58 @@ class GeneralizationDialog {
                 }
             }
         }
+    }
+
+    getPreviousColumn() {
+        var columns = this.app.getColumnNames();
+        var previous = columns.indexOf(this.currentColumn) -1;
+        while(previous > -1){
+            var previousValue = columns[previous];
+            if(this.app.attributeActions[previousValue].action == "generalize"){
+                return previousValue
+            }
+            previous--;
+        }
+        return "";
+    }
+
+    getNextColumn() {
+        var columns = this.app.getColumnNames();
+        var next = columns.indexOf(this.currentColumn) +1;
+        while(next < columns.length -1){
+            var nextValue = columns[next];
+            if(this.app.attributeActions[nextValue].action == "generalize"){
+                return nextValue
+            }
+            next++;
+        }
+        return "";
+    }
+
+    backClicked(){
+        this.app.attributeActions[this.currentColumn].defined = true;
+        this.saveFormData();
+        var previousColumn = this.getPreviousColumn();
+        if(previousColumn == ""){
+            this.winMgr.closeWindow("generalization");
+            $("#actions").show();
+        }else{
+            this.init(previousColumn);
+        }
+
+    }
+
+    nextClicked() {
+        debugger;
+        this.saveFormData();
         this.winMgr.closeWindow("generalization");
-        this.app.actionDialog.defineNextRule();
+        this.app.attributeActions[this.currentColumn].defined = true;
+        if(this.currentColumnId >= this.lastDefinedColumnId){
+            this.definingInProgress = false;
+            this.app.actionDialog.defineNextRule();
+        }else{
+            this.init(this.getNextColumn());
+        }
     }
 }
 

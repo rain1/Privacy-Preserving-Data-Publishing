@@ -58,6 +58,7 @@ class JoinDialog {
     joinRulesList:JoinRule[] = [];
     tableNames:string[];
     lastJoinResult = [];
+    startOver = true;
 
     constructor(app:Application, winMgr:WindowManager) {
         this.app = app;
@@ -83,14 +84,9 @@ class JoinDialog {
         $('#schema_list .preview_table th').css("color", "#000");
     }
 
-    finishRule() {
-        this.defineRules = false;
+    finishRuleVisuals(){
         var joinButton = $("#new_join_rule");
         var ruleKeys = Object.keys(this.joinRules);
-        var joinRule = new JoinRule(this.joinRules[ruleKeys[0]], "=", this.joinRules[ruleKeys[1]]);
-        this.joinRulesList.push(joinRule);
-        var htmlContent = '<code class="window_container"><span class="rule">' + joinRule.toString() + '</span><img class="icon24 window_container_remove" src="./public/icons/delete.png" title="Remove rule" onclick="app.joinDlg.removeRule(this)"></code>';
-        $("#join_rules").append(htmlContent);
         joinButton.val("Add rule");
         joinButton.attr("onclick", "app.joinDlg.addRule();");
         for (let tableName of this.tableNames) {
@@ -99,6 +95,16 @@ class JoinDialog {
             }
         }
         $('#schema_list .preview_table th').css("color", "#555");
+    }
+
+    finishRule() {
+        this.finishRuleVisuals();
+        this.defineRules = false;
+        var ruleKeys = Object.keys(this.joinRules);
+        var joinRule = new JoinRule(this.joinRules[ruleKeys[0]], "=", this.joinRules[ruleKeys[1]]);
+        this.joinRulesList.push(joinRule);
+        var htmlContent = '<code class="window_container"><span class="rule">' + joinRule.toString() + '</span><img class="icon24 window_container_remove" src="./public/icons/delete.png" title="Remove rule" onclick="app.joinDlg.removeRule(this)"></code>';
+        $("#join_rules").append(htmlContent);
         this.joinRules = {};
         this.showResult();
     }
@@ -175,44 +181,62 @@ class JoinDialog {
     nextClicked() {
         this.winMgr.closeWindow("join");
         this.app.schema = this.lastJoinResult;
-        this.app.typeDialog.init("merged");
+        this.app.typeDialog.init("merged", this.startOver);
+    }
+
+    backClicked() {
+        this.winMgr.closeWindow("join");
+        this.app.openDialog.startOver = false;
+        $("#open").show();
     }
 
 
-    init(selectedTables:string[]) {
-        var htmlContent = '';
-        this.schemasJSON = {};
-        this.defineRules = false;
-        this.joinRules = {};
-        this.joinRulesList = [];
-        this.tableNames = [];
-        this.lastJoinResult = [];
-        this.tableNames = selectedTables;
-        console.log("init join");
-
-        if (selectedTables.length == 0) {
-            console.log("none");
-            return;
-        } else if (selectedTables.length == 1) {
+    init(selectedTables:string[], startOver:boolean) {
+        if (selectedTables.length == 1){
             console.log("skip to column types");
             this.app.schema = this.app.getSchema(selectedTables[0]);
-            this.app.typeDialog.init(selectedTables[0]);
+            this.app.typeDialog.init(selectedTables[0],startOver);
             return;
-        } else {
-            console.log("merge" + selectedTables.length.toString());
-            for (let schemaName of selectedTables) {
-                console.log(schemaName);
-                this.schemasJSON[schemaName] = this.app.getSchema(schemaName);
-                htmlContent += this.buildTable(schemaName, this.schemasJSON[schemaName]);
+        }
+
+        if(startOver) {
+            var htmlContent = '';
+            this.schemasJSON = {};
+            this.defineRules = false;
+            this.joinRules = {};
+            this.joinRulesList = [];
+            this.tableNames = [];
+            this.lastJoinResult = [];
+            this.tableNames = selectedTables;
+            console.log("init join");
+
+            if (selectedTables.length == 0) {
+                console.error("none");
+                return;
+            } else if (selectedTables.length == 1) {
+                console.log("skip to column types");
+                this.app.schema = this.app.getSchema(selectedTables[0]);
+                this.app.typeDialog.init(selectedTables[0],startOver);
+                return;
+            } else {
+                console.log("merge" + selectedTables.length.toString());
+                for (let schemaName of selectedTables) {
+                    console.log(schemaName);
+                    this.schemasJSON[schemaName] = this.app.getSchema(schemaName);
+                    htmlContent += this.buildTable(schemaName, this.schemasJSON[schemaName]);
+                }
             }
+
+            $("#new_join_rule").prop("disabled", false);
+            $("#schema_list").html(htmlContent);
+            $('#schema_list .preview_table th').css("color", "#555");
+            $("#joinNext").prop("disabled", true);
+            $("#join_rules").html("");
+            this.showResult();
+            this.finishRuleVisuals();
         }
         $("#join").show();
-
-        $("#schema_list").html(htmlContent);
-        $('#schema_list .preview_table th').css("color", "#555");
-        $("#joinNext").prop("disabled", true);
-        $("#join_rules").html("");
-        this.showResult();
+        this.startOver = false;
     }
 
     compareRow(rows) {
@@ -287,6 +311,7 @@ class JoinDialog {
     }
 
     showResult() {
+        this.startOver = true;
         var result = this.joinTables(jQuery.extend(true, {}, this.schemasJSON), {}, []);
         if (result.length == 0 && this.joinRulesList.length == 0) {
             $("#join_preview").html("No rules defined.");

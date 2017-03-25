@@ -3,6 +3,7 @@ import WindowManager = require("./../WindowManager");
 class TypeDialog {
     app:Application;
     winMgr:WindowManager;
+    startOver = true;
 
     constructor(app:Application, winMgr:WindowManager) {
         this.app = app;
@@ -53,15 +54,28 @@ class TypeDialog {
 
     }
 
-    init(selectedTable: string) {
-        this.app.schemaName = selectedTable;
-        var schemasJSON = "";
-        var htmlContent = '';
+    init(selectedTable: string, startOver:boolean) {
+        this.startOver = startOver;
+        if(startOver) {
+            this.app.schemaName = selectedTable;
+            var schemasJSON = "";
+            var htmlContent = '';
 
-        htmlContent += this.buildTableTypes(this.app.schema);
+            htmlContent += this.buildTableTypes(this.app.schema);
+            $("#type_list").html(htmlContent);
+        }
         $("#types").show();
+    }
 
-        $("#type_list").html(htmlContent);
+    backClicked() {
+        this.winMgr.closeWindow("types");
+        if(this.app.method == "multir"){
+            this.app.joinDialog.startOver = false;
+            $("#join").show();
+        }else{
+            this.app.openDialog.startOver = false;
+            $("#open").show();
+        }
     }
 
     nextClicked() {
@@ -83,7 +97,7 @@ class TypeDialog {
         }
 
         this.winMgr.closeWindow('types');
-        app.actionDlg.init();
+        app.actionDlg.init(this.startOver);
     }
 }
 

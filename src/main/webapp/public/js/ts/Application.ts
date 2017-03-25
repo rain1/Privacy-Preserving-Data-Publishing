@@ -94,6 +94,14 @@ class Application {
         return columns;
     };
 
+    getColumnNames() {
+        var columns = [];
+        for (var c in this.attributeTypes) {
+            columns.push(c);
+        }
+        return columns;
+    };
+
     equals(a, b) {
         return JSON.stringify(a) == JSON.stringify(b);
     };

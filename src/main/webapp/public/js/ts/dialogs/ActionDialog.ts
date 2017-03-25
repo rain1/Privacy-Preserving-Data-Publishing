@@ -2,6 +2,7 @@ import Application = require("./../Application");
 import WindowManager = require("./../WindowManager");
 class ActionDialog {
     specificationEnded = false;
+    startOver = true;
 
     app:Application;
     winMgr:WindowManager;
@@ -73,21 +74,25 @@ class ActionDialog {
     }
 
 
-    init() {
-        this.app.attributeActions = {};
-        var htmlContent = '';
+    init(startOver:boolean) {
+        this.app.typeDialog.startOver = false;
+        if(startOver) {
+            this.app.attributeActions = {};
+            var htmlContent = '';
 
-        htmlContent += this.buildActionsTable(this.app.schema);
-        $("#actions").show();
+            htmlContent += this.buildActionsTable(this.app.schema);
 
-        if (this.app.method == "kanonymity") {
-            $("#special_actions").hide();
-        } else {
-            $("#special_actions").show();
+            if (this.app.method == "kanonymity") {
+                $("#special_actions").hide();
+            } else {
+                //$("#special_actions").show();
+            }
+
+            $("#action_list").html(htmlContent);
         }
-
-        $("#action_list").html(htmlContent);
+        $("#actions").show();
         this.preselectActions();
+        this.startOver = false;
     }
 
 
@@ -103,7 +108,6 @@ class ActionDialog {
                 break;
             case "generalize":
                 this.app.generalizationDialog.init(columName);
-                $("#generalization").show();
                 break;
             case "suppress":
                 setupSuppression(columName);
@@ -132,21 +136,53 @@ class ActionDialog {
         this.app.anonymizer.anonymizeData();
     }
 
+    backClicked() {
+        this.winMgr.closeWindow("actions");
+        this.app.typeDialog.startOver = false;
+        $("#types").show();
+    }
+
 
     nextClicked() {
         console.log("sadfsd");
         for (let element of $('select[class="action_select"]')) {
             var colName = $(element).attr('name');
             var jsonVariable = {};
-            jsonVariable["action"] = $(element).val();
-            jsonVariable["defined"] = false;
-            this.app.attributeActions[colName] = jsonVariable;
+            if(this.app.attributeActions[colName] == undefined
+                || (this.app.attributeActions[colName] != undefined && this.app.attributeActions[colName].action != $(element).val())) {
+                jsonVariable["action"] = $(element).val();
+                jsonVariable["defined"] = false;
+                this.app.attributeActions[colName] = jsonVariable;
+            }
         }
-        this.defineNextRule();
+        //if(this.app.generalizationDialog.definingInProgress && !this.startOver){
+        if(this.app.generalizationDialog.definingInProgress){
+            var firstColumn = this.getFirstGeneralizeColumn();
+            if(firstColumn == ""){ //in case there is no longer anything to generalize
+                this.app.anonymizer.anonymizeData();
+            }else{
+                this.app.generalizationDialog.init(firstColumn);
+            }
+        }else{
+            this.defineNextRule();
+        }
         this.winMgr.closeWindow('actions');
         console.log(this.app.attributeActions);
         console.log("defining done");
 
+    }
+
+    private getFirstGeneralizeColumn() {
+        var columns = this.app.getColumnNames();
+        var next = 0;
+        while(next < columns.length -1){
+            var nextValue = columns[next];
+            if(this.app.attributeActions[nextValue].action == "generalize"){
+                return nextValue
+            }
+            next++;
+        }
+        return "";
     }
 }
 
