@@ -37,7 +37,6 @@ class Anonymization {
 
     getPreservedColumns(){
         var columns = [];
-        debugger;
         for(let column in this.app.attributeActions){
             if(this.app.attributeActions[column]["action"] != "remove"){
                 columns.push(column);
@@ -115,11 +114,13 @@ class Anonymization {
             final_sort.push([sortToken.id ,0]);
         }
 
-        $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable"));
+        var statistics = new Statistics(this.app);
+        var statisticsData = statistics.build();
+
+        $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable", statisticsData.highlightData));
         $("#export_schema").prop("disabled", false);
         $("#myTable").tablesorter({sortList: final_sort});
-        var statistics = new Statistics(this.app);
-        $("#statistics").html(statistics.build());
+        $("#statistics").html(statisticsData.statistics);
         for(let chart of statistics.charts){
             statistics.drawChart(chart);
         }

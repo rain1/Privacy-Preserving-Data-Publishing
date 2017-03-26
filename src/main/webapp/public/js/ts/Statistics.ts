@@ -8,7 +8,15 @@ class Statistics {
         this.app = app;
     }
 
-    pushId(qidMap, qid:string, id:string) {
+    pushElement(qidMap, qid:string, element:string) {
+        if (qidMap[qid] == undefined) {
+            qidMap[qid] = [element];
+        } else {
+            qidMap[qid].push(element);
+        }
+    }
+
+    addId(qidMap, qid:string, id:string) {
         if (qidMap[qid] == undefined) {
             qidMap[qid] = new Set([id]);
         } else {
@@ -34,8 +42,8 @@ class Statistics {
 
     getRowColumnsNot(row, columns:string[]) {
         var selected = {};
-        for(let key in Object.keys(row)) {
-            if(columns.indexOf(row[key]) == -1){
+        for (let key in Object.keys(row)) {
+            if (columns.indexOf(row[key]) == -1) {
                 selected[key] = row[key];
             }
         }
@@ -64,7 +72,7 @@ class Statistics {
         for (let row of this.app.anonymizedSchemaFull) {
             var qid = this.getRowColumns(row, qidColumns);
             var id = this.getRowColumns(row, idColumns);
-            this.pushId(qidIdMap, JSON.stringify(qid), JSON.stringify(id));
+            this.addId(qidIdMap, JSON.stringify(qid), JSON.stringify(id));
         }
         return qidIdMap;
     }
@@ -113,16 +121,72 @@ class Statistics {
         return '<div class="canvas_container"><canvas id="' + id + '"></canvas></div>';
     }
 
-    getXYStatistics(qidColumns:string[], correspondingColumns:string[]){
+    getXYStatistics(qidColumns:string[], correspondingColumns:string[]) {
         var qidIdSet = this.xyMap(qidColumns, correspondingColumns);
         var qidIdSetSizeMap = this.qidIdSetToSizeMap(qidIdSet);
         var smallestQIDXY = this.findSmallestMapKey(qidIdSetSizeMap);
         var largestQIDXY = this.findLargestMapKey(qidIdSetSizeMap);
         return {
-            map:qidIdSetSizeMap,
+            map: qidIdSetSizeMap,
             smallest: smallestQIDXY,
             largest: largestQIDXY
         };
+    }
+
+    frequencyMapToRelative(distributionMap, numElements) {
+        for (let key in distributionMap) {
+            distributionMap[key] = distributionMap[key] / numElements;
+        }
+    }
+
+    getTableFrequencyMap(table, sensitiveColumn:string) {
+        var distributionMap = {};
+        var numElements = table.length;
+        for (let row of table) {
+            this.incrementMapCounter(distributionMap, row[sensitiveColumn]);
+        }
+        this.frequencyMapToRelative(distributionMap, numElements);
+        return distributionMap;
+    }
+
+    getGroupFrequencyMap(values:any[]) {
+        var distributionMap = {};
+        var numElements = values.length;
+        for (let value of values) {
+            this.incrementMapCounter(distributionMap, value);
+        }
+        this.frequencyMapToRelative(distributionMap, numElements);
+        return distributionMap;
+    }
+
+    getDistributionsSimilarity(table, qidColumns:string[], sensitiveColumns:string[]) {
+        var sensitiveColumn = sensitiveColumns[0];
+        var tableDistributionMap = this.getTableFrequencyMap(table, sensitiveColumn);
+        var qidSensitiveMap = {};
+        for (let row of table) {
+            var qid = this.getRowColumns(row, qidColumns);
+            var sensitive = this.getRowColumns(row, [sensitiveColumn]);
+            this.pushElement(qidSensitiveMap, JSON.stringify(qid), sensitive[sensitiveColumns[0]]);
+        }
+
+        var qidFrequencies = {};
+        for (let key in qidSensitiveMap) {
+            qidFrequencies[key] = this.getGroupFrequencyMap(qidSensitiveMap[key]);
+        }
+
+        var qidFails = {};
+        for (let qidKey in qidFrequencies) {
+            for (let sensitiveKey in qidFrequencies[qidKey]) {
+                if (Math.abs(qidFrequencies[qidKey][sensitiveKey] - tableDistributionMap[sensitiveKey]) > 0.1) {
+                    this.pushElement(qidFails, qidKey, sensitiveKey);
+                }
+            }
+        }
+
+        return {
+            total: Object.keys(qidFrequencies).length,
+            fails: qidFails
+        }
     }
 
     build() {
@@ -134,8 +198,8 @@ class Statistics {
         var frequencyMap = this.qidMapToFrequencyMap(qidMap);
         var smallestQID = this.findSmallestMapValue(qidMap);
         var largestQID = this.findLargestMapValue(qidMap);
+        var highlightData = {};
 
-        debugger;
         if (qidColumns.length == 0) {
             statistics += "Warning: QID not defined<br>";
         } else {
@@ -192,11 +256,33 @@ class Statistics {
                         statistics += "There are " + ldiv.map[value] + " QID groups that represent " + value + " different values.<br>";
                     }
                     break;
+                case "tc":
+                    highlightData = this.getDistributionsSimilarity(this.app.anonymizedSchemaFull, qidColumns, sensitiveColumns);
+                    var numFails = Object.keys(highlightData["fails"]).length;
+                    statistics += "Total QID groups: " + highlightData["total"] + "<br>";
+                    statistics += "QID groups that have similar distribution to table: " + (highlightData["total"] - numFails) + "<br>";
+                    statistics += "QID groups that have different distribution from table: " + numFails + "<br>";
+                    var tableDistributionMap = this.getTableFrequencyMap(this.app.anonymizedSchemaFull, sensitiveColumns[0]);
+                    statistics += this.buildCanvas("table-distribution");
+                    this.charts.push({
+                        elementId: "table-distribution",
+                        dataMap: tableDistributionMap,
+                        xLabel: 'Sensitive attribute',
+                        yLabel: 'Occurrences %',
+                        title: 'Distribution of sensitive attributes'
+                    });
+                    for (let value in tableDistributionMap) {
+                        statistics += (tableDistributionMap[value] * 100) + " % of sensitive attribute values are " + value + " .<br>";
+                    }
+                    break;
                 default:
                     break;
             }
         }
-        return statistics;
+        return {
+            "statistics": statistics,
+            "highlightData": highlightData
+        }
     }
 
     qidMapToFrequencyMap(qidMap) {

@@ -27,7 +27,6 @@ class GeneralizationDialog {
     }
 
     renderView(columnName:string){
-        debugger;
         if (this.app.attributeActions[columnName].defined) {
             if (this.app.attributeActions[columnName].mode == "interval") {
                 $("#interval_size").val(this.app.attributeActions[columnName]["operation"]);
@@ -208,7 +207,6 @@ class GeneralizationDialog {
     }
 
     nextClicked() {
-        debugger;
         this.saveFormData();
         this.winMgr.closeWindow("generalization");
         this.app.attributeActions[this.currentColumn].defined = true;

@@ -145,3 +145,11 @@ canvas{
 #statistics {
     margin-left: 10px;
 }
+
+
+.warn-group {
+    background-color: #f88;
+}
+.warn-row {
+    background-color: #f00;
+}

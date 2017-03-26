@@ -76,7 +76,15 @@ var Statistics = (function () {
         Chart.defaults.global.legend.display = false;
         this.app = app;
     }
-    Statistics.prototype.pushId = function (qidMap, qid, id) {
+    Statistics.prototype.pushElement = function (qidMap, qid, element) {
+        if (qidMap[qid] == undefined) {
+            qidMap[qid] = [element];
+        }
+        else {
+            qidMap[qid].push(element);
+        }
+    };
+    Statistics.prototype.addId = function (qidMap, qid, id) {
         if (qidMap[qid] == undefined) {
             qidMap[qid] = new Set([id]);
         }
@@ -132,7 +140,7 @@ var Statistics = (function () {
             var row = _a[_i];
             var qid = this.getRowColumns(row, qidColumns);
             var id = this.getRowColumns(row, idColumns);
-            this.pushId(qidIdMap, JSON.stringify(qid), JSON.stringify(id));
+            this.addId(qidIdMap, JSON.stringify(qid), JSON.stringify(id));
         }
         return qidIdMap;
     };
@@ -186,6 +194,58 @@ var Statistics = (function () {
             largest: largestQIDXY
         };
     };
+    Statistics.prototype.frequencyMapToRelative = function (distributionMap, numElements) {
+        for (var key in distributionMap) {
+            distributionMap[key] = distributionMap[key] / numElements;
+        }
+    };
+    Statistics.prototype.getTableFrequencyMap = function (table, sensitiveColumn) {
+        var distributionMap = {};
+        var numElements = table.length;
+        for (var _i = 0, table_2 = table; _i < table_2.length; _i++) {
+            var row = table_2[_i];
+            this.incrementMapCounter(distributionMap, row[sensitiveColumn]);
+        }
+        this.frequencyMapToRelative(distributionMap, numElements);
+        return distributionMap;
+    };
+    Statistics.prototype.getGroupFrequencyMap = function (values) {
+        var distributionMap = {};
+        var numElements = values.length;
+        for (var _i = 0, values_1 = values; _i < values_1.length; _i++) {
+            var value = values_1[_i];
+            this.incrementMapCounter(distributionMap, value);
+        }
+        this.frequencyMapToRelative(distributionMap, numElements);
+        return distributionMap;
+    };
+    Statistics.prototype.getDistributionsSimilarity = function (table, qidColumns, sensitiveColumns) {
+        var sensitiveColumn = sensitiveColumns[0];
+        var tableDistributionMap = this.getTableFrequencyMap(table, sensitiveColumn);
+        var qidSensitiveMap = {};
+        for (var _i = 0, table_3 = table; _i < table_3.length; _i++) {
+            var row = table_3[_i];
+            var qid = this.getRowColumns(row, qidColumns);
+            var sensitive = this.getRowColumns(row, [sensitiveColumn]);
+            this.pushElement(qidSensitiveMap, JSON.stringify(qid), sensitive[sensitiveColumns[0]]);
+        }
+        var qidFrequencies = {};
+        for (var key in qidSensitiveMap) {
+            qidFrequencies[key] = this.getGroupFrequencyMap(qidSensitiveMap[key]);
+        }
+        var qidFails = {};
+        for (var qidKey in qidFrequencies) {
+            for (var sensitiveKey in qidFrequencies[qidKey]) {
+                if (Math.abs(qidFrequencies[qidKey][sensitiveKey] - tableDistributionMap[sensitiveKey]) > 0.1) {
+                    this.pushElement(qidFails, qidKey, sensitiveKey);
+                }
+            }
+        }
+        return {
+            total: Object.keys(qidFrequencies).length,
+            fails: qidFails
+        };
+    };
     Statistics.prototype.build = function () {
         var statistics = "<b>Statistics:</b><br>";
         var qidColumns = this.app.getColumnNamesByType("qid");
@@ -195,7 +255,7 @@ var Statistics = (function () {
         var frequencyMap = this.qidMapToFrequencyMap(qidMap);
         var smallestQID = this.findSmallestMapValue(qidMap);
         var largestQID = this.findLargestMapValue(qidMap);
-        debugger;
+        var highlightData = {};
         if (qidColumns.length == 0) {
             statistics += "Warning: QID not defined<br>";
         }
@@ -251,11 +311,33 @@ var Statistics = (function () {
                         statistics += "There are " + ldiv.map[value] + " QID groups that represent " + value + " different values.<br>";
                     }
                     break;
+                case "tc":
+                    highlightData = this.getDistributionsSimilarity(this.app.anonymizedSchemaFull, qidColumns, sensitiveColumns);
+                    var numFails = Object.keys(highlightData["fails"]).length;
+                    statistics += "Total QID groups: " + highlightData["total"] + "<br>";
+                    statistics += "QID groups that have similar distribution to table: " + (highlightData["total"] - numFails) + "<br>";
+                    statistics += "QID groups that have different distribution from table: " + numFails + "<br>";
+                    var tableDistributionMap = this.getTableFrequencyMap(this.app.anonymizedSchemaFull, sensitiveColumns[0]);
+                    statistics += this.buildCanvas("table-distribution");
+                    this.charts.push({
+                        elementId: "table-distribution",
+                        dataMap: tableDistributionMap,
+                        xLabel: 'Sensitive attribute',
+                        yLabel: 'Occurrences %',
+                        title: 'Distribution of sensitive attributes'
+                    });
+                    for (var value in tableDistributionMap) {
+                        statistics += (tableDistributionMap[value] * 100) + " % of sensitive attribute values are " + value + " .<br>";
+                    }
+                    break;
                 default:
                     break;
             }
         }
-        return statistics;
+        return {
+            "statistics": statistics,
+            "highlightData": highlightData
+        };
     };
     Statistics.prototype.qidMapToFrequencyMap = function (qidMap) {
         var frequencyMap = {};
@@ -367,7 +449,6 @@ var Anonymization = (function () {
     };
     Anonymization.prototype.getPreservedColumns = function () {
         var columns = [];
-        debugger;
         for (var column in this.app.attributeActions) {
             if (this.app.attributeActions[column]["action"] != "remove") {
                 columns.push(column);
@@ -432,11 +513,12 @@ var Anonymization = (function () {
             var sortToken = qid_ids_1[_i];
             final_sort.push([sortToken.id, 0]);
         }
-        $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable"));
+        var statistics = new Statistics(this.app);
+        var statisticsData = statistics.build();
+        $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable", statisticsData.highlightData));
         $("#export_schema").prop("disabled", false);
         $("#myTable").tablesorter({ sortList: final_sort });
-        var statistics = new Statistics(this.app);
-        $("#statistics").html(statistics.build());
+        $("#statistics").html(statisticsData.statistics);
         for (var _a = 0, _b = statistics.charts; _a < _b.length; _a++) {
             var chart = _b[_a];
             statistics.drawChart(chart);
@@ -805,7 +887,6 @@ var GeneralizationDialog = (function () {
         this.currentColumnId = columns.indexOf(column);
     };
     GeneralizationDialog.prototype.renderView = function (columnName) {
-        debugger;
         if (this.app.attributeActions[columnName].defined) {
             if (this.app.attributeActions[columnName].mode == "interval") {
                 $("#interval_size").val(this.app.attributeActions[columnName]["operation"]);
@@ -975,7 +1056,6 @@ var GeneralizationDialog = (function () {
         }
     };
     GeneralizationDialog.prototype.nextClicked = function () {
-        debugger;
         this.saveFormData();
         this.winMgr.closeWindow("generalization");
         this.app.attributeActions[this.currentColumn].defined = true;
@@ -1560,6 +1640,7 @@ var Main = (function () {
         this.actionDlg = new ActionDialog(this.app, this.winMgr);
         this.generalizationDlg = new GeneralizationDialog(this.app, this.winMgr);
         this.anonymizer = new Anonymization(this.app);
+        this.statistics = new Statistics(this.app);
     }
     Main.prototype.init = function () {
         this.winMgr.loadWindow("open");
@@ -1577,10 +1658,32 @@ var Main = (function () {
         this.app.generalizationDialog = this.generalizationDlg;
         this.app.anonymizer = this.anonymizer;
     };
-    Main.prototype.jsonToTable = function (jsonData, maxLength, highlight, id) {
+    Main.prototype.getHighlightClass = function (row, highlightData, qidColumns, sensitiveColumns) {
+        var highlightClass = "normal";
+        if (Object.keys(highlightData).length == 0) {
+            return highlightClass;
+        }
+        if (this.app.method == "tc") {
+            var qidData = this.statistics.getRowColumns(row, qidColumns);
+            var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);
+            for (var key in highlightData["fails"]) {
+                if (JSON.stringify(qidData) == key) {
+                    highlightClass = "warn-group";
+                    if (highlightData["fails"][key].indexOf(sensitiveData[sensitiveColumns[0]]) > -1) {
+                        highlightClass = "warn-row";
+                    }
+                }
+            }
+        }
+        return highlightClass;
+    };
+    Main.prototype.jsonToTable = function (jsonData, maxLength, highlight, id, highlightData) {
         if (maxLength === void 0) { maxLength = -1; }
         if (highlight === void 0) { highlight = []; }
         if (id === void 0) { id = ""; }
+        if (highlightData === void 0) { highlightData = {}; }
+        var qidColumns = this.app.getColumnNamesByType("qid");
+        var sensitiveColumns = this.app.getColumnNamesByType("sensitive");
         if (id != "") {
             id = ' id="' + id + '"';
         }
@@ -1598,7 +1701,7 @@ var Main = (function () {
         var rowCount = 0;
         for (var _b = 0, jsonData_1 = jsonData; _b < jsonData_1.length; _b++) {
             var row = jsonData_1[_b];
-            table += "<tr>";
+            table += '<tr class="' + this.getHighlightClass(row, highlightData, qidColumns, sensitiveColumns) + '">';
             for (var cell in row) {
                 if (highlight.indexOf(cell) > -1) {
                     table += '<td class="highlight">' + row[cell] + "</td>";

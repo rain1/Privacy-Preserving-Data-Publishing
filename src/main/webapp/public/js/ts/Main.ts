@@ -24,6 +24,7 @@ class Main {
     actionDlg = new ActionDialog(this.app, this.winMgr);
     generalizationDlg = new GeneralizationDialog(this.app, this.winMgr);
     anonymizer = new Anonymization(this.app);
+    statistics = new Statistics(this.app);
 
     init() {
         this.winMgr.loadWindow("open");
@@ -43,7 +44,29 @@ class Main {
         this.app.anonymizer = this.anonymizer;
     }
 
-    jsonToTable(jsonData, maxLength:number = -1, highlight:string[] = [], id:string = "") {
+    getHighlightClass(row:{}, highlightData:{}, qidColumns:string[], sensitiveColumns:string[]) {
+        var highlightClass = "normal";
+        if(Object.keys(highlightData).length == 0){
+            return highlightClass;
+        }
+        if (this.app.method == "tc") {
+            var qidData = this.statistics.getRowColumns(row, qidColumns);
+            var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);
+            for (let key in highlightData["fails"]) {
+                if (JSON.stringify(qidData) == key) {
+                    highlightClass = "warn-group";
+                    if (highlightData["fails"][key].indexOf(sensitiveData[sensitiveColumns[0]]) > -1) {
+                        highlightClass = "warn-row";
+                    }
+                }
+            }
+        }
+        return highlightClass;
+    }
+
+    jsonToTable(jsonData, maxLength:number = -1, highlight:string[] = [], id:string = "", highlightData = {}) {
+        var qidColumns = this.app.getColumnNamesByType("qid");
+        var sensitiveColumns = this.app.getColumnNamesByType("sensitive");
 
         if (id != "") {
             id = ' id="' + id + '"';
@@ -62,7 +85,7 @@ class Main {
 
         var rowCount = 0;
         for (let row of jsonData) {
-            table += "<tr>";
+            table += '<tr class="' + this.getHighlightClass(row, highlightData, qidColumns, sensitiveColumns) + '">';
             for (let cell in row) {
                 if (highlight.indexOf(cell) > -1) {
                     table += '<td class="highlight">' + row[cell] + "</td>";
@@ -93,14 +116,14 @@ class Main {
         for (let key of Object.keys(jsonData[0])) {
             table += key + ",";
         }
-        table = table.slice(0,-1);
+        table = table.slice(0, -1);
         table += "\n";
 
         for (let row of jsonData) {
             for (let cell in row) {
-                    table += row[cell] + ",";
+                table += row[cell] + ",";
             }
-            table = table.slice(0,-1);
+            table = table.slice(0, -1);
             table += "\n";
         }
 
