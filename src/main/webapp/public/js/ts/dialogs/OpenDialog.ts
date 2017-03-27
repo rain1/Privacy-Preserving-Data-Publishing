@@ -57,6 +57,7 @@ class OpenDialog {
     }
 
     methodChanged() {
+        this.startOver = true;
         if ($("#anonymization_method").val() == "none") {
             $("#open_next").prop("disabled", true);
         } else {

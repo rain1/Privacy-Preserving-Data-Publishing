@@ -207,6 +207,7 @@ class Statistics {
             switch (this.app.method) {
                 case "kanonymity":
                 case "multir":
+                case "edif":
                     statistics += "Smallest QID group: " + smallestQID + "<br>";
                     statistics += "Largest QID group: " + largestQID + "<br>";
                     statistics += this.buildCanvas("qidsize");

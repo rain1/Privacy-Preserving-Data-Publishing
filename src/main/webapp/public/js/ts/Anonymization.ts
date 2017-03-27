@@ -8,13 +8,20 @@ class Anonymization {
         this.app = app;
     }
 
+    randInt(min, max){
+        return Math.floor((Math.random() * max) + min);
+    }
+
+    randNoise(cell){
+        return this.randInt(cell*0.9, cell*1.1);
+    }
+
 
     anonymizeCell(cell, rule) {
         switch (rule.action) {
             case "keep":
                 return cell;
             case "remove":
-                //specificationEnded = true;
                 return cell;
                 break;
             case "generalize":
@@ -26,11 +33,12 @@ class Anonymization {
                 }
                 break;
             case "suppress":
-                //setupSuppression(columName);
                 $("#suppression").show();
                 break;
+            case "noise":
+                return this.randNoise(cell);
+                break;
             default:
-                //specificationEnded = true;
                 break;
         }
     }

@@ -264,6 +264,7 @@ var Statistics = (function () {
             switch (this.app.method) {
                 case "kanonymity":
                 case "multir":
+                case "edif":
                     statistics += "Smallest QID group: " + smallestQID + "<br>";
                     statistics += "Largest QID group: " + largestQID + "<br>";
                     statistics += this.buildCanvas("qidsize");
@@ -421,12 +422,17 @@ var Anonymization = (function () {
     function Anonymization(app) {
         this.app = app;
     }
+    Anonymization.prototype.randInt = function (min, max) {
+        return Math.floor((Math.random() * max) + min);
+    };
+    Anonymization.prototype.randNoise = function (cell) {
+        return this.randInt(cell * 0.9, cell * 1.1);
+    };
     Anonymization.prototype.anonymizeCell = function (cell, rule) {
         switch (rule.action) {
             case "keep":
                 return cell;
             case "remove":
-                //specificationEnded = true;
                 return cell;
                 break;
             case "generalize":
@@ -439,11 +445,12 @@ var Anonymization = (function () {
                 }
                 break;
             case "suppress":
-                //setupSuppression(columName);
                 $("#suppression").show();
                 break;
+            case "noise":
+                return this.randNoise(cell);
+                break;
             default:
-                //specificationEnded = true;
                 break;
         }
     };
@@ -702,11 +709,13 @@ var ActionDialog = (function () {
         this.winMgr = winMgr;
     }
     ActionDialog.prototype.buildActionsCombo = function (name) {
+        var additiveNoise = this.app.method == "edif" ? '<option value="noise">Add noise</option>' : '';
         return '<select class="action_select" name="' + name + '">' +
             '   <option value="keep">Keep as is</option>' +
             '   <option value="remove">Remove column</option>' +
             '   <option value="generalize">Generalize</option>' +
             //'   <option value="suppress">Suppress</option>' +
+            additiveNoise +
             '</select>';
     };
     ActionDialog.prototype.buildActionsTable = function (tableJson) {
@@ -750,9 +759,15 @@ var ActionDialog = (function () {
         for (var i in identifiers) {
             console.log(identifiers[i]);
             var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
-            element.val("keep");
             element.prop("disabled", true);
-            element.prop("title", "Sensitive attributes are not generalized");
+            if (this.app.method == "edif") {
+                element.val("noise");
+                element.prop("title", "ϵ-Differential privacy is achieved by adding random noise to variable.");
+            }
+            else {
+                element.val("keep");
+                element.prop("title", "Sensitive attributes are not generalized");
+            }
         }
     };
     ActionDialog.prototype.init = function (startOver) {
@@ -761,11 +776,6 @@ var ActionDialog = (function () {
             this.app.attributeActions = {};
             var htmlContent = '';
             htmlContent += this.buildActionsTable(this.app.schema);
-            if (this.app.method == "kanonymity") {
-                $("#special_actions").hide();
-            }
-            else {
-            }
             $("#action_list").html(htmlContent);
         }
         $("#actions").show();
@@ -776,6 +786,7 @@ var ActionDialog = (function () {
         var columName = columnName;
         this.specificationEnded = false;
         switch (action.action) {
+            case "noise":
             case "keep":
             case "remove":
                 this.specificationEnded = true;
@@ -925,8 +936,6 @@ var GeneralizationDialog = (function () {
             }
         }
         if (this.isNum) {
-            //selectIntervals();
-            //$("#intervals_radio").prop("checked", true);
             $("#intervals_radio").click();
             $("#min_max").html('Min:' + Math.min.apply(Math, cells) + ' Max:' + Math.max.apply(Math, cells));
         }
@@ -939,7 +948,6 @@ var GeneralizationDialog = (function () {
         $("#interval_size").val("");
         $("#rules").val("");
         $("#generalization_preview").html(app.jsonToTable(this.app.schema, -1, [this.currentColumn]));
-        //$("#generalization_next").prop("disabled", true);
         this.renderView(columnName);
         this.updateLastDefinedColumn(columnName);
         $("#generalization").show();
@@ -1430,6 +1438,7 @@ var OpenDialog = (function () {
         this.app.joinDialog.init(selected, this.startOver);
     };
     OpenDialog.prototype.methodChanged = function () {
+        this.startOver = true;
         if ($("#anonymization_method").val() == "none") {
             $("#open_next").prop("disabled", true);
         }
@@ -1504,13 +1513,49 @@ var TypeDialog = (function () {
         this.winMgr = winMgr;
     }
     TypeDialog.prototype.buildCombo = function (name) {
-        return '<select class="type_select" name="' + name + '">' +
+        return '<select  onchange="app.typeDlg.typeChanged();" class="type_select" name="' + name + '">' +
             '   <option value="none">Not Defined</option>' +
             '   <option value="id">ID</option>' +
             '   <option value="qid">QID</option>' +
             '   <option value="sensitive">Sensitive</option>' +
             '   <option value="nonsensitive">Nonsensitive</option>' +
             '</select>';
+    };
+    TypeDialog.prototype.validateTypes = function () {
+        var senitiveColumns = 0;
+        for (var _i = 0, _a = $('select[class="type_select"]'); _i < _a.length; _i++) {
+            var element = _a[_i];
+            var columnName = $(element).attr('name');
+            var columnType = $(element).val();
+            if (columnType == "sensitive") {
+                senitiveColumns++;
+                if (senitiveColumns > 1) {
+                    alert("Privacy preserving methods implemented in this program are designed to support only one " +
+                        "sensitive attribute. You have chosen " + senitiveColumns + " columns. Please cange your " +
+                        "choices before you continue.");
+                    return false;
+                }
+            }
+            if (this.app.method == "edif" && columnType == "sensitive") {
+                var cells = this.app.getUniqueValueByColumn(columnName);
+                for (var i in cells) {
+                    if (!$.isNumeric(cells[i])) {
+                        alert("In ϵ-Differential privacy sensitive attributes can only have numerical values." +
+                            " Please choose some other column to be sensitive.");
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    };
+    TypeDialog.prototype.typeChanged = function () {
+        if (this.validateTypes()) {
+            $("#typesNext").prop("disabled", false);
+        }
+        else {
+            $("#typesNext").prop("disabled", true);
+        }
     };
     TypeDialog.prototype.buildTableTypes = function (tableJson) {
         console.log("building....");
@@ -1550,6 +1595,7 @@ var TypeDialog = (function () {
             htmlContent += this.buildTableTypes(this.app.schema);
             $("#type_list").html(htmlContent);
         }
+        this.typeChanged();
         $("#types").show();
     };
     TypeDialog.prototype.backClicked = function () {

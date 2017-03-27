@@ -13,11 +13,13 @@ class ActionDialog {
     }
 
     buildActionsCombo(name:string) {
+        var additiveNoise = this.app.method == "edif" ? '<option value="noise">Add noise</option>' : '';
         return '<select class="action_select" name="' + name + '">' +
             '   <option value="keep">Keep as is</option>' +
             '   <option value="remove">Remove column</option>' +
             '   <option value="generalize">Generalize</option>' +
                 //'   <option value="suppress">Suppress</option>' +
+            additiveNoise +
             '</select>';
     }
 
@@ -67,9 +69,14 @@ class ActionDialog {
         for (var i in identifiers) {
             console.log(identifiers[i]);
             var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
-            element.val("keep");
             element.prop("disabled", true);
-            element.prop("title", "Sensitive attributes are not generalized");
+            if(this.app.method == "edif"){
+                element.val("noise");
+                element.prop("title", "ϵ-Differential privacy is achieved by adding random noise to variable.");
+            }else{
+                element.val("keep");
+                element.prop("title", "Sensitive attributes are not generalized");
+            }
         }
     }
 
@@ -82,11 +89,6 @@ class ActionDialog {
 
             htmlContent += this.buildActionsTable(this.app.schema);
 
-            if (this.app.method == "kanonymity") {
-                $("#special_actions").hide();
-            } else {
-                //$("#special_actions").show();
-            }
 
             $("#action_list").html(htmlContent);
         }
@@ -100,6 +102,7 @@ class ActionDialog {
         var columName = columnName;
         this.specificationEnded = false;
         switch (action.action) {
+            case "noise":
             case "keep":
             case "remove":
                 this.specificationEnded = true;

@@ -64,8 +64,6 @@ class GeneralizationDialog {
             }
         }
         if (this.isNum) {
-            //selectIntervals();
-            //$("#intervals_radio").prop("checked", true);
             $("#intervals_radio").click();
             $("#min_max").html('Min:' + Math.min.apply(Math, cells) + ' Max:' + Math.max.apply(Math, cells));
         } else {
@@ -79,7 +77,6 @@ class GeneralizationDialog {
         $("#interval_size").val("");
         $("#rules").val("");
         $("#generalization_preview").html(app.jsonToTable(this.app.schema, -1, [this.currentColumn]));
-        //$("#generalization_next").prop("disabled", true);
         this.renderView(columnName);
         this.updateLastDefinedColumn(columnName);
         $("#generalization").show();
