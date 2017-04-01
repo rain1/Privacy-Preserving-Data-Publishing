@@ -9,7 +9,9 @@ import org.springframework.web.multipart.MultipartFile;
 import thesis.ppdp.PPDPController;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
@@ -27,7 +29,6 @@ public class ApplicationController {
     @RequestMapping("/rest/schema/{schema:.+}")
     public List<Map<String, String>> getStats(@PathVariable("schema") String schema) {
         LOG.info("Requested schema for {}", schema);
-
         return app.getSchema(schema);
     }
 
@@ -57,23 +58,23 @@ public class ApplicationController {
         }
         List<Map<String, String>> addedSchema = null;
         File file = convert(multipartFile);
+        InputStream targetStream = new FileInputStream(file);
         try {
-            addedSchema = app.addSchema(name, file);
+            addedSchema = app.addSchema(name, targetStream);
         } catch (Exception e) {
             LOG.error("Upload failed", e);
         }
         return addedSchema;
     }
 
-
-    @PostMapping("/rest/schema/add")
     @SneakyThrows
+    @PostMapping("/rest/schema/add")
     public List<Map<String, String>> addFile(@RequestParam("file") MultipartFile multipartFile) {
         return handleUploadedFile(multipartFile);
     }
 
-    @PostMapping("/rest/schema/addfallback")
     @SneakyThrows
+    @PostMapping("/rest/schema/addfallback")
     public String addFileFallback(@RequestParam("file") MultipartFile multipartFile) {
         if(handleUploadedFile(multipartFile) == null) {
             return "Upload failed.";

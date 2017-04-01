@@ -1,0 +1,501 @@
+id,age,gender,city,job
+0,57,Female,Türi,Support
+1,55,Female,Tartu,Support
+2,49,Male,Jõgeva,Support
+3,47,Female,Jõgeva,Support
+4,47,Female,Elva,Support
+5,43,Male,Põltsamaa,Support
+6,36,Female,Türi,Support
+7,51,Male,Vändra,Support
+8,29,Female,Elva,Support
+9,60,Female,Vändra,Support
+10,26,Female,Vändra,Support
+11,55,Male,Viljandi,Support
+12,67,Female,Paide,Support
+13,67,Female,Tartu,Support
+14,52,Female,Jõgeva,Support
+15,60,Female,Tartu,Supervisor
+16,26,Female,Vändra,Supervisor
+17,59,Female,Paide,Supervisor
+18,65,Female,Vändra,Supervisor
+19,45,Male,Viljandi,Supervisor
+20,27,Male,Paide,Supervisor
+21,37,Male,Elva,Supervisor
+22,41,Male,Tartu,Supervisor
+23,57,Male,Elva,Supervisor
+24,52,Female,Rapla,Supervisor
+25,68,Male,Põltsamaa,Supervisor
+26,38,Male,Rapla,Supervisor
+27,37,Male,Elva,Supervisor
+28,66,Female,Türi,Supervisor
+29,49,Male,Jõgeva,Supervisor
+30,58,Male,Tartu,Supervisor
+31,44,Female,Viljandi,Supervisor
+32,37,Male,Viljandi,Supervisor
+33,54,Male,Viljandi,Supervisor
+34,63,Male,Paide,Supervisor
+35,29,Male,Vändra,Supervisor
+36,67,Male,Tartu,Supervisor
+37,45,Female,Elva,Supervisor
+38,51,Male,Rapla,Supervisor
+39,21,Male,Rapla,Supervisor
+40,56,Male,Tartu,Supervisor
+41,32,Male,Tallinn,Supervisor
+42,24,Female,Türi,Supervisor
+43,58,Male,Türi,Supervisor
+44,35,Male,Rapla,Supervisor
+45,40,Male,Viljandi,Supervisor
+46,46,Male,Paide,Supervisor
+47,65,Female,Viljandi,Supervisor
+48,65,Female,Tallinn,Supervisor
+49,57,Male,Põltsamaa,Supervisor
+50,64,Female,Paide,Engineer
+51,52,Female,Elva,Engineer
+52,31,Male,Vändra,Engineer
+53,56,Male,Tartu,Engineer
+54,60,Male,Vändra,Engineer
+55,47,Female,Tartu,Engineer
+56,30,Male,Tallinn,Engineer
+57,29,Female,Elva,Engineer
+58,42,Male,Paide,Engineer
+59,37,Female,Rapla,Engineer
+60,49,Male,Tallinn,Engineer
+61,60,Male,Tallinn,Engineer
+62,20,Male,Türi,Engineer
+63,68,Female,Viljandi,Engineer
+64,48,Female,Viljandi,Engineer
+65,63,Male,Tallinn,Engineer
+66,49,Female,Tallinn,Engineer
+67,57,Male,Rapla,Engineer
+68,31,Female,Vändra,Engineer
+69,41,Female,Põltsamaa,Engineer
+70,68,Male,Rapla,Engineer
+71,51,Male,Viljandi,Engineer
+72,51,Female,Elva,Engineer
+73,66,Female,Jõgeva,Engineer
+74,67,Male,Jõgeva,Engineer
+75,34,Female,Jõgeva,Engineer
+76,56,Female,Vändra,Engineer
+77,57,Female,Türi,Engineer
+78,36,Male,Rapla,Engineer
+79,48,Male,Viljandi,Engineer
+80,32,Female,Türi,Engineer
+81,47,Female,Tallinn,Engineer
+82,28,Female,Rapla,Engineer
+83,32,Male,Viljandi,Engineer
+84,63,Female,Tallinn,Engineer
+85,48,Male,Tartu,Engineer
+86,46,Male,Põltsamaa,Engineer
+87,31,Male,Elva,Engineer
+88,50,Male,Paide,Engineer
+89,69,Female,Jõgeva,Engineer
+90,39,Male,Elva,Engineer
+91,31,Male,Elva,Engineer
+92,33,Female,Vändra,Engineer
+93,26,Female,Rapla,Engineer
+94,37,Female,Jõgeva,Engineer
+95,30,Male,Viljandi,Engineer
+96,57,Male,Elva,Engineer
+97,20,Female,Jõgeva,Engineer
+98,29,Female,Tartu,Engineer
+99,21,Male,Türi,Engineer
+100,20,Female,Elva,Painter
+101,48,Male,Viljandi,Painter
+102,62,Male,Türi,Painter
+103,23,Female,Paide,Painter
+104,57,Female,Paide,Painter
+105,68,Female,Tallinn,Painter
+106,64,Male,Rapla,Painter
+107,36,Female,Põltsamaa,Painter
+108,56,Female,Türi,Painter
+109,57,Female,Rapla,Painter
+110,48,Male,Elva,Painter
+111,67,Male,Tallinn,Painter
+112,49,Female,Rapla,Painter
+113,57,Male,Türi,Painter
+114,36,Female,Türi,Painter
+115,62,Male,Tartu,Painter
+116,44,Female,Vändra,Painter
+117,61,Female,Vändra,Painter
+118,27,Female,Viljandi,Painter
+119,66,Male,Jõgeva,Painter
+120,60,Female,Põltsamaa,Painter
+121,27,Male,Türi,Painter
+122,39,Female,Jõgeva,Painter
+123,68,Male,Viljandi,Painter
+124,59,Male,Paide,Painter
+125,62,Female,Paide,Painter
+126,52,Female,Tallinn,Painter
+127,24,Female,Põltsamaa,Painter
+128,64,Female,Rapla,Painter
+129,47,Male,Jõgeva,Painter
+130,25,Female,Rapla,Painter
+131,26,Male,Rapla,Painter
+132,53,Male,Jõgeva,Painter
+133,58,Male,Elva,Painter
+134,28,Female,Paide,Painter
+135,27,Male,Viljandi,Painter
+136,39,Female,Rapla,Painter
+137,41,Female,Tallinn,Painter
+138,30,Female,Jõgeva,Painter
+139,42,Male,Põltsamaa,Painter
+140,41,Male,Põltsamaa,Painter
+141,42,Female,Põltsamaa,Painter
+142,30,Female,Jõgeva,Painter
+143,22,Male,Elva,Painter
+144,52,Male,Viljandi,Painter
+145,31,Female,Vändra,Painter
+146,34,Male,Türi,Painter
+147,34,Male,Vändra,Painter
+148,64,Female,Viljandi,Painter
+149,24,Male,Paide,Painter
+150,48,Female,Põltsamaa,Therapist
+151,43,Male,Tartu,Therapist
+152,31,Male,Tallinn,Therapist
+153,38,Female,Türi,Therapist
+154,54,Male,Paide,Therapist
+155,47,Male,Paide,Therapist
+156,32,Male,Jõgeva,Therapist
+157,60,Female,Elva,Therapist
+158,21,Female,Elva,Therapist
+159,25,Male,Jõgeva,Therapist
+160,29,Male,Paide,Therapist
+161,57,Male,Viljandi,Therapist
+162,58,Male,Põltsamaa,Therapist
+163,21,Female,Vändra,Therapist
+164,56,Male,Viljandi,Therapist
+165,33,Female,Türi,Therapist
+166,34,Male,Türi,Therapist
+167,60,Female,Viljandi,Therapist
+168,24,Female,Jõgeva,Therapist
+169,52,Female,Viljandi,Therapist
+170,58,Male,Põltsamaa,Therapist
+171,35,Female,Paide,Therapist
+172,40,Male,Viljandi,Therapist
+173,29,Male,Tartu,Therapist
+174,30,Male,Viljandi,Therapist
+175,34,Male,Tallinn,Therapist
+176,57,Male,Viljandi,Therapist
+177,25,Female,Elva,Therapist
+178,25,Male,Türi,Therapist
+179,24,Female,Viljandi,Therapist
+180,35,Female,Rapla,Therapist
+181,34,Female,Elva,Therapist
+182,20,Female,Tartu,Therapist
+183,48,Male,Türi,Therapist
+184,39,Female,Türi,Therapist
+185,27,Female,Viljandi,Therapist
+186,46,Male,Tallinn,Therapist
+187,67,Male,Tartu,Therapist
+188,57,Male,Paide,Therapist
+189,50,Male,Vändra,Therapist
+190,57,Female,Elva,Therapist
+191,41,Female,Elva,Therapist
+192,61,Male,Põltsamaa,Therapist
+193,57,Female,Põltsamaa,Therapist
+194,69,Male,Põltsamaa,Therapist
+195,49,Female,Tartu,Therapist
+196,29,Male,Vändra,Therapist
+197,52,Male,Tallinn,Therapist
+198,29,Female,Põltsamaa,Therapist
+199,33,Female,Rapla,Therapist
+200,54,Female,Paide,Physician
+201,25,Female,Viljandi,Physician
+202,32,Female,Põltsamaa,Physician
+203,41,Female,Vändra,Physician
+204,37,Female,Paide,Physician
+205,36,Female,Türi,Physician
+206,24,Female,Rapla,Physician
+207,63,Female,Tallinn,Physician
+208,23,Male,Paide,Physician
+209,20,Male,Paide,Physician
+210,29,Female,Paide,Physician
+211,27,Female,Tallinn,Physician
+212,20,Female,Vändra,Physician
+213,31,Male,Viljandi,Physician
+214,44,Female,Paide,Physician
+215,47,Female,Tartu,Physician
+216,21,Male,Tartu,Physician
+217,23,Female,Viljandi,Physician
+218,65,Female,Paide,Physician
+219,68,Female,Türi,Physician
+220,27,Male,Tallinn,Physician
+221,41,Female,Vändra,Physician
+222,54,Male,Türi,Physician
+223,51,Female,Jõgeva,Physician
+224,63,Female,Jõgeva,Physician
+225,48,Female,Rapla,Physician
+226,39,Male,Vändra,Physician
+227,67,Female,Rapla,Physician
+228,52,Female,Elva,Physician
+229,44,Male,Viljandi,Physician
+230,64,Female,Tallinn,Physician
+231,45,Female,Põltsamaa,Physician
+232,39,Female,Rapla,Physician
+233,34,Male,Vändra,Physician
+234,22,Male,Tallinn,Physician
+235,35,Male,Rapla,Physician
+236,42,Female,Vändra,Physician
+237,67,Female,Viljandi,Physician
+238,49,Female,Türi,Physician
+239,57,Female,Tartu,Physician
+240,46,Female,Paide,Physician
+241,30,Female,Türi,Physician
+242,61,Male,Põltsamaa,Physician
+243,53,Male,Elva,Physician
+244,32,Male,Elva,Physician
+245,61,Female,Rapla,Physician
+246,55,Male,Viljandi,Physician
+247,47,Male,Türi,Physician
+248,49,Male,Elva,Physician
+249,50,Male,Jõgeva,Physician
+250,30,Female,Jõgeva,Artist
+251,53,Female,Elva,Artist
+252,21,Female,Viljandi,Artist
+253,36,Female,Põltsamaa,Artist
+254,38,Male,Vändra,Artist
+255,31,Female,Jõgeva,Artist
+256,29,Female,Jõgeva,Artist
+257,26,Female,Põltsamaa,Artist
+258,50,Female,Tallinn,Artist
+259,29,Male,Tartu,Artist
+260,27,Female,Vändra,Artist
+261,33,Female,Tartu,Artist
+262,60,Female,Rapla,Artist
+263,47,Female,Türi,Artist
+264,56,Female,Elva,Artist
+265,64,Female,Türi,Artist
+266,67,Female,Paide,Artist
+267,53,Female,Viljandi,Artist
+268,63,Female,Viljandi,Artist
+269,22,Female,Vändra,Artist
+270,46,Male,Viljandi,Artist
+271,38,Female,Tartu,Artist
+272,62,Female,Tallinn,Artist
+273,37,Female,Jõgeva,Artist
+274,55,Female,Türi,Artist
+275,55,Female,Jõgeva,Artist
+276,25,Female,Tallinn,Artist
+277,31,Female,Paide,Artist
+278,50,Male,Elva,Artist
+279,68,Male,Tallinn,Artist
+280,63,Male,Viljandi,Artist
+281,20,Female,Jõgeva,Artist
+282,37,Female,Türi,Artist
+283,52,Female,Tallinn,Artist
+284,26,Male,Türi,Artist
+285,20,Male,Vändra,Artist
+286,69,Male,Põltsamaa,Artist
+287,40,Male,Tartu,Artist
+288,34,Female,Türi,Artist
+289,20,Female,Tallinn,Artist
+290,62,Male,Vändra,Artist
+291,47,Female,Tartu,Artist
+292,35,Female,Vändra,Artist
+293,60,Male,Elva,Artist
+294,27,Male,Vändra,Artist
+295,47,Male,Viljandi,Artist
+296,51,Male,Tallinn,Artist
+297,26,Female,Põltsamaa,Artist
+298,25,Female,Tartu,Artist
+299,49,Female,Tallinn,Artist
+300,69,Female,Põltsamaa,Printmaker
+301,25,Male,Tartu,Printmaker
+302,63,Female,Paide,Printmaker
+303,34,Female,Vändra,Printmaker
+304,58,Female,Jõgeva,Printmaker
+305,29,Female,Türi,Printmaker
+306,43,Female,Viljandi,Printmaker
+307,57,Female,Viljandi,Printmaker
+308,67,Male,Vändra,Printmaker
+309,64,Female,Jõgeva,Printmaker
+310,24,Male,Viljandi,Printmaker
+311,62,Female,Türi,Printmaker
+312,52,Female,Paide,Printmaker
+313,27,Male,Elva,Printmaker
+314,54,Male,Tartu,Printmaker
+315,65,Female,Tallinn,Printmaker
+316,52,Female,Paide,Printmaker
+317,31,Female,Jõgeva,Printmaker
+318,52,Male,Tallinn,Printmaker
+319,44,Female,Vändra,Printmaker
+320,66,Male,Türi,Printmaker
+321,51,Male,Rapla,Printmaker
+322,68,Male,Viljandi,Printmaker
+323,60,Male,Elva,Printmaker
+324,69,Male,Rapla,Printmaker
+325,56,Male,Viljandi,Printmaker
+326,36,Female,Tartu,Printmaker
+327,60,Male,Jõgeva,Printmaker
+328,30,Male,Paide,Printmaker
+329,43,Female,Tartu,Printmaker
+330,44,Male,Viljandi,Printmaker
+331,55,Female,Vändra,Printmaker
+332,48,Female,Tallinn,Printmaker
+333,59,Female,Türi,Printmaker
+334,41,Female,Elva,Printmaker
+335,53,Female,Viljandi,Printmaker
+336,50,Male,Tartu,Printmaker
+337,39,Female,Türi,Printmaker
+338,67,Female,Vändra,Printmaker
+339,23,Male,Viljandi,Printmaker
+340,56,Female,Põltsamaa,Printmaker
+341,48,Male,Jõgeva,Printmaker
+342,67,Female,Tallinn,Printmaker
+343,62,Female,Türi,Printmaker
+344,49,Male,Viljandi,Printmaker
+345,59,Male,Jõgeva,Printmaker
+346,34,Male,Tartu,Printmaker
+347,36,Female,Põltsamaa,Printmaker
+348,66,Female,Jõgeva,Printmaker
+349,34,Female,Vändra,Printmaker
+350,64,Female,Jõgeva,Designer
+351,53,Female,Jõgeva,Designer
+352,64,Female,Elva,Designer
+353,50,Male,Põltsamaa,Designer
+354,63,Female,Põltsamaa,Designer
+355,32,Male,Jõgeva,Designer
+356,57,Male,Jõgeva,Designer
+357,24,Male,Tallinn,Designer
+358,52,Male,Tartu,Designer
+359,24,Female,Elva,Designer
+360,38,Female,Türi,Designer
+361,36,Female,Türi,Designer
+362,62,Female,Rapla,Designer
+363,67,Female,Vändra,Designer
+364,26,Male,Türi,Designer
+365,64,Male,Viljandi,Designer
+366,48,Female,Rapla,Designer
+367,48,Male,Põltsamaa,Designer
+368,55,Female,Jõgeva,Designer
+369,43,Male,Viljandi,Designer
+370,49,Female,Viljandi,Designer
+371,55,Male,Jõgeva,Designer
+372,32,Female,Viljandi,Designer
+373,24,Male,Rapla,Designer
+374,52,Female,Tallinn,Designer
+375,31,Female,Vändra,Designer
+376,64,Male,Rapla,Designer
+377,55,Male,Türi,Designer
+378,59,Female,Rapla,Designer
+379,21,Female,Paide,Designer
+380,68,Male,Türi,Designer
+381,36,Female,Viljandi,Designer
+382,65,Male,Vändra,Designer
+383,59,Male,Tartu,Designer
+384,55,Female,Türi,Designer
+385,45,Male,Tallinn,Designer
+386,32,Male,Elva,Designer
+387,35,Female,Vändra,Designer
+388,41,Male,Viljandi,Designer
+389,65,Male,Viljandi,Designer
+390,27,Male,Jõgeva,Designer
+391,34,Male,Vändra,Designer
+392,43,Female,Jõgeva,Designer
+393,25,Male,Tartu,Designer
+394,22,Male,Tallinn,Designer
+395,30,Male,Tartu,Designer
+396,42,Female,Vändra,Designer
+397,53,Male,Paide,Designer
+398,56,Female,Põltsamaa,Designer
+399,60,Female,Vändra,Designer
+400,59,Male,Paide,System admin
+401,20,Female,Põltsamaa,System admin
+402,55,Female,Jõgeva,System admin
+403,54,Male,Viljandi,System admin
+404,24,Female,Elva,System admin
+405,52,Female,Tallinn,System admin
+406,53,Female,Elva,System admin
+407,39,Male,Rapla,System admin
+408,65,Female,Jõgeva,System admin
+409,49,Female,Viljandi,System admin
+410,24,Female,Elva,System admin
+411,27,Male,Viljandi,System admin
+412,23,Female,Tallinn,System admin
+413,54,Male,Tallinn,System admin
+414,40,Female,Paide,System admin
+415,55,Male,Türi,System admin
+416,30,Male,Rapla,System admin
+417,43,Male,Viljandi,System admin
+418,46,Male,Paide,System admin
+419,58,Female,Jõgeva,System admin
+420,56,Female,Elva,System admin
+421,57,Female,Rapla,System admin
+422,63,Male,Viljandi,System admin
+423,47,Male,Vändra,System admin
+424,58,Female,Paide,System admin
+425,62,Female,Viljandi,System admin
+426,69,Female,Vändra,System admin
+427,49,Female,Vändra,System admin
+428,49,Male,Tallinn,System admin
+429,39,Female,Tartu,System admin
+430,27,Female,Vändra,System admin
+431,48,Male,Viljandi,System admin
+432,35,Male,Viljandi,System admin
+433,35,Female,Jõgeva,System admin
+434,35,Male,Elva,System admin
+435,68,Male,Tallinn,System admin
+436,54,Male,Vändra,System admin
+437,66,Male,Tallinn,System admin
+438,33,Male,Türi,System admin
+439,35,Male,Jõgeva,System admin
+440,38,Female,Viljandi,System admin
+441,66,Male,Põltsamaa,System admin
+442,68,Female,Türi,System admin
+443,66,Male,Rapla,System admin
+444,43,Male,Vändra,System admin
+445,51,Male,Elva,System admin
+446,23,Male,Jõgeva,System admin
+447,40,Male,Viljandi,System admin
+448,62,Female,Türi,System admin
+449,56,Female,Põltsamaa,System admin
+450,42,Female,Viljandi,Programmer
+451,64,Male,Elva,Programmer
+452,31,Female,Vändra,Programmer
+453,63,Female,Rapla,Programmer
+454,31,Female,Tartu,Programmer
+455,31,Male,Tallinn,Programmer
+456,69,Male,Jõgeva,Programmer
+457,46,Male,Vändra,Programmer
+458,61,Male,Paide,Programmer
+459,67,Female,Rapla,Programmer
+460,32,Male,Türi,Programmer
+461,42,Male,Rapla,Programmer
+462,29,Female,Jõgeva,Programmer
+463,51,Female,Paide,Programmer
+464,33,Female,Elva,Programmer
+465,20,Male,Paide,Programmer
+466,53,Female,Viljandi,Programmer
+467,26,Male,Põltsamaa,Programmer
+468,50,Male,Põltsamaa,Programmer
+469,50,Male,Türi,Programmer
+470,67,Female,Türi,Programmer
+471,38,Male,Jõgeva,Programmer
+472,27,Female,Viljandi,Programmer
+473,34,Female,Vändra,Programmer
+474,63,Male,Jõgeva,Programmer
+475,47,Male,Viljandi,Programmer
+476,65,Female,Vändra,Programmer
+477,66,Male,Põltsamaa,Programmer
+478,56,Female,Jõgeva,Programmer
+479,24,Male,Vändra,Programmer
+480,41,Male,Jõgeva,Programmer
+481,51,Male,Türi,Programmer
+482,38,Male,Põltsamaa,Programmer
+483,65,Female,Rapla,Programmer
+484,61,Male,Paide,Programmer
+485,31,Male,Paide,Programmer
+486,47,Female,Viljandi,Programmer
+487,68,Male,Viljandi,Programmer
+488,32,Male,Tallinn,Programmer
+489,64,Male,Türi,Programmer
+490,64,Male,Paide,Programmer
+491,66,Female,Tallinn,Programmer
+492,65,Male,Rapla,Programmer
+493,42,Female,Jõgeva,Programmer
+494,45,Female,Tallinn,Programmer
+495,51,Female,Viljandi,Programmer
+496,48,Female,Tallinn,Programmer
+497,57,Male,Rapla,Programmer
+498,39,Male,Jõgeva,Programmer
+499,34,Male,Rapla,Programmer

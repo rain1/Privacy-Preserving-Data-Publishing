@@ -5,6 +5,7 @@
   <groupId>org.springframework</groupId>
   <artifactId>gs-spring-boot</artifactId>
   <version>0.1.0</version>
+  <packaging>war</packaging>
 
   <parent>
     <groupId>org.springframework.boot</groupId>
@@ -15,6 +16,7 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <java.version>1.8</java.version>
+    <start-class>thesis.ApplicationRunner</start-class>
   </properties>
 
   <dependencies>
@@ -122,11 +124,6 @@
       <version>1.16.6</version>
     </dependency>
     <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-      <version>2.4</version>
-    </dependency>
-    <dependency>
       <groupId>info.cukes</groupId>
       <artifactId>gherkin</artifactId>
       <version>2.12.2</version>
@@ -151,6 +148,9 @@
 
   <build>
     <resources>
+      <resource>
+        <directory>src/main/webapp</directory>
+      </resource>
       <resource>
         <directory>src/main/resources</directory>
       </resource>

@@ -3,7 +3,6 @@ package thesis.ppdp;
 import lombok.SneakyThrows;
 import org.apache.commons.io.FilenameUtils;
 
-import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -15,10 +14,9 @@ public class SchemaManager {
     @SneakyThrows
     SchemaManager(){
         SchemaReader schemaReader = new SchemaReader();
-        for (File schema : schemaReader.getSchemas()) {
-            String fileName = schema.getName();
+        for (String fileName : schemaReader.getSchemas()) {
+            List<Map<String, String>> content = schemaReader.readSchema(fileName);
             fileName = FilenameUtils.removeExtension(fileName);
-            List<Map<String, String>> content = schemaReader.readSchema(schema);
             schemas.put(fileName, content);
         }
     }

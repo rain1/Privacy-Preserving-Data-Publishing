@@ -191,7 +191,8 @@ var Statistics = (function () {
         return {
             map: qidIdSetSizeMap,
             smallest: smallestQIDXY,
-            largest: largestQIDXY
+            largest: largestQIDXY,
+            rawMap: qidIdSet
         };
     };
     Statistics.prototype.frequencyMapToRelative = function (distributionMap, numElements) {
@@ -246,6 +247,16 @@ var Statistics = (function () {
             fails: qidFails
         };
     };
+    Statistics.prototype.filterSetMap = function (qidIdMap) {
+        var setMap = {};
+        for (var key in qidIdMap) {
+            var element = qidIdMap[key];
+            if (element.size == 1) {
+                setMap[key] = {};
+            }
+        }
+        return setMap;
+    };
     Statistics.prototype.build = function () {
         var statistics = "<b>Statistics:</b><br>";
         var qidColumns = this.app.getColumnNamesByType("qid");
@@ -297,10 +308,12 @@ var Statistics = (function () {
                     }
                     break;
                 case "ldiv":
+                    debugger;
                     var ldiv = this.getXYStatistics(qidColumns, sensitiveColumns);
-                    statistics += "Smallest QID group: " + ldiv.smallest + "<br>";
-                    statistics += "Largest QID group: " + ldiv.largest + "<br>";
+                    statistics += "QID group(s) that has the least amount of unique sensitive attribute values contains: " + ldiv.smallest + " different sensitive attribute values<br>";
+                    statistics += "QID group(s) that has the largest amount of unique sensitive attribute values contains: " + ldiv.largest + " different sensitive attribute values<br>";
                     statistics += this.buildCanvas("qidsens");
+                    highlightData["fails"] = this.filterSetMap(ldiv.rawMap);
                     this.charts.push({
                         elementId: "qidsens",
                         dataMap: ldiv.map,
@@ -1433,7 +1446,7 @@ var OpenDialog = (function () {
             selected.push($(this).attr('name'));
         });
         this.app.method = $("#anonymization_method").val();
-        $(".method").html(this.app.methodName);
+        $(".method").html($("#anonymization_method option:selected").text());
         this.winMgr.closeWindow('open');
         this.app.joinDialog.init(selected, this.startOver);
     };
@@ -1709,13 +1722,14 @@ var Main = (function () {
         if (Object.keys(highlightData).length == 0) {
             return highlightClass;
         }
-        if (this.app.method == "tc") {
+        //debugger;
+        if (this.app.method == "tc" || this.app.method == "ldiv") {
             var qidData = this.statistics.getRowColumns(row, qidColumns);
             var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);
             for (var key in highlightData["fails"]) {
                 if (JSON.stringify(qidData) == key) {
                     highlightClass = "warn-group";
-                    if (highlightData["fails"][key].indexOf(sensitiveData[sensitiveColumns[0]]) > -1) {
+                    if (this.app.method == "tc" && highlightData["fails"][key].indexOf(sensitiveData[sensitiveColumns[0]]) > -1) {
                         highlightClass = "warn-row";
                     }
                 }

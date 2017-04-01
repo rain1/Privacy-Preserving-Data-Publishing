@@ -13,4 +13,5 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/upload").setViewName("upload");
     }
+
 }

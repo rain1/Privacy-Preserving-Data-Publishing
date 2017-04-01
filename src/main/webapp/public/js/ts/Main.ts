@@ -49,13 +49,14 @@ class Main {
         if(Object.keys(highlightData).length == 0){
             return highlightClass;
         }
-        if (this.app.method == "tc") {
+        //debugger;
+        if (this.app.method == "tc" || this.app.method == "ldiv" ) {
             var qidData = this.statistics.getRowColumns(row, qidColumns);
             var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);
             for (let key in highlightData["fails"]) {
                 if (JSON.stringify(qidData) == key) {
                     highlightClass = "warn-group";
-                    if (highlightData["fails"][key].indexOf(sensitiveData[sensitiveColumns[0]]) > -1) {
+                    if (this.app.method == "tc" && highlightData["fails"][key].indexOf(sensitiveData[sensitiveColumns[0]]) > -1) {
                         highlightClass = "warn-row";
                     }
                 }
