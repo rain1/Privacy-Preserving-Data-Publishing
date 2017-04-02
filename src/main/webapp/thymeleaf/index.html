@@ -35,7 +35,9 @@
         <input type="button" onclick="app.uploadDlg.init();" value="Import">
         <input type="button" class="btn btn-default" onclick="app.openDlg.init();" value="Open">
         <input id="export_schema" type="button" class="btn btn-default" onclick="app.app.downloadResult();"
-               value="Export" disabled="true">
+               value="Export to CSV" disabled="true">
+        <input id="export_schema_full" type="button" class="btn btn-default" onclick="app.app.downloadResultFull();"
+               value="Export to JSON" disabled="true">
 
         <div class="row">
             <div class="left_col" style="overflow: inherit;">

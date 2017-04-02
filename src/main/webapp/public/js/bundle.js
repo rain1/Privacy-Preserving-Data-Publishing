@@ -537,6 +537,7 @@ var Anonymization = (function () {
         var statisticsData = statistics.build();
         $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable", statisticsData.highlightData));
         $("#export_schema").prop("disabled", false);
+        $("#export_schema_full").prop("disabled", false);
         $("#myTable").tablesorter({ sortList: final_sort });
         $("#statistics").html(statisticsData.statistics);
         for (var _a = 0, _b = statistics.charts; _a < _b.length; _a++) {
@@ -568,6 +569,12 @@ var Application = (function () {
     }
     Application.prototype.downloadResult = function () {
         var csv = app.jsonToCSV(this.anonymizedSchema);
+        var downloadLink = $("#result_download");
+        downloadLink.attr("href", "data:text/plain," + encodeURIComponent(csv));
+        downloadLink[0].click();
+    };
+    Application.prototype.downloadResultFull = function () {
+        var csv = app.jsonToString();
         var downloadLink = $("#result_download");
         downloadLink.attr("href", "data:text/plain," + encodeURIComponent(csv));
         downloadLink[0].click();
@@ -1795,12 +1802,22 @@ var Main = (function () {
         for (var _b = 0, jsonData_2 = jsonData; _b < jsonData_2.length; _b++) {
             var row = jsonData_2[_b];
             for (var cell in row) {
-                table += row[cell] + ",";
+                table += '"' + row[cell] + '",';
             }
             table = table.slice(0, -1);
             table += "\n";
         }
         return table;
+    };
+    Main.prototype.jsonToString = function () {
+        var exportData = {
+            tableFull: this.app.anonymizedSchemaFull,
+            table: this.app.anonymizedSchema,
+            types: this.app.attributeTypes,
+            actions: this.app.attributeActions,
+            method: this.app.method
+        };
+        return JSON.stringify(exportData);
     };
     return Main;
 }());

@@ -122,13 +122,24 @@ class Main {
 
         for (let row of jsonData) {
             for (let cell in row) {
-                table += row[cell] + ",";
+                table += '"' +row[cell] + '",';
             }
             table = table.slice(0, -1);
             table += "\n";
         }
 
         return table;
+    }
+
+    jsonToString(){
+        var exportData = {
+            tableFull: this.app.anonymizedSchemaFull,
+            table: this.app.anonymizedSchema,
+            types: this.app.attributeTypes,
+            actions: this.app.attributeActions,
+            method: this.app.method,
+        };
+        return JSON.stringify(exportData);
     }
 
 }

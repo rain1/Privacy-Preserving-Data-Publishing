@@ -127,6 +127,7 @@ class Anonymization {
 
         $("#finished_table").html(app.jsonToTable(this.app.anonymizedSchema, -1, [], "myTable", statisticsData.highlightData));
         $("#export_schema").prop("disabled", false);
+        $("#export_schema_full").prop("disabled", false);
         $("#myTable").tablesorter({sortList: final_sort});
         $("#statistics").html(statisticsData.statistics);
         for(let chart of statistics.charts){

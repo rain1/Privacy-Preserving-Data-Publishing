@@ -31,6 +31,13 @@ class Application {
         downloadLink[0].click();
     }
 
+    downloadResultFull() {
+        var csv = app.jsonToString();
+        var downloadLink = $("#result_download");
+        downloadLink.attr("href", "data:text/plain,"+encodeURIComponent(csv));
+        downloadLink[0].click();
+    }
+
     getSchemas() {
         var response = "";
         $.ajax({
