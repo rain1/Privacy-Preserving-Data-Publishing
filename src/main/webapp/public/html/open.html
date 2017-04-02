@@ -24,10 +24,10 @@
                         <option value="multir">MultiRelational k-anonymity</option>
                         <option value="ldiv">l-Diversity</option>
                         <option value="tc">t-Closeness</option>
-                        <option value="edif">e-Differential privacy</option>
-                        <!--<option value="dist">Distributional Privacy</option>-->
+                        <option value="edif">&epsilon;-Differential privacy</option>
                     </select>
-
+                    <br><br>
+                    <div id="method_parameter_container">Mehtod parameter <span id="method_parameter_name"></span>: <input id="method_parameter_value" value="10" width="45" oninput="app.openDlg.methodParamChanged()"><br> (% of attribute value)</div>
                 </td>
             </tr>
         </table>

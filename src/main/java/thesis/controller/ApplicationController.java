@@ -43,9 +43,9 @@ public class ApplicationController {
     {
         File convFile = new File(file.getOriginalFilename());
         convFile.createNewFile();
-        FileOutputStream fos = new FileOutputStream(convFile);
-        fos.write(file.getBytes());
-        fos.close();
+        FileOutputStream fileOutputStream = new FileOutputStream(convFile);
+        fileOutputStream.write(file.getBytes());
+        fileOutputStream.close();
         return convFile;
     }
 

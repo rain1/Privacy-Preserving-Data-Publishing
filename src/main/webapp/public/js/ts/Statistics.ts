@@ -190,11 +190,11 @@ class Statistics {
         }
     }
 
-    filterSetMap(qidIdMap){
+    filterSetMap(qidIdMap) {
         var setMap = {};
-        for(let key in qidIdMap){
+        for (let key in qidIdMap) {
             var element = qidIdMap[key];
-            if(element.size == 1){
+            if (element.size == 1) {
                 setMap[key] = {};
             }
         }
@@ -253,7 +253,6 @@ class Statistics {
                     }
                     break;
                 case "ldiv":
-                    debugger;
                     var ldiv = this.getXYStatistics(qidColumns, sensitiveColumns);
                     statistics += "QID group(s) that has the least amount of unique sensitive attribute values contains: " + ldiv.smallest + " different sensitive attribute values<br>";
                     statistics += "QID group(s) that has the largest amount of unique sensitive attribute values contains: " + ldiv.largest + " different sensitive attribute values<br>";

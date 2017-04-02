@@ -308,7 +308,6 @@ var Statistics = (function () {
                     }
                     break;
                 case "ldiv":
-                    debugger;
                     var ldiv = this.getXYStatistics(qidColumns, sensitiveColumns);
                     statistics += "QID group(s) that has the least amount of unique sensitive attribute values contains: " + ldiv.smallest + " different sensitive attribute values<br>";
                     statistics += "QID group(s) that has the largest amount of unique sensitive attribute values contains: " + ldiv.largest + " different sensitive attribute values<br>";
@@ -439,7 +438,8 @@ var Anonymization = (function () {
         return Math.floor((Math.random() * max) + min);
     };
     Anonymization.prototype.randNoise = function (cell) {
-        return this.randInt(cell * 0.9, cell * 1.1);
+        var noiseAmount = this.app.methodParam / 100;
+        return this.randInt(cell * (1 - noiseAmount), cell * (1 + noiseAmount));
     };
     Anonymization.prototype.anonymizeCell = function (cell, rule) {
         switch (rule.action) {
@@ -486,7 +486,6 @@ var Anonymization = (function () {
             if (remember[currentIdColumnsStr] == undefined) {
                 remember[currentIdColumnsStr] = ++counter;
             }
-            //jQuery.extend(true, {"id": remember[currentIdColumnsStr]}, statistics.getRowColumnsNot(row, idColumns));
             table[row] = jQuery.extend(true, { "_id": remember[currentIdColumnsStr] }, table[row]);
         }
     };
@@ -501,7 +500,6 @@ var Anonymization = (function () {
             var row = {};
             for (var key in obj) {
                 var actionData = this.app.attributeActions[key];
-                //if (actionData.action != "remove") {
                 row[key] = this.anonymizeCell(obj[key], actionData);
             }
             resultTable.push(row);
@@ -564,6 +562,7 @@ var Application = (function () {
         this.schema = {};
         this.workingSchema = {};
         this.method = "";
+        this.methodParam = 10;
         this.anonymizedSchema = {};
         this.anonymizedSchemaFull = {};
     }
@@ -1449,6 +1448,13 @@ var OpenDialog = (function () {
     };
     OpenDialog.prototype.nextClicked = function () {
         var selected = [];
+        var inputValue = $("#method_parameter_value").val();
+        if (!this.isValidInterval(inputValue)) {
+            return;
+        }
+        else {
+            this.app.methodParam = inputValue;
+        }
         $("#open input:checked").each(function () {
             selected.push($(this).attr('name'));
         });
@@ -1459,15 +1465,39 @@ var OpenDialog = (function () {
     };
     OpenDialog.prototype.methodChanged = function () {
         this.startOver = true;
-        if ($("#anonymization_method").val() == "none") {
+        var anonymizationMethod = $("#anonymization_method");
+        if (anonymizationMethod.val() == "none") {
             $("#open_next").prop("disabled", true);
         }
         else {
             $("#open_next").prop("disabled", false);
         }
+        if (anonymizationMethod.val() == "edif") {
+            $("#method_parameter_container").show();
+            $("#method_parameter_name").html("&epsilon;");
+        }
+        else {
+            $("#method_parameter_container").hide();
+        }
+    };
+    OpenDialog.prototype.isValidInterval = function (str) {
+        var integerValue = Math.floor(Number(str));
+        if (String(integerValue) == str) {
+            if (integerValue == 0) {
+                alert("Epsilon must be positive");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    };
+    OpenDialog.prototype.methodParamChanged = function () {
+        var inputValue = $("#method_parameter_value").val();
+        this.isValidInterval(inputValue);
     };
     OpenDialog.prototype.checkboxesChanged = function () {
         this.startOver = true;
+        var anonymizationMethod = $("#anonymization_method");
         console.log("changed");
         var selectedCheckboxes = $("input:checked[type=checkbox]");
         var checkedInputs = selectedCheckboxes.length;
@@ -1499,10 +1529,11 @@ var OpenDialog = (function () {
             $("option[value=dist]").prop("disabled", true);
             $("#anonymization_method").val("multir");
         }
-        if (checkedInputs < 2 && ($("#anonymization_method").val() == "multir" || $("#anonymization_method").val() == null)) {
+        if (checkedInputs < 2 && (anonymizationMethod.val() == "multir" || anonymizationMethod.val() == null)) {
             $("#anonymization_method").val("none");
         }
         var selectedNames = [];
+        methodParam;
         if (checkedInputs == 1) {
             selectedNames.push(selectedCheckboxes.attr("name"));
         }
@@ -1815,7 +1846,8 @@ var Main = (function () {
             table: this.app.anonymizedSchema,
             types: this.app.attributeTypes,
             actions: this.app.attributeActions,
-            method: this.app.method
+            method: this.app.method,
+            param: this.app.methodParam
         };
         return JSON.stringify(exportData);
     };

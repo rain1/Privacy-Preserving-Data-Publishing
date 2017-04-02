@@ -46,11 +46,11 @@ class Main {
 
     getHighlightClass(row:{}, highlightData:{}, qidColumns:string[], sensitiveColumns:string[]) {
         var highlightClass = "normal";
-        if(Object.keys(highlightData).length == 0){
+        if (Object.keys(highlightData).length == 0) {
             return highlightClass;
         }
         //debugger;
-        if (this.app.method == "tc" || this.app.method == "ldiv" ) {
+        if (this.app.method == "tc" || this.app.method == "ldiv") {
             var qidData = this.statistics.getRowColumns(row, qidColumns);
             var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);
             for (let key in highlightData["fails"]) {
@@ -122,7 +122,7 @@ class Main {
 
         for (let row of jsonData) {
             for (let cell in row) {
-                table += '"' +row[cell] + '",';
+                table += '"' + row[cell] + '",';
             }
             table = table.slice(0, -1);
             table += "\n";
@@ -131,13 +131,14 @@ class Main {
         return table;
     }
 
-    jsonToString(){
+    jsonToString() {
         var exportData = {
             tableFull: this.app.anonymizedSchemaFull,
             table: this.app.anonymizedSchema,
             types: this.app.attributeTypes,
             actions: this.app.attributeActions,
             method: this.app.method,
+            param: this.app.methodParam
         };
         return JSON.stringify(exportData);
     }

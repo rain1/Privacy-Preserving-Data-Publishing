@@ -45,6 +45,13 @@ class OpenDialog {
     nextClicked() {
         var selected = [];
 
+        var inputValue = $("#method_parameter_value").val();
+        if (!this.isValidInterval(inputValue)) {
+            return;
+        } else {
+            this.app.methodParam = inputValue;
+        }
+
         $("#open input:checked").each(function () {
             selected.push($(this).attr('name'));
         });
@@ -58,15 +65,41 @@ class OpenDialog {
 
     methodChanged() {
         this.startOver = true;
-        if ($("#anonymization_method").val() == "none") {
+        var anonymizationMethod = $("#anonymization_method");
+        if (anonymizationMethod.val() == "none") {
             $("#open_next").prop("disabled", true);
         } else {
             $("#open_next").prop("disabled", false);
         }
+
+        if (anonymizationMethod.val() == "edif") {
+            $("#method_parameter_container").show();
+            $("#method_parameter_name").html("&epsilon;");
+        } else {
+            $("#method_parameter_container").hide();
+        }
+    }
+
+    isValidInterval(str) {
+        var integerValue = Math.floor(Number(str));
+        if (String(integerValue) == str) {
+            if (integerValue == 0) {
+                alert("Epsilon must be positive");
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+    methodParamChanged() {
+        var inputValue = $("#method_parameter_value").val();
+        this.isValidInterval(inputValue);
     }
 
     checkboxesChanged() {
         this.startOver = true;
+        var anonymizationMethod = $("#anonymization_method");
         console.log("changed");
         var selectedCheckboxes = $("input:checked[type=checkbox]");
         var checkedInputs = selectedCheckboxes.length;
@@ -97,11 +130,12 @@ class OpenDialog {
             $("#anonymization_method").val("multir");
         }
 
-        if (checkedInputs < 2 && ($("#anonymization_method").val() == "multir" || $("#anonymization_method").val() == null)) {
+        if (checkedInputs < 2 && (anonymizationMethod.val() == "multir" || anonymizationMethod.val() == null)) {
             $("#anonymization_method").val("none");
         }
 
         var selectedNames = [];
+        methodParam
 
         if (checkedInputs == 1) {
             selectedNames.push(selectedCheckboxes.attr("name"));

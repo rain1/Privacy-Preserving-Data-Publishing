@@ -153,3 +153,7 @@ canvas{
 .warn-row {
     background-color: #f00;
 }
+
+#method_parameter_container {
+    display: none;
+}

@@ -19,24 +19,24 @@ public class SchemaReader {
 
     //http://stackoverflow.com/questions/3923129/get-a-list-of-resources-from-classpath-directory
     @SneakyThrows
-    private List<String> getResourceFiles(String path){
+    private List<String> getResourceFiles(String path) {
         List<String> filenames = new ArrayList<>();
 
-            InputStream in = getResourceAsStream(path);
-            BufferedReader br = new BufferedReader(new InputStreamReader(in));
-            String resource;
+        InputStream inputStream = getResourceAsStream(path);
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+        String resource;
 
-            while ((resource = br.readLine()) != null) {
-                filenames.add(resource);
-            }
+        while ((resource = bufferedReader.readLine()) != null) {
+            filenames.add(resource);
+        }
 
         return filenames;
     }
 
     private InputStream getResourceAsStream(String resource) {
-        final InputStream in = getContextClassLoader().getResourceAsStream(resource);
+        final InputStream inputStream = getContextClassLoader().getResourceAsStream(resource);
 
-        return in == null ? getClass().getResourceAsStream(resource) : in;
+        return inputStream == null ? getClass().getResourceAsStream(resource) : inputStream;
     }
 
     private ClassLoader getContextClassLoader() {
@@ -44,18 +44,19 @@ public class SchemaReader {
     }
 
 
+    //http://stackoverflow.com/questions/1429172/how-do-i-list-the-files-inside-a-jar-file
     @SneakyThrows
-    void getSchemasFromJar(){
+    void getSchemasFromJar() {
         CodeSource codeSource = SchemaReader.class.getProtectionDomain().getCodeSource();
         if (codeSource != null) {
             URL jar = codeSource.getLocation();
             ZipInputStream zip = new ZipInputStream(jar.openStream());
-            while(true) {
-                ZipEntry e = zip.getNextEntry();
-                if (e == null)
+            while (true) {
+                ZipEntry entry = zip.getNextEntry();
+                if (entry == null)
                     break;
-                String name = e.getName();
-                if(name.contains("schema") && name.substring(name.length() - 4).equals(".csv")) {
+                String name = entry.getName();
+                if (name.contains("schema") && name.substring(name.length() - 4).equals(".csv")) {
                     File file = new File(name);
                     String fileName = file.getName();
                     System.out.println(fileName);
@@ -65,21 +66,21 @@ public class SchemaReader {
         }
     }
 
-    void getSchemasFromDir(){
+    void getSchemasFromDir() {
         List<String> resources = getResourceFiles("schema");
         for (String resource : resources) {
             System.out.println(resource);
-            if(resource.substring(resource.length() - 4).equals(".csv")) {
+            if (resource.substring(resource.length() - 4).equals(".csv")) {
                 schemas.add(resource);
             }
         }
     }
 
     SchemaReader() {
-        URL dirURL = SchemaReader.class.getResource("/");
-        if(dirURL.getProtocol().equals("jar")){
+        URL url = SchemaReader.class.getResource("/");
+        if (url.getProtocol().equals("jar")) {
             getSchemasFromJar();
-        }else{
+        } else {
             getSchemasFromDir();
         }
     }
@@ -88,7 +89,7 @@ public class SchemaReader {
     public List<Map<String, String>> readSchema(String fileName) throws IOException {
         CsvSchema bootstrap = CsvSchema.emptySchema().withHeader();
         CsvMapper csvMapper = new CsvMapper();
-        InputStream stream=getClass().getClassLoader().getResourceAsStream("schema/"+fileName);
+        InputStream stream = getClass().getClassLoader().getResourceAsStream("schema/" + fileName);
         MappingIterator<Map<String, String>> mappingIterator = csvMapper.reader(Map.class).with(bootstrap).readValues(stream);
         return mappingIterator.readAll();
     }

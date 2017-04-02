@@ -8,12 +8,13 @@ class Anonymization {
         this.app = app;
     }
 
-    randInt(min, max){
+    randInt(min, max) {
         return Math.floor((Math.random() * max) + min);
     }
 
-    randNoise(cell){
-        return this.randInt(cell*0.9, cell*1.1);
+    randNoise(cell) {
+        var noiseAmount = this.app.methodParam / 100;
+        return this.randInt(cell * (1 - noiseAmount), cell * (1 + noiseAmount));
     }
 
 
@@ -43,31 +44,28 @@ class Anonymization {
         }
     }
 
-    getPreservedColumns(){
+    getPreservedColumns() {
         var columns = [];
-        for(let column in this.app.attributeActions){
-            if(this.app.attributeActions[column]["action"] != "remove"){
+        for (let column in this.app.attributeActions) {
+            if (this.app.attributeActions[column]["action"] != "remove") {
                 columns.push(column);
             }
         }
         return columns;
     }
 
-    generateIdentificators(table, idColumns: string[]){
+    generateIdentificators(table, idColumns:string[]) {
         var remember = {};
         var counter = 0;
         var statistics = new Statistics();
-        for(let row in table){
+        for (let row in table) {
             var currentIdColumns = statistics.getRowColumns(table[row], idColumns);
             var currentIdColumnsStr = JSON.stringify(currentIdColumns);
-            if(remember[currentIdColumnsStr] == undefined){
+            if (remember[currentIdColumnsStr] == undefined) {
                 remember[currentIdColumnsStr] = ++counter;
             }
-            //jQuery.extend(true, {"id": remember[currentIdColumnsStr]}, statistics.getRowColumnsNot(row, idColumns));
             table[row] = jQuery.extend(true, {"_id": remember[currentIdColumnsStr]}, table[row]);
         }
-
-
     }
 
     anonymizeData() {
@@ -83,21 +81,18 @@ class Anonymization {
             var row = {};
             for (var key in obj) {
                 var actionData = this.app.attributeActions[key];
-                //if (actionData.action != "remove") {
-                    row[key] = this.anonymizeCell(obj[key], actionData);
-                    //console.log(key, obj[key], actionData);
-                //}
+                row[key] = this.anonymizeCell(obj[key], actionData);
             }
             resultTable.push(row);
         }
 
         this.generateIdentificators(resultTable, id_cols);
 
-        var preservedColumns =  this.getPreservedColumns();
-        if(id_cols.length > 0){
+        var preservedColumns = this.getPreservedColumns();
+        if (id_cols.length > 0) {
             preservedColumns.unshift("_id");
         }
-        var subSet = statistics.selectColumns(resultTable,preservedColumns);
+        var subSet = statistics.selectColumns(resultTable, preservedColumns);
         this.app.anonymizedSchema = subSet;
         this.app.anonymizedSchemaFull = resultTable;
 
@@ -106,20 +101,20 @@ class Anonymization {
         for (i in tableKeys) {
             if (qid_cols.indexOf(tableKeys[i]) > -1) {
                 qid_ids.push({
-                    "name":tableKeys[i],
+                    "name": tableKeys[i],
                     "values": this.app.getUniqueValueByColumn(tableKeys[i], this.app.anonymizedSchema).length,
                     'id': i
                 });
             }
         }
 
-        qid_ids.sort(function(a, b) {
+        qid_ids.sort(function (a, b) {
             return parseFloat(a.values) - parseFloat(b.values);
         });
 
         var final_sort = [];
-        for(let sortToken of qid_ids){
-            final_sort.push([sortToken.id ,0]);
+        for (let sortToken of qid_ids) {
+            final_sort.push([sortToken.id, 0]);
         }
 
         var statistics = new Statistics(this.app);
@@ -130,7 +125,7 @@ class Anonymization {
         $("#export_schema_full").prop("disabled", false);
         $("#myTable").tablesorter({sortList: final_sort});
         $("#statistics").html(statisticsData.statistics);
-        for(let chart of statistics.charts){
+        for (let chart of statistics.charts) {
             statistics.drawChart(chart);
         }
     }

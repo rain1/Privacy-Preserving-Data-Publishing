@@ -13,6 +13,7 @@ class Application {
     schema = {};
     workingSchema = {};
     method = "";
+    methodParam = 10;
     anonymizedSchema = {};
     anonymizedSchemaFull = {};
 
