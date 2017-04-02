@@ -110,7 +110,7 @@
                 </tr>
             </table>
         </center>
-        <h4>(X, Y)-Anonymity (Currently unsupported)</h4>
+        <h4>(X, Y)-Anonymity</h4>
         <p>The purpose of (X, Y)-Anonymity is to protect individuals against record linkage attacks. In cases where one
             individual appears in multiple rows k-Anonymity would not offer sufficient protection. For example if
             hospital releases data about diaseses, person who has multiple diaseses would be present in pultiple rows
@@ -174,10 +174,12 @@
         <p>MultiRelational k-anonymity is also for protecting against record linkage. In more realistic situations, data is stored in relational database rather than one single table that contains all the data. Usually, it would be a person specific table (PT) and one table T for each sensitive
             attribute. In such situations other anonymization methods would either not provide sufficient protection for privacy or they could make data useless for dataminers by over generalizing it. Such tables have common identifier which can be used to link persons with their attributes. For
             example <code>PT = {Id, Name, Age, Gender, City}</code> and <code>T1= {PersonId, Job}</code>. In tabe T1 <code>PersonId</code> matches <code>Id</code> in PT so these table can be joined on <code>PT.Id = T1.PersonId</code> which would result in <code>T = {Id, Name, Age, Gender, City, Job}</code>. After joining those tables together into table T, k-Anonymity is applied to T.</p>
-        <h4>l-Diversity (Currently unsupported)</h4>
-        <h4>t-Closeness (Currently unsupported)</h4>
-        <h4>e-Differential privacy (Currently unsupported)</h4>
-        <h4>Distributional Privacy (Currently unsupported)</h4>
+        <h4>l-Diversity</h4>
+        <p>L-diversity is proposed by Machanavajjhala to prevent attribute linkage attack. L-diversity requires that each QID group has at least l different sensitive attribute values. L-diversity differs from k-anonymity for that while k-anonymity requires group to contain at least k individuals with same QID, l-diversity requires group to contain at least l different sensitive attributes. For example with k-anonymity it is possible that QID group has size of k but all sensitive values are same. This means that when attacker knows QID of victim he can guess sensitive attribute of victim with probability of 1/1. When l-Diversity is required, attacker would be able to correctly guess sensitive attribute value of victim with probability of 1/l.</p>
+        <h4>t-Closeness</h4>
+        <p>Sometimes l-diversity may not guarantee enough protection. For example in table there could be a table where 90% of people work as designer and 10% work as programmer. Suppose that there is some QID group where 50% of sensitive attributes are designer and 50% of sensitive values are programmer. In that case person could be infered to be programmer with 50% of confidence. T-closeness overcomes this weakness by requiring that the distribution of sensitive attributes QID would be close to distribution of sensitive attributes in table.</p>
+        <h4>&epsilon;-Differential privacy</h4>
+        <p>&epsilon;-Differential privacy requires that threat to record owner's privacy should not significantly increase as a result of prarticipating in data relesase. &epsilon;-Differential privacy achieved by shifting sensitive attribute by &epsilon;.</p>
     </div>
 
     <div style="clear:both"></div>
