@@ -7,6 +7,7 @@ This project is educational purpose software that is written to help students to
 Running
 -------
 There are two options to run this file:
+
 a. run the precompiled .war file from terminal/cmd with the following command:
 
 ~~~
