@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <script>
+
+    </script>
+</head>
+<body>
+
+<div th:each="task : ${quiz}">
+    <div th:id="'t_' + ${task.question.task} + '-q_' + ${task.question.id}">
+        <span th:text="${task.text}"></span>
+        <span th:text="${task.question.question}"></span>
+        <div th:each="option : ${task.question.options}">
+            <input type="radio" th:name="'t_' + ${task.question.task} + '-q_' + ${task.question.id}"
+                   th:value="${option}"> <span th:text="${option}"></span><br>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

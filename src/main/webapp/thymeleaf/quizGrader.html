@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz</title>
+    <script src="public/js/jquery.js"></script>
+    <script src="public/js/Quiz.js"></script>
+    <link rel="stylesheet" type="text/css" href="public/css/style.css">
+    <script>
+
+    </script>
+</head>
+<body>
+<div id="score_label">Your score is: <span id="score_number"></span></div>
+<div th:each="task : ${quiz}">
+    <div class="task" th:id="'t_' + ${task.question.task} + '-q_' + ${task.question.id}">
+        <div th:text="${task.text}"></div>
+        <div th:text="${task.question.question}"></div>
+        <div th:each="option : ${task.question.options}">
+            <input type="radio" th:name="${task.question.task} + '-' + ${task.question.id}"
+                   th:value="${option}"> <span th:text="${option}"></span><br>
+        </div>
+    </div>
+</div>
+<input id="submit" type="button" value="Submit" onclick="quiz.answer();"> <input style="display: none" id="save" type="button" value="Save results" onclick="quiz.save();">
+<a id="result_download" download="result.json"></a>
+
+</body>
+</html>
