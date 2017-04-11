@@ -1,0 +1,282 @@
+[
+  {
+    "id": 1,
+    "text": "1) Open table Job_Large and select k-Anonymity as anonymization method.<br> 2) Click Next.<br> 3) Define attribute types. Read the instructions (Introduction and Getting Started) on right hand side. Think what type should each attribute (column) be and select right attributes.<br> In case you are confused, here is the list of attribute types: name - ID, last name - ID, age - QID, gender - QID, city - QID and job - Sensitive.<br> 4) Click next<br> 5) You are now asked to specify attribute actions for each attribute. Note that some attributes are already preselected based on your choices in previous step. However you still have to specify attribute actions for age gender and city. Again, first thing that you need to do is read the explanations on right hand side. Think what action should be done to each attribute.<br> In case you are stuck, here are actions: age - Generalize, gender - Keep as is (can you guess why?) and city - generalize.<br> 6) Click next<br> 7) You are now asked to specify interval size for values in column age. Again first thing to do is to read instructions of right hand side to get a better overview of what you need to do.Enter 10 and click Next.<br> 8) Now you are asked to generalize city names. In real life situation, a more general value should be something that is common for all specific values. However in these tasks we care more about getting few groups that are about equal in size than about good general value.<br> 8.1) Click on city names that could belong to one group and then click on Set generalization rule and enter some eneral value.<br> 8.2) Repeat step 8.1 until you have no city names left.<br> In this sample task we are going to define the following rules: <br> Tallinn,Tartu,Paide->Large city<br> Viljandi,Türi,Jõgeva->Medium city<br> Vändra,Rapla,Põltsamaa,Elva->Small city<br> <br> 8.3) Click Next.<br> 9) You should now see the resulting table. Since this is the sample task you do not have to submit result of this task.<br> If you did everything correctly, you should  see the following information about QIDs<br> Unique QIDs: 29<br> Smallest QID group: 2<br> Largest QID group: 14<br> Since the smallest QID group contains only 2 different people this table is only 2-anonymous.<br>",
+    "questions": [
+      {
+        "id": 1,
+        "task": 1,
+        "question": "Does 2-anonymos table offer sufficient protection?",
+        "options": [
+          "Yes, because generalizing QID values make it difficult to find specific person from given table.",
+          "No, because with 2-anonymous table sensitive attribute value can be easily guessed (with 50% confidence)."
+        ],
+        "answer": "No, because with 2-anonymous table sensitive attribute value can be easily guessed (with 50% confidence)."
+      }
+    ]
+  },
+  {
+    "id": 2,
+    "text": "After solving first task, you ended up with having 2-anonymous table. However 2-anonymous table may not offer sufficient protection to privacy. Your task is to come up with a better solution. For example 5-anonymous table would be already better.<br>1) Follow steps 1-8 from first task. This time, let's generalize gender values male and female to any gender.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 2,
+        "question": "Did protection to privacy increase?",
+        "options": [
+          "Yes, because there are larger QID groups.",
+          "No, because we used the same table as we did in previous task."
+        ],
+        "answer": "Yes, because there are larger QID groups."
+      },
+      {
+        "id": 2,
+        "task": 2,
+        "question": "This time table is",
+        "options": [
+          "Still 2-anonymous because we used the same table as previous time.",
+          "3-anonymous because we generalzed 3 columns instead of 2.",
+          "5-anonymous",
+          "Something else"
+        ],
+        "answer": "5-anonymous"
+      },
+      {
+        "id": 3,
+        "task": 2,
+        "question": "How many different persons are in smallest QID group?",
+        "options": [
+          "We cannot know this because QID hides person specific details.",
+          "We cannot know because two persons with same explicit identifier could in same group",
+          "5 because this table is 5-anonymous."
+        ],
+        "answer": "5 because this table is 5-anonymous."
+      }
+    ]
+  },
+  {
+    "id": 3,
+    "text": "By now you should have learned what to do when you need to increase the protection to privacy. Now lets see an other factor that plays part in protection for table. In task 2, you anonymized table that had 100 records. Now let's look at table that has 20 records.<br>1) Open table Job (not Job Large)<br>2) Do everything else like you did in task 2 to increase  protection to privacy (select same types, same actions and specify same generalization rules as you did in task 2.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 3,
+        "question": "How does the size of table affect protection to anonymity given that the only difference is that table a has more rows than table b?",
+        "options": [
+          "Table a is less anonymous because is has more rows than table b.",
+          "Table a is more anonymous because it has more rows than table b and therefore bigger QID groups will form.",
+          "table size doesnt matter."
+        ],
+        "answer": "Table a is more anonymous because it has more rows than table b and therefore bigger QID groups will form."
+      },
+      {
+        "id": 2,
+        "task": 3,
+        "question": "This table is:",
+        "options": [
+          "2-anonymous",
+          "same as previous time because we used same parameters as previous time",
+          "more anonymous than previous time because we used smaller table this time"
+        ],
+        "answer": "2-anonymous"
+      }
+    ]
+  },
+  {
+    "id": 4,
+    "text": "We have so far anonymized tables where each row represents one person. However in some cases it could be that one person is present in multiple rows.<br>1) Go to Open table view.<br>2) On right side, scroll down to (X, Y)-Anonymity and read about (X, Y)-Anonymity.<br>3) Choose table disease.<br>4) This table is about different diseases that people have. One person can have one or more diseases. Using this hint choose proper anonymization method and click Next.<br>5) By now we expect that you already know what column types to choose. Choose right column type for each column and click next. If you have forgotten them, you can read about attribute types in right panel.<br>6) Choose proper actions for each attribute.<br>7) Generalize the values. Interval size for age: 10, all cities to estonia.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 4,
+        "question": "How many unique people are in smallest QID group?",
+        "options": [
+          "6",
+          "8",
+          "26"
+        ],
+        "answer": "8"
+      },
+      {
+        "id": 2,
+        "task": 4,
+        "question": "Suppose that X = {age, gender, city} and Y =  {personId}. Suppose that this table satisfies (X, Y)-Anonymity for integer k=4. Suppose that each person has exactly 2 diseases. How many rows are there in smallest QID?",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "6",
+          "8"
+        ],
+        "answer": "8"
+      },
+      {
+        "id": 3,
+        "task": 4,
+        "question": "X = {age, gender, city} and Y =  {_id}, anonymized table satisfies (X,Y)-Anonymity for k=",
+        "options": [
+          "1",
+          "6",
+          "8",
+          "26"
+        ],
+        "answer": "8"
+      }
+    ]
+  },
+  {
+    "id": 5,
+    "text": "So far we have looked datasets that consist of single table, however in real life data is often stored in relational database.<br>1) Go to Open table view and on the right panel read about MultiRelational k-anonymity.<br>2) Select Job_Relational and Person_Relational.<br>3) MultiRelational k-anonymity is automatically selected for you. Click Next.<br>4) You are now asked to Join selected tables. Read the instructions on right hand side. Getting started will tell you what to do.<br>5) Add required rule(s). Click Next.<br>6) Specify attribute types and attribute actions.<br>Hint: id is unique identifier, you dont have to worry about name and last name (Not Defined), you can choose to remove them (Remove column).<br>7) Generalize age to interval size of 10.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 5,
+        "question": "What is the correct attribute type for colum id?",
+        "options": [
+          "ID",
+          "QID",
+          "Sensitive",
+          "Non-Sensitive"
+        ],
+        "answer": "ID"
+      },
+      {
+        "id": 2,
+        "task": 5,
+        "question": "What could go wrong if relational data is anonymized before joining?",
+        "options": [
+          "Nothing, the order of performing these activities does not matter.",
+          "Data could be distorted too much",
+          "Insufficient protection could be offered.",
+          "Both can happen: data could be too distorted or privacy might be insufficiently protected."
+        ],
+        "answer": "Both can happen: data could be too distorted or privacy might be insufficiently protected."
+      }
+    ]
+  },
+  {
+    "id": 6,
+    "text": "Introducing additional requirement for better privacy protection.<br>1) In Open table view, read about l-Diversity.<br>2) Select table Job_Large_Monotonous and anonymization method l-Diversity.<br>3) Specify attribute types and actions.<br>4) Use these generalization rules:<br>Interval for age: 10<br>City names:<br>Tallinn,Tartu,Paide->Large city<br>Viljandi,Türi,Jõgeva->Medium city<br>Vändra,Rapla,Põltsamaa,Elva->Small city<br>Hint: if you don't wish to click on city names that much you can copy-paste these three lines above.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 6,
+        "question": "How many different sensitive attribute values are in the QID group that contains the least amount of unique sensitive attribute values contains?",
+        "options": [
+          "1",
+          "2",
+          "6",
+          "30"
+        ],
+        "answer": "1"
+      },
+      {
+        "id": 2,
+        "task": 6,
+        "question": "On the top of the anonymized table you can see a red QID group that contains 6 different persons. Does this grup offer sufficient protection to the privacy if table is required to be 5-anonymous?",
+        "options": [
+          "Yes because QID with size of 6 also satisfiers requirement of 5-anonymity",
+          "No because even tough QID group contains enough records, sensitive attribute can be successfully guessed."
+        ],
+        "answer": "No because even tough QID group contains enough records, sensitive attribute can be successfully guessed."
+      },
+      {
+        "id": 3,
+        "task": 6,
+        "question": "On the top of the anonymized table you can see a red QID group that contains 6 different persons. Is there anything wrong with that group?",
+        "options": [
+          "No, it's fine because the size of this QID group is good enough.",
+          "Yes, the sensitive attribute for this QID group can be guessed with 100% confidence and therefore the size of QID does not help."
+        ],
+        "answer": "Yes, the sensitive attribute for this QID group can be guessed with 100% confidence and therefore the size of QID does not help."
+      }
+    ]
+  },
+  {
+    "id": 7,
+    "text": "Introducing additional requirement for better privacy protection 2.<br>1) Do steps 1-4 from Task 6 but this time choose Job_Large instead of Job_Large_Monotonous.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 7,
+        "question": "Suppose that person x is 60-70 years old female from small city who works as a Therapist(scroll down if you need) and that job is the sensitive attribute that needs to be kept private. What's the probability of guessing her's sensitive attribute when her's QID is known?",
+        "options": [
+          "1/1",
+          "1/2",
+          "1/3",
+          "1/8",
+          "1/10",
+          "1/29"
+        ],
+        "answer": "1/8"
+      },
+      {
+        "id": 2,
+        "task": 7,
+        "question": "Why is diversity of sensitive attribute required?",
+        "options": [
+          "Because the greater the diversity the harder to guess the value of sensitive attribute.",
+          "It actually doesn't matter, only thing that matters is the size of QID group."
+        ],
+        "answer": "Because the greater the diversity the harder to guess the value of sensitive attribute."
+      },
+      {
+        "id": 3,
+        "task": 7,
+        "question": "This table is",
+        "options": [
+          "1-diverse",
+          "2-diverse",
+          "4-diverse",
+          "8-diverse",
+          "10-diverse",
+          "29-diverse"
+        ],
+        "answer": "2-diverse"
+      }
+    ]
+  },
+  {
+    "id": 8,
+    "text": "Do the same as you did in previous task, except now select t-closeness instead of l-diversity. Read about t-closeness if you haven't already.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 8,
+        "question": "On the anonymized table, light red marks the QID group where distribution of sensitive attribute is not close enough to distribution of sensitive attribute in the table. Red rows are rows that ruin the distribution of sensitive attribute for given QID groups. What can be said?",
+        "options": [
+          "The distribution of sensitive attribute in QID group mostly matches the distribution of sensitive attribute in the rest of the table.",
+          "The distribution of sensitive attribute in QID group mostly does not match the distribution of sensitive attribute in the rest of the table."
+        ],
+        "answer": "The distribution of sensitive attribute in QID group mostly does not match the distribution of sensitive attribute in the rest of the table."
+      }
+    ]
+  },
+  {
+    "id": 9,
+    "text": "Sometimes generalizing QID attributes is not enough. For example in a company salary might be a confidential information. It is possible, that boss who knows QID and salary of his employees and wants to find out if any of his employees have participated in questionnaire about salaries. Since salary was declared confidential, participation in such list could harm employee's relationship with employee.<br>1) In Open table view, read about &epsilon;-Differential privacy.<br>2) Select table Job_Large_Salary and anonymization method &epsilon;-Differential privacy.<br>3) In attribute types specification view look at salaries.<br>4) Specify attribute types and actions.<br>Hint: Job can be Nonsensitive this time.",
+    "questions": [
+      {
+        "id": 1,
+        "task": 9,
+        "question": "What did happen to salary values?",
+        "options": [
+          "Nothing because sensitive attribute is not generalized",
+          "They were changed by +/- &epsilon;% of theyr value."
+        ],
+        "answer": "They were changed by +/- &epsilon;% of theyr value."
+      },
+      {
+        "id": 2,
+        "task": 9,
+        "question": "What does &epsilon;-Differential privacy offer that k-anonymity doesn't?",
+        "options": [
+          "Nothing, they are interchangeable",
+          "&epsilon;-Differential privacy will add additional protection by shifting the value of sensitive attribute which improves privacy."
+        ],
+        "answer": "&epsilon;-Differential privacy will add additional protection by shifting the value of sensitive attribute which improves privacy."
+      }
+    ]
+  }
+]

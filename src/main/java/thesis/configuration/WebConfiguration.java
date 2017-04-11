@@ -12,6 +12,7 @@ public class WebConfiguration extends WebMvcConfigurerAdapter {
     public void addViewControllers(ViewControllerRegistry registry) {
         registry.addViewController("/").setViewName("index");
         registry.addViewController("/quiz").setViewName("quiz");
+        registry.addViewController("/grade").setViewName("quizGrader");
         registry.addViewController("/upload").setViewName("upload");
     }
 

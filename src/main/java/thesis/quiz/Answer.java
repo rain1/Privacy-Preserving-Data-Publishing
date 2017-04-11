@@ -1,7 +1,12 @@
 package thesis.quiz;
 
-/**
- * Created by rain on 5.04.17.
- */
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
 public class Answer {
+    int taskId;
+    int questionId;
+    String answer;
 }

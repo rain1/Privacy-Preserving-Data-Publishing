@@ -5,6 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.PropertySources;
+import thesis.quiz.QuizController;
 
 @SpringBootApplication
 @PropertySources({
@@ -13,6 +14,7 @@ import org.springframework.context.annotation.PropertySources;
 public class ApplicationRunner {
 
     public static void main(String[] args) {
+        new QuizController();
         ConfigurableApplicationContext ctx = SpringApplication.run(ApplicationRunner.class, args);
     }
 }

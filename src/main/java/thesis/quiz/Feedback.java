@@ -1,7 +1,12 @@
 package thesis.quiz;
 
-/**
- * Created by rain on 6.04.17.
- */
+import lombok.Getter;
+
+@Getter
 public class Feedback {
+    int taskId;
+    int questionId;
+    String userAnswer;
+    String actualAnswer;
+    Boolean correct;
 }

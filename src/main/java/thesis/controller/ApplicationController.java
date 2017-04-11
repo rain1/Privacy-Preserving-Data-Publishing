@@ -7,6 +7,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import thesis.ppdp.PPDPController;
+import thesis.quiz.Answer;
+import thesis.quiz.Feedback;
+import thesis.quiz.Quiz;
+import thesis.quiz.TaskDTO;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +25,7 @@ public class ApplicationController {
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationController.class);
 
     public PPDPController app;
+    Quiz quiz = new Quiz();
 
     ApplicationController() {
         app = new PPDPController();
@@ -81,5 +86,17 @@ public class ApplicationController {
         }else{
             return "Upload succeeded.<br>Click <a href='/'>here</a> to go back";
         }
+    }
+
+    @SneakyThrows
+    @RequestMapping(value = "/rest/quiz", method = RequestMethod.POST)
+    public List<Feedback> check(@RequestBody List<Answer> answers) {
+        return quiz.cehckQuiz(answers);
+    }
+
+    @SneakyThrows
+    @RequestMapping(value = "/rest/getquiz", method = RequestMethod.POST)
+    public List<TaskDTO>  grade(@RequestBody List<Answer> answers) {
+        return quiz.ofAnswers(answers);
     }
 }
