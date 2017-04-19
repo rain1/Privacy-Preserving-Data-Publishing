@@ -124,8 +124,8 @@ class GeneralizationDialog {
     isValidInterval(str) {
         var integerValue = Math.floor(Number(str));
         if (String(integerValue) == str) {
-            if (integerValue == 0) {
-                alert("Error: Interval with size of 0 is not usable for generalization.");
+            if (integerValue <= 0) {
+                alert("Error: Interval with size of 0 or less is not usable for generalization.");
                 return false;
             }
             return true;

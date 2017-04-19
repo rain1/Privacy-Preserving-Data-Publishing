@@ -52,6 +52,18 @@ var Quiz = (function () {
         });
         return response;
     };
+    Quiz.prototype.getFile = function (dataUrl) {
+        var response = "";
+        $.ajax({
+            url: dataUrl,
+            type: 'GET',
+            success: function (result) {
+                response = result;
+            },
+            async: false
+        });
+        return response;
+    };
     Quiz.prototype.answer = function () {
         var answers = this.answersToJson();
         this.lastAnswers = answers;
@@ -73,11 +85,29 @@ var Quiz = (function () {
             location.reload(true);
         }
     };
+    Quiz.prototype.toHtml = function () {
+        var htmlContent = '<!DOCTYPE html>' +
+            '<html>' +
+            '<head>' +
+            '<meta charset="UTF-8">' +
+            '<style>' +
+            '{STYLE}' +
+            '</style>' +
+            '</head>' +
+            '<body>' +
+            '{BODY}' +
+            '</body>' +
+            '</html>';
+        debugger;
+        htmlContent = htmlContent.replace("{STYLE}", this.getFile("/public/css/quiz.css"));
+        htmlContent = htmlContent.replace("{BODY}", $("#quiz_container").html());
+        return htmlContent;
+    };
     Quiz.prototype.save = function () {
         var results = this.lastAnswers;
-        var resultsString = JSON.stringify(results);
+        //var resultsString = JSON.stringify(results);
         var downloadLink = $("#result_download");
-        downloadLink.attr("href", "data:text/plain," + encodeURIComponent(resultsString));
+        downloadLink.attr("href", "data:text/plain," + encodeURIComponent(this.toHtml()));
         downloadLink[0].click();
     };
     Quiz.prototype.grader = function () {

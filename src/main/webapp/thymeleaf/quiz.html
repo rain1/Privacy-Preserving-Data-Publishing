@@ -6,30 +6,32 @@
     <script src="public/js/jquery.js"></script>
     <script src="public/js/Quiz.js"></script>
     <link rel="stylesheet" type="text/css" href="public/css/style.css">
+    <link rel="stylesheet" type="text/css" href="public/css/quiz.css">
     <script>
 
     </script>
 </head>
 <body>
-<div id="score_label">Your score is: <span id="score_number"></span></div>
-<div th:each="task : ${quiz}">
-    <div class="task" th:id="'t_' + ${task.question.task} + '-q_' + ${task.question.id}">
-        <h3>Task <span th:text="${task.question.task}"></span></h3>
-        <div th:utext="${task.text}"></div>
-        <br>
-        <div class="question">
-        <div th:utext="${task.question.question}"></div>
-            <div th:each="option : ${task.question.options}">
-                <input type="radio" th:name="${task.question.task} + '-' + ${task.question.id}" th:value="${option}">
-                <span th:utext="${option}"></span><br>
+<div id="quiz_container">
+    <div id="score_label">Your score is: <span id="score_number"></span></div>
+    <div th:each="task : ${quiz}">
+        <div class="task" th:id="'t_' + ${task.question.task} + '-q_' + ${task.question.id}">
+            <h3>Task <span th:text="${task.question.task}"></span></h3>
+            <div th:utext="${task.text}"></div>
+            <br>
+            <div class="question">
+            <div th:utext="${task.question.question}"></div>
+                <div th:each="option : ${task.question.options}">
+                    <input type="radio" th:name="${task.question.task} + '-' + ${task.question.id}" th:value="${option}">
+                    <span th:utext="${option}"></span><br>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<input id="submit" type="button" value="Submit" onclick="quiz.answer();"> <input style="display: none" id="save"
-                                                                                 type="button" value="Save results"
-                                                                                 onclick="quiz.save();">
-<a id="result_download" download="result.json"></a>
+<input id="submit" type="button" value="Submit" onclick="quiz.answer();">
+<input style="display: none" id="save" type="button" value="Save results" onclick="quiz.save();">
+<a id="result_download" download="result.html"></a>
 
 </body>
 </html>

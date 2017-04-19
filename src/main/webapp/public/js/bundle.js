@@ -435,7 +435,7 @@ var Anonymization = (function () {
         this.app = app;
     }
     Anonymization.prototype.randInt = function (min, max) {
-        return Math.floor((Math.random() * max) + min);
+        return Math.floor((Math.random() * (max - min)) + min);
     };
     Anonymization.prototype.randNoise = function (cell) {
         var noiseAmount = this.app.methodParam / 100;
@@ -1007,8 +1007,8 @@ var GeneralizationDialog = (function () {
     GeneralizationDialog.prototype.isValidInterval = function (str) {
         var integerValue = Math.floor(Number(str));
         if (String(integerValue) == str) {
-            if (integerValue == 0) {
-                alert("Error: Interval with size of 0 is not usable for generalization.");
+            if (integerValue <= 0) {
+                alert("Error: Interval with size of 0 or less is not usable for generalization.");
                 return false;
             }
             return true;
@@ -1483,7 +1483,7 @@ var OpenDialog = (function () {
     OpenDialog.prototype.isValidInterval = function (str) {
         var integerValue = Math.floor(Number(str));
         if (String(integerValue) == str) {
-            if (integerValue == 0) {
+            if (integerValue <= 0) {
                 alert("Epsilon must be positive");
                 return false;
             }
@@ -1533,7 +1533,6 @@ var OpenDialog = (function () {
             $("#anonymization_method").val("none");
         }
         var selectedNames = [];
-        methodParam;
         if (checkedInputs == 1) {
             selectedNames.push(selectedCheckboxes.attr("name"));
         }

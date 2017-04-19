@@ -9,7 +9,7 @@ class Anonymization {
     }
 
     randInt(min, max) {
-        return Math.floor((Math.random() * max) + min);
+        return Math.floor((Math.random() * (max - min)) + min);
     }
 
     randNoise(cell) {

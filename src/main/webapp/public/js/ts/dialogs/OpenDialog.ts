@@ -83,7 +83,7 @@ class OpenDialog {
     isValidInterval(str) {
         var integerValue = Math.floor(Number(str));
         if (String(integerValue) == str) {
-            if (integerValue == 0) {
+            if (integerValue <= 0) {
                 alert("Epsilon must be positive");
                 return false;
             }
@@ -135,7 +135,6 @@ class OpenDialog {
         }
 
         var selectedNames = [];
-        methodParam
 
         if (checkedInputs == 1) {
             selectedNames.push(selectedCheckboxes.attr("name"));

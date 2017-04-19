@@ -34,7 +34,7 @@ class Quiz {
 
     postJson(dataJson, dataUrl) {
         var response = "";
-        if(typeof dataJson != 'string'){
+        if (typeof dataJson != 'string') {
             dataJson = JSON.stringify(dataJson);
         }
         $.ajax({
@@ -52,11 +52,24 @@ class Quiz {
         return response;
     }
 
+    getFile(dataUrl) {
+        var response = "";
+        $.ajax({
+            url: dataUrl,
+            type: 'GET',
+            success: function (result) {
+                response = result;
+            },
+            async: false
+        });
+        return response;
+    }
+
     answer() {
         var answers = this.answersToJson();
         this.lastAnswers = answers;
         if (answers.length == 9) {
-            console.log("success")
+            console.log("success");
             var response = this.postJson(answers, './rest/quiz/');
             $("#save").show();
         } else {
@@ -74,11 +87,30 @@ class Quiz {
         }
     }
 
+    toHtml() {
+        var htmlContent =  '<!DOCTYPE html>' +
+            '<html>' +
+            '<head>' +
+            '<meta charset="UTF-8">' +
+            '<style>' +
+            '{STYLE}' +
+            '</style>' +
+            '</head>' +
+            '<body>' +
+            '{BODY}' +
+            '</body>' +
+            '</html>';
+        debugger;
+        htmlContent =  htmlContent.replace("{STYLE}", this.getFile("/public/css/quiz.css"))
+        htmlContent = htmlContent.replace("{BODY}", $("#quiz_container").html());
+        return htmlContent;
+    }
+
     save() {
         var results = this.lastAnswers;
-        var resultsString = JSON.stringify(results);
+        //var resultsString = JSON.stringify(results);
         var downloadLink = $("#result_download");
-        downloadLink.attr("href", "data:text/plain," + encodeURIComponent(resultsString));
+        downloadLink.attr("href", "data:text/plain," + encodeURIComponent(this.toHtml()));
         downloadLink[0].click();
     }
 
@@ -109,9 +141,9 @@ class Quiz {
         }
     }
 
-    markAnswers(answers){
-        for(let answer of answers){
-            $("input[name='"+answer.taskId+"-"+answer.questionId+"'][value='"+answer["answer"]+"']").prop('checked', true);
+    markAnswers(answers) {
+        for (let answer of answers) {
+            $("input[name='" + answer.taskId + "-" + answer.questionId + "'][value='" + answer["answer"] + "']").prop('checked', true);
         }
     }
 

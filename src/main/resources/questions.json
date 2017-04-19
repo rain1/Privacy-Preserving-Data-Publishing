@@ -35,11 +35,11 @@
         "question": "This time table is",
         "options": [
           "Still 2-anonymous because we used the same table as previous time.",
-          "3-anonymous because we generalzed 3 columns instead of 2.",
-          "5-anonymous",
-          "Something else"
+          "3-anonymous because we generalized 3 columns instead of 2.",
+          "5-anonymous.",
+          "Something else."
         ],
-        "answer": "5-anonymous"
+        "answer": "5-anonymous."
       },
       {
         "id": 3,
@@ -56,16 +56,16 @@
   },
   {
     "id": 3,
-    "text": "By now you should have learned what to do when you need to increase the protection to privacy. Now lets see an other factor that plays part in protection for table. In task 2, you anonymized table that had 100 records. Now let's look at table that has 20 records.<br>1) Open table Job (not Job Large)<br>2) Do everything else like you did in task 2 to increase  protection to privacy (select same types, same actions and specify same generalization rules as you did in task 2.",
+    "text": "By now you should have learned what to do when you need to increase the protection to privacy. Now lets see an other factor that plays part in protection for table. In task 2, you anonymized table that had 200 records. Now let's look at table that has 20 records.<br>1) Open table Job (not Job_Large)<br>2) Do everything else like you did in task 2 to increase protection to privacy (select same types, same actions and specify same generalization rules as you did in task 2.",
     "questions": [
       {
         "id": 1,
         "task": 3,
-        "question": "How does the size of table affect protection to anonymity given that the only difference is that table a has more rows than table b?",
+        "question": "Let a and b be two tables. How does the size of table affect protection to anonymity given that the only difference is that table a has more rows than table b?",
         "options": [
           "Table a is less anonymous because is has more rows than table b.",
           "Table a is more anonymous because it has more rows than table b and therefore bigger QID groups will form.",
-          "table size doesnt matter."
+          "Table size doesn't matter."
         ],
         "answer": "Table a is more anonymous because it has more rows than table b and therefore bigger QID groups will form."
       },
@@ -75,8 +75,9 @@
         "question": "This table is:",
         "options": [
           "2-anonymous",
-          "same as previous time because we used same parameters as previous time",
-          "more anonymous than previous time because we used smaller table this time"
+          "5-anonymous",
+          "same as previous time because we used same parameters as previous time.",
+          "more anonymous than previous time because we used smaller table this time."
         ],
         "answer": "2-anonymous"
       }
@@ -84,7 +85,7 @@
   },
   {
     "id": 4,
-    "text": "We have so far anonymized tables where each row represents one person. However in some cases it could be that one person is present in multiple rows.<br>1) Go to Open table view.<br>2) On right side, scroll down to (X, Y)-Anonymity and read about (X, Y)-Anonymity.<br>3) Choose table disease.<br>4) This table is about different diseases that people have. One person can have one or more diseases. Using this hint choose proper anonymization method and click Next.<br>5) By now we expect that you already know what column types to choose. Choose right column type for each column and click next. If you have forgotten them, you can read about attribute types in right panel.<br>6) Choose proper actions for each attribute.<br>7) Generalize the values. Interval size for age: 10, all cities to estonia.",
+    "text": "We have so far anonymized tables where each row represents one person. However in some cases it could be that one person is present in multiple rows.<br>1) Go to Open table view.<br>2) On right side, scroll down to (X, Y)-Anonymity and read about (X, Y)-Anonymity.<br>3) Choose table Disease_xy.<br>4) This table is about different diseases that people have. One person can have one or more diseases. Using this hint choose proper anonymization method and click Next.<br>5) By now we expect that you already know what column types to choose. Choose right column type for each column and click next. If you have forgotten them, you can read about attribute types in right panel.<br>6) Choose proper actions for each attribute.<br>7) Generalize the values. Interval size for age: 10, all cities to estonia.",
     "questions": [
       {
         "id": 1,
@@ -127,17 +128,17 @@
   },
   {
     "id": 5,
-    "text": "So far we have looked datasets that consist of single table, however in real life data is often stored in relational database.<br>1) Go to Open table view and on the right panel read about MultiRelational k-anonymity.<br>2) Select Job_Relational and Person_Relational.<br>3) MultiRelational k-anonymity is automatically selected for you. Click Next.<br>4) You are now asked to Join selected tables. Read the instructions on right hand side. Getting started will tell you what to do.<br>5) Add required rule(s). Click Next.<br>6) Specify attribute types and attribute actions.<br>Hint: id is unique identifier, you dont have to worry about name and last name (Not Defined), you can choose to remove them (Remove column).<br>7) Generalize age to interval size of 10.",
+    "text": "So far we have looked data sets that consist of single table, however in real life data is often stored in relational database.<br>1) Go to Open table view and on the right panel read about MultiRelational k-anonymity.<br>2) Select Job_Relational and Person_Relational.<br>3) MultiRelational k-anonymity is automatically selected for you. Click Next.<br>4) You are now asked to Join selected tables. Read the instructions on right hand side. Getting started will tell you what to do.<br>5) Add required rule(s). Click Next.<br>6) Specify attribute types and attribute actions.<br>Hint: id is unique identifier, you dont have to worry about name and last name (Not Defined), you can choose to remove them (Remove column).<br>7) Generalize age to interval size of 10.",
     "questions": [
       {
         "id": 1,
         "task": 5,
-        "question": "What is the correct attribute type for colum id?",
+        "question": "What is the correct attribute type for column id?",
         "options": [
           "ID",
           "QID",
           "Sensitive",
-          "Non-Sensitive"
+          "Non-sensitive"
         ],
         "answer": "ID"
       },
@@ -174,9 +175,9 @@
       {
         "id": 2,
         "task": 6,
-        "question": "On the top of the anonymized table you can see a red QID group that contains 6 different persons. Does this grup offer sufficient protection to the privacy if table is required to be 5-anonymous?",
+        "question": "On the top of the anonymized table you can see a red QID group that contains 6 different persons. Does this group offer sufficient protection to the privacy if table is required to be 5-anonymous?",
         "options": [
-          "Yes because QID with size of 6 also satisfiers requirement of 5-anonymity",
+          "Yes because QID with size of 6 also satisfies requirement of 5-anonymity.",
           "No because even tough QID group contains enough records, sensitive attribute can be successfully guessed."
         ],
         "answer": "No because even tough QID group contains enough records, sensitive attribute can be successfully guessed."
@@ -224,16 +225,16 @@
       {
         "id": 3,
         "task": 7,
-        "question": "This table is",
+        "question": "This table is:",
         "options": [
-          "1-diverse",
-          "2-diverse",
-          "4-diverse",
-          "8-diverse",
-          "10-diverse",
-          "29-diverse"
+          "1-diverse.",
+          "2-diverse.",
+          "4-diverse.",
+          "8-diverse.",
+          "10-diverse.",
+          "29-diverse."
         ],
-        "answer": "2-diverse"
+        "answer": "2-diverse."
       }
     ]
   },
@@ -255,7 +256,7 @@
   },
   {
     "id": 9,
-    "text": "Sometimes generalizing QID attributes is not enough. For example in a company salary might be a confidential information. It is possible, that boss who knows QID and salary of his employees and wants to find out if any of his employees have participated in questionnaire about salaries. Since salary was declared confidential, participation in such list could harm employee's relationship with employee.<br>1) In Open table view, read about &epsilon;-Differential privacy.<br>2) Select table Job_Large_Salary and anonymization method &epsilon;-Differential privacy.<br>3) In attribute types specification view look at salaries.<br>4) Specify attribute types and actions.<br>Hint: Job can be Nonsensitive this time.",
+    "text": "Sometimes generalizing QID attributes is not enough. For example in a company salary might be a confidential information. It is possible, that boss who knows QID and salary of his employees and wants to find out if any of his employees have participated in questionnaire about salaries. Since salary was declared confidential, participation in such list could harm employee's relationship with employee.<br>1) In Open table view, read about &epsilon;-Differential privacy.<br>2) Select table Job_Large_Salary and anonymization method &epsilon;-Differential privacy.<br>3) In attribute types specification view look at salaries.<br>4) Specify attribute types and actions.<br>Hint: job can be Non-sensitive this time.",
     "questions": [
       {
         "id": 1,
@@ -263,16 +264,16 @@
         "question": "What did happen to salary values?",
         "options": [
           "Nothing because sensitive attribute is not generalized",
-          "They were changed by +/- &epsilon;% of theyr value."
+          "They were changed by +/- &epsilon;% of their value."
         ],
-        "answer": "They were changed by +/- &epsilon;% of theyr value."
+        "answer": "They were changed by +/- &epsilon;% of their value."
       },
       {
         "id": 2,
         "task": 9,
         "question": "What does &epsilon;-Differential privacy offer that k-anonymity doesn't?",
         "options": [
-          "Nothing, they are interchangeable",
+          "Nothing, they are interchangeable.",
           "&epsilon;-Differential privacy will add additional protection by shifting the value of sensitive attribute which improves privacy."
         ],
         "answer": "&epsilon;-Differential privacy will add additional protection by shifting the value of sensitive attribute which improves privacy."
