@@ -66,7 +66,8 @@ class OpenDialog {
     methodChanged() {
         this.startOver = true;
         var anonymizationMethod = $("#anonymization_method");
-        if (anonymizationMethod.val() == "none") {
+        var selectedCheckboxes = $("input:checked[type=checkbox]");
+        if (anonymizationMethod.val() == "none" || selectedCheckboxes.length < 1) {
             $("#open_next").prop("disabled", true);
         } else {
             $("#open_next").prop("disabled", false);

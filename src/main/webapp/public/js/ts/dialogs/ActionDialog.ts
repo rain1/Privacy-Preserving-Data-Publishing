@@ -57,6 +57,11 @@ class ActionDialog {
     }
 
     preselectActions() {
+        var allCombos = this.app.getColumnNames();
+        for(let combo of allCombos){
+            var element = $('select[class="action_select"][name="' + combo + '"]');
+            element.prop("disabled", false);
+        }
         var identifiers = this.app.getColumnNamesByType("id");
         for (var i in identifiers) {
             console.log(identifiers[i]);
@@ -65,10 +70,10 @@ class ActionDialog {
             element.prop("disabled", true);
             element.prop("title", "Identificators will always be removed");
         }
-        var identifiers = this.app.getColumnNamesByType("sensitive");
-        for (var i in identifiers) {
-            console.log(identifiers[i]);
-            var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
+        var sensitive = this.app.getColumnNamesByType("sensitive");
+        for (var i in sensitive) {
+            console.log(sensitive[i]);
+            var element = $('select[class="action_select"][name="' + sensitive[i] + '"]');
             element.prop("disabled", true);
             if(this.app.method == "edif"){
                 element.val("noise");

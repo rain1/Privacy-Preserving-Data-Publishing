@@ -766,6 +766,12 @@ var ActionDialog = (function () {
         return content;
     };
     ActionDialog.prototype.preselectActions = function () {
+        var allCombos = this.app.getColumnNames();
+        for (var _i = 0, allCombos_1 = allCombos; _i < allCombos_1.length; _i++) {
+            var combo = allCombos_1[_i];
+            var element = $('select[class="action_select"][name="' + combo + '"]');
+            element.prop("disabled", false);
+        }
         var identifiers = this.app.getColumnNamesByType("id");
         for (var i in identifiers) {
             console.log(identifiers[i]);
@@ -774,10 +780,10 @@ var ActionDialog = (function () {
             element.prop("disabled", true);
             element.prop("title", "Identificators will always be removed");
         }
-        var identifiers = this.app.getColumnNamesByType("sensitive");
-        for (var i in identifiers) {
-            console.log(identifiers[i]);
-            var element = $('select[class="action_select"][name="' + identifiers[i] + '"]');
+        var sensitive = this.app.getColumnNamesByType("sensitive");
+        for (var i in sensitive) {
+            console.log(sensitive[i]);
+            var element = $('select[class="action_select"][name="' + sensitive[i] + '"]');
             element.prop("disabled", true);
             if (this.app.method == "edif") {
                 element.val("noise");
@@ -1466,7 +1472,8 @@ var OpenDialog = (function () {
     OpenDialog.prototype.methodChanged = function () {
         this.startOver = true;
         var anonymizationMethod = $("#anonymization_method");
-        if (anonymizationMethod.val() == "none") {
+        var selectedCheckboxes = $("input:checked[type=checkbox]");
+        if (anonymizationMethod.val() == "none" || selectedCheckboxes.length < 1) {
             $("#open_next").prop("disabled", true);
         }
         else {

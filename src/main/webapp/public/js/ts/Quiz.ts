@@ -100,7 +100,6 @@ class Quiz {
             '{BODY}' +
             '</body>' +
             '</html>';
-        debugger;
         htmlContent =  htmlContent.replace("{STYLE}", this.getFile("/public/css/quiz.css"))
         htmlContent = htmlContent.replace("{BODY}", $("#quiz_container").html());
         return htmlContent;
