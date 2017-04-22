@@ -1550,6 +1550,10 @@ var OpenDialog = (function () {
             }
         }
         this.methodChanged();
+        if (checkedInputs > 2) {
+            alert("Right now only 2 tables are supported in MultiRelational k-Anonymity, you have selected " + checkedInputs + ".\nPlease unselect " + (checkedInputs - 2) + " inputs.");
+            $("#open_next").prop("disabled", true);
+        }
         this.buildPreviews(selectedNames);
     };
     return OpenDialog;
