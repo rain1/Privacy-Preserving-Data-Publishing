@@ -65,16 +65,16 @@ class Application {
         return response;
     };
 
-    unique(arr) {
-        var u = {};
-        var a = [];
-        for (let element of arr) {
-            if (!u.hasOwnProperty(element)) {
-                a.push(element);
-                u[element] = 1;
+    unique(list) {
+        var uniqueHashMap = {};
+        var uniqueArray = [];
+        for (let element of list) {
+            if (!(element in uniqueHashMap)) {
+                uniqueArray.push(element);
+                uniqueHashMap[element] = 1;
             }
         }
-        return a;
+        return uniqueArray;
     }
 
     getValuesByColumn(columnName:string, schema = {}):string[] {

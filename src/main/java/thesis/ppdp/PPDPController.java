@@ -24,13 +24,6 @@ public class PPDPController {
         return schemaManager.getSchema(name);
     }
 
-    public List<Map<String, String>> addSchema(String name, String fileName) throws IOException {
-        SchemaReader schemaReader = new SchemaReader();
-        List<Map<String, String>> schema = schemaReader.readSchema(fileName);
-        schemaManager.add(name, schema);
-        return schemaManager.getSchema(name);
-    }
-
     public List<Map<String, String>> addSchema(String name, InputStream content) throws IOException {
         SchemaReader schemaReader = new SchemaReader();
         List<Map<String, String>> schema = schemaReader.readSchema(content);

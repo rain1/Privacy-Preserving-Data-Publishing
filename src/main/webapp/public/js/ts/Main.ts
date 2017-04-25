@@ -49,7 +49,6 @@ class Main {
         if (Object.keys(highlightData).length == 0) {
             return highlightClass;
         }
-        //debugger;
         if (this.app.method == "tc" || this.app.method == "ldiv") {
             var qidData = this.statistics.getRowColumns(row, qidColumns);
             var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);

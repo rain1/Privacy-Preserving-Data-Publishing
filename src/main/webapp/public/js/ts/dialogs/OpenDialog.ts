@@ -81,9 +81,10 @@ class OpenDialog {
         }
     }
 
-    isValidInterval(str) {
-        var integerValue = Math.floor(Number(str));
-        if (String(integerValue) == str) {
+    isValidInterval(interval: string) {
+        //http://stackoverflow.com/questions/10834796/validate-that-a-string-is-a-positive-integer
+        var integerValue = Math.floor(Number(interval));
+        if (String(integerValue) == interval) {
             if (integerValue <= 0) {
                 alert("Epsilon must be positive");
                 return false;

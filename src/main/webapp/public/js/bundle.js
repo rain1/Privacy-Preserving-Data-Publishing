@@ -604,17 +604,17 @@ var Application = (function () {
         return response;
     };
     ;
-    Application.prototype.unique = function (arr) {
-        var u = {};
-        var a = [];
-        for (var _i = 0, arr_1 = arr; _i < arr_1.length; _i++) {
-            var element = arr_1[_i];
-            if (!u.hasOwnProperty(element)) {
-                a.push(element);
-                u[element] = 1;
+    Application.prototype.unique = function (list) {
+        var uniqueHashMap = {};
+        var uniqueArray = [];
+        for (var _i = 0, list_1 = list; _i < list_1.length; _i++) {
+            var element = list_1[_i];
+            if (!(element in uniqueHashMap)) {
+                uniqueArray.push(element);
+                uniqueHashMap[element] = 1;
             }
         }
-        return a;
+        return uniqueArray;
     };
     Application.prototype.getValuesByColumn = function (columnName, schema) {
         if (schema === void 0) { schema = {}; }
@@ -706,8 +706,6 @@ var WindowManager = (function () {
             scroll: false,
             handle: '#titlebar_' + window
         });
-    };
-    WindowManager.prototype.setWindowTitle = function () {
     };
     return WindowManager;
 }());
@@ -1487,9 +1485,10 @@ var OpenDialog = (function () {
             $("#method_parameter_container").hide();
         }
     };
-    OpenDialog.prototype.isValidInterval = function (str) {
-        var integerValue = Math.floor(Number(str));
-        if (String(integerValue) == str) {
+    OpenDialog.prototype.isValidInterval = function (interval) {
+        //http://stackoverflow.com/questions/10834796/validate-that-a-string-is-a-positive-integer
+        var integerValue = Math.floor(Number(interval));
+        if (String(integerValue) == interval) {
             if (integerValue <= 0) {
                 alert("Epsilon must be positive");
                 return false;
@@ -1770,7 +1769,6 @@ var Main = (function () {
         if (Object.keys(highlightData).length == 0) {
             return highlightClass;
         }
-        //debugger;
         if (this.app.method == "tc" || this.app.method == "ldiv") {
             var qidData = this.statistics.getRowColumns(row, qidColumns);
             var sensitiveData = this.statistics.getRowColumns(row, sensitiveColumns);

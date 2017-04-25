@@ -73,7 +73,9 @@ class Quiz {
             var response = this.postJson(answers, './rest/quiz/');
             $("#save").show();
         } else {
-            console.log("fail")
+            console.log("fail");
+            alert("You must complete all tasks before you can submit answers.");
+            return;
         }
         this.answersFromJson(response);
         $("#submit").attr("value", "Try again");

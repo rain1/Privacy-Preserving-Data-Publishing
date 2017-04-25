@@ -74,6 +74,8 @@ var Quiz = (function () {
         }
         else {
             console.log("fail");
+            alert("You must complete all tasks before you can submit answers.");
+            return;
         }
         this.answersFromJson(response);
         $("#submit").attr("value", "Try again");

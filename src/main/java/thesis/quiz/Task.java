@@ -24,10 +24,6 @@ public class Task {
         return null;
     }
 
-    int getQuestionCount(){
-        return questions.size();
-    }
-
     private int randInt(int min, int max){
         Random random = new Random();
         return random.nextInt(max) + min;
