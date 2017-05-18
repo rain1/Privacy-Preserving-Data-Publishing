@@ -17,7 +17,7 @@
   },
   {
     "id": 2,
-    "text": "After solving first task, you ended up with having 2-anonymous table. However 2-anonymous table may not offer sufficient protection to privacy. Your task is to come up with a better solution. For example 5-anonymous table would be already better.<br>1) Follow steps 1-8 from first task. This time, let's generalize gender values male and female to any gender.",
+    "text": "After solving first task, you ended up with having 2-anonymous table. However 2-anonymous table may not offer sufficient protection to privacy. Your task is to come up with a better solution. For example 5-anonymous table would be already better.<br>1) Follow steps 1-8 from first task but this time, let's generalize gender values male and female to any gender.<br>We only generalize gender in this task to any gender in this task. In the following tasks we do not generalize or remove gender.",
     "questions": [
       {
         "id": 1,
@@ -56,7 +56,7 @@
   },
   {
     "id": 3,
-    "text": "By now you should have learned what to do when you need to increase the protection to privacy. Now lets see an other factor that plays part in protection for table. In task 2, you anonymized table that had 200 records. Now let's look at table that has 20 records.<br>1) Open table Job (not Job_Large)<br>2) Do everything else like you did in task 2 to increase protection to privacy (select same types, same actions and specify same generalization rules as you did in task 2.",
+    "text": "By now you should have learned what to do when you need to increase the protection to privacy. Now lets see an other factor that plays part in protection for table. In task 2, you anonymized table that had 200 records. Now let's look at table that has 20 records.<br>1) Open table Job (not Job_Large)<br>2) Do everything else like you did in task 1 to increase protection to privacy (select same types, same actions and specify same generalization rules as you did in task 1.",
     "questions": [
       {
         "id": 1,

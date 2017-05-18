@@ -1,6 +1,12 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Warning: this python script is not meant to be used by the end users. The purpose of this script is to simplify the
+# process of creating data sets to use in this prototype. If you want to use this prototype to learn about
+# privacy-preserving data publishing you do not need to run this python script.
+# Use at your own risk: The author of this script shall not be held liable for possible damages that this script could
+# cause.
+
 import random
 from random import randrange
 
