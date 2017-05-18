@@ -1,7 +1,7 @@
-Privacy preserving data Publishing Study Assistant
+Privacy-preserving data Publishing Study Assistant
 ==================================================
 
-This project is educational purpose software that is written to help students to learn about privacy preserving data publishing which was the topic of my master's thesis. The purpose of this software is to allow students to learn how different anonymization methods work. All instructions together with introduction to  privacy preserving data publishing can be found within this program.
+This project is educational purpose software that is written to help students to learn about privacy-preserving data publishing which was the topic of my master's thesis. The purpose of this software is to allow students to learn how different anonymization methods work. All instructions together with introduction to privacy-preserving data publishing can be found within this program.
 
 
 Running
