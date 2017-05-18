@@ -1590,7 +1590,7 @@ var TypeDialog = (function () {
             if (columnType == "sensitive") {
                 senitiveColumns++;
                 if (senitiveColumns > 1) {
-                    alert("Privacy preserving methods implemented in this program are designed to support only one " +
+                    alert("Privacy-preserving methods implemented in this program are designed to support only one " +
                         "sensitive attribute. You have chosen " + senitiveColumns + " columns. Please cange your " +
                         "choices before you continue.");
                     return false;
